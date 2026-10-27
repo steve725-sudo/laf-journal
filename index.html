@@ -90,6 +90,10 @@ textarea{font-family:var(--serif);line-height:1.5;resize:vertical;field-sizing:c
 .fld>span{display:block;font-size:.85rem;color:var(--muted);margin-bottom:6px}
 .fld[data-acc] textarea{border-left:3px solid var(--c)}
 .emo{margin-top:18px}
+[data-k-choice] .chip{padding:6px 11px}
+.fld.ci{display:flex;align-items:center;gap:10px;margin-top:10px}
+.fld.ci>span{flex:0 0 96px;margin:0;line-height:1.25}
+.fld.ci .chips{flex:1;gap:5px}
 .emo summary{font-size:.9rem;color:var(--muted);cursor:pointer;padding:6px 0}
 .pair{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
 .pair .chip{text-align:center}
@@ -108,7 +112,7 @@ textarea{font-family:var(--serif);line-height:1.5;resize:vertical;field-sizing:c
 .sh-head h2{font-family:var(--serif);font-weight:400;font-size:1.5rem;line-height:1.2}
 
 .tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;justify-content:center;gap:4px;padding:6px 12px calc(env(safe-area-inset-bottom) + 6px);background:var(--bg);background:color-mix(in srgb,var(--bg) 90%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line)}
-.tabs button{flex:1;max-width:140px;padding:11px 0;font-size:.84rem;color:var(--muted);text-align:center}
+.tabs button{flex:1;max-width:140px;padding:11px 0;font-size:.8rem;color:var(--muted);text-align:center}
 .tabs button[aria-current="page"]{color:var(--ink);font-weight:600}
 
 .gate{max-width:440px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 11vh) 24px 48px}
@@ -134,6 +138,11 @@ textarea{font-family:var(--serif);line-height:1.5;resize:vertical;field-sizing:c
 .pp{width:84px;height:84px;border-radius:50%;border:1.5px solid var(--ink);display:grid;place-items:center;margin:0 auto 28px}
 input[type=range]{padding:0;border:0;background:none;accent-color:var(--practice);-webkit-appearance:auto;appearance:auto}
 .times{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);margin-top:6px;font-variant-numeric:tabular-nums}
+.prow{padding:12px 0;border-bottom:1px solid var(--line)}
+.pname{font-family:var(--serif);font-size:1.05rem}
+.pname small{display:block;font-family:var(--sans);font-size:.8rem;color:var(--muted);margin-top:2px}
+.pbar{display:flex;height:6px;border-radius:3px;overflow:hidden;margin-top:8px;max-width:260px}
+.pline{font-family:var(--serif);font-size:1.02rem;line-height:1.5;margin-top:10px}
 .track{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line)}
 .trk{flex:1;padding:14px 0;font-family:var(--serif);font-size:1.05rem}
 .libbar{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
@@ -178,15 +187,27 @@ const parseTagInput = text => [...new Set(String(text).split(/[\s,]+/).map(norma
 
 /* ---------- entry types ---------- */
 const TYPES = {
-  laf:       {label:'LAF', title:"Tonight's LAF", color:'--love', fields:[
+  laf:       {label:'LAF', title:"Tonight's LAF", color:'--love', soothe:'What helped today?', fields:[
                {k:'love', label:'What I love about myself today', accent:'love', rows:2, focus:true},
                {k:'accept', label:'What I accept about myself today', accent:'accept', rows:2},
                {k:'forgive', label:'What I forgive myself for today', accent:'forgive', rows:2},
-               {k:'notice', label:'Anything else that came up', rows:2}]},
+               {k:'notice', label:'Anything else that came up', rows:2},
+               {k:'energy', label:'Energy', kind:'choice', options:['Low','OK','Good']},
+               {k:'focus', label:'Focus', kind:'choice', options:['Scattered','OK','Clear']},
+               {k:'sleep', label:'Sleep', kind:'choice', options:['Poor','OK','Good']},
+               {k:'sensory', label:'Sensory load', kind:'choice', options:['Calm','Busy','Overloaded']},
+               {k:'social', label:'Social battery', kind:'choice', options:['Empty','OK','Full']}]},
   dream:     {label:'Dream', color:'--dream', intro:'Tap the mic on the keyboard to dictate.', fields:[
                {k:'text', label:'The dream', rows:7, focus:true}, {k:'title', label:'A title, if one comes', kind:'line'}]},
-  note:      {label:'Noticing', color:'--forgive', intro:'Whatever is here right now.', fields:[
+  note:      {label:'Noticing', color:'--forgive', soothe:'Anything help?', intro:'Whatever is here right now.', fields:[
                {k:'text', label:'What’s coming up', rows:5, focus:true}]},
+  trigger:   {label:'Triggered', color:'--love', parts:true, soothe:'What I tried', sootheOpen:true, intro:'When something set you off. Short is fine.', fields:[
+               {k:'text', label:'What happened', rows:3, focus:true},
+               {k:'state', label:'Where it went', kind:'choice', options:['Meltdown','Shutdown','Held it together']},
+               {k:'did', label:'What I did, or wanted to do', rows:2},
+               {k:'adult', label:'What my Healthy Adult says', accent:'forgive', rows:3},
+               {k:'need', label:'What I needed', rows:2},
+               {k:'helpedHow', label:'Did it help?', kind:'choice', options:['Not really','A bit','A lot']}]},
   meditation:{label:'Meditation', color:'--practice', fields:[
                {k:'kind', label:'Kind', kind:'choice', options:['Recording','Silent','Lumenate']},
                {k:'track', label:'Practice', kind:'line'}, {k:'minutes', label:'Minutes', kind:'num'},
@@ -205,7 +226,7 @@ const TYPES = {
   review:    {label:'Weekly review', color:'--muted', fields:[
                {k:'text', label:'What keeps coming up?', rows:6, focus:true}]},
 };
-const TYPE_ORDER = ['laf','dream','note','meditation','yoga','idea','creative','retreat','review'];
+const TYPE_ORDER = ['laf','trigger','dream','note','meditation','yoga','idea','creative','retreat','review'];
 // Everyday pairs shown on every entry (editable in Settings)
 const DEFAULT_EMOTIONS = [['calm','agitated'],['safe','threatened'],['confident','insecure'],['peaceful','enraged'],['joyous','grieving'],['proud','ashamed'],['loving','hateful'],['fearless','frightened'],['satisfied','frustrated'],['grateful','ungrateful'],['vital','exhausted'],['trusting','suspicious']];
 // Full iRest library, Level 1 and Level 2 manuals, de-duplicated. Searchable from Feelings.
@@ -256,8 +277,16 @@ let KEY = null, S = null, META = null, VIEW = 'today', player = null, PENDING_MS
 let lastActive = Date.now(), lockHold = 0;
 const JF = {type:'all', tag:null, q:''};
 let MAPP = 90;
+// Schema therapy modes, stored as tags
+const MODES = [['vulnerable-child','Vulnerable child'],['angry-child','Angry child'],['protector','Detached protector'],
+  ['inner-critic','Inner critic'],['masking','Masking'],['healthy-adult','Healthy adult'],['happy-child','Happy child']];
+const CHECKIN = ['energy','focus','sleep','sensory','social'];
+const HARD = {energy:'Low', focus:'Scattered', sleep:'Poor', sensory:'Overloaded', social:'Empty'};
+const DEFAULT_HELPS = ['Breathing','Yoga nidra','Lumenate','Meditation','Walk','Exercise','Music','Time alone','Quiet, dim room','Nature','Talking to someone','Creative work','Rest or sleep'];
+const schemaSlug = t => normalizeTag(String(t).replace(/[\/&]/g, ' '));
+const partWords = () => new Set([...MODES.map(m => m[0]), ...(S.settings.schemas || []).map(schemaSlug)]);
 const freshState = () => ({v:1, created:new Date().toISOString(), entries:[], tracks:[],
-  settings:{emotions:DEFAULT_EMOTIONS, seedTags:SEED_TAGS, lastBackup:null, nudgeSeen:null}});
+  settings:{helps:DEFAULT_HELPS, schemas:[], emotions:DEFAULT_EMOTIONS, seedTags:SEED_TAGS, lastBackup:null, nudgeSeen:null}});
 function migrate(s) {
   const f = freshState();
   s.entries ||= []; s.tracks ||= []; s.created ||= f.created;
@@ -321,7 +350,7 @@ function renderUnlock() {
   $('#pass').addEventListener('keydown', e => { if (e.key === 'Enter') A.unlock(); });
 }
 function enterApp() {
-  $('#root').innerHTML = `<div id="view"></div><nav class="tabs" aria-label="Sections">${[['today','Today'],['journal','Journal'],['map','Map'],['settings','Settings']]
+  $('#root').innerHTML = `<div id="view"></div><nav class="tabs" aria-label="Sections">${[['today','Today'],['journal','Journal'],['map','Map'],['patterns','Patterns'],['settings','Settings']]
     .map(([v, l]) => `<button data-act="tab" data-v="${v}">${l}</button>`).join('')}</nav>`;
   lastActive = Date.now(); renderView();
 }
@@ -334,13 +363,14 @@ function renderView() {
   $$('.tabs button').forEach(b => b.setAttribute('aria-current', b.dataset.v === VIEW ? 'page' : 'false'));
   if (VIEW === 'map') { root.className = 'mapview'; root.innerHTML = mapHTML(); initMap(); return; }
   root.className = 'app';
-  root.innerHTML = VIEW === 'today' ? todayHTML() : VIEW === 'journal' ? journalHTML() : settingsHTML();
+  root.innerHTML = VIEW === 'today' ? todayHTML() : VIEW === 'journal' ? journalHTML() : VIEW === 'patterns' ? patternsHTML() : settingsHTML();
   if (VIEW === 'journal') { const q = $('#q'); q.addEventListener('input', () => { JF.q = q.value; $('#jlist').innerHTML = journalList(); }); }
 }
 const typeColor = t => `var(${TYPES[t]?.color || '--muted'})`;
 function preview(e) {
   const f = e.fields;
   switch (e.type) {
+    case 'trigger': return [f.text, f.adult].filter(Boolean).join(' / ');
     case 'laf': return f.love || f.accept || f.forgive || f.notice || '';
     case 'meditation': return [f.minutes ? f.minutes + ' min' : '', f.kind === 'Lumenate' && f.track !== 'Lumenate' ? 'Lumenate' : '', f.track, f.text].filter(Boolean).join(', ');
     case 'yoga': return [f.minutes ? f.minutes + ' min' : '', f.style, f.text].filter(Boolean).join(', ');
@@ -371,7 +401,7 @@ function todayHTML() {
   h += notesHTML();
   const b = (t, l) => `<button data-act="new" data-type="${t}"><i style="--c:${typeColor(t)}"></i>${l}</button>`;
   const open = S.entries.filter(e => e.type === 'idea' && !e.fields.done).length;
-  h += `<h2 class="group">Compassion</h2><div class="actions">${b('dream','Dream')}${b('note','Noticing')}
+  h += `<h2 class="group">Compassion</h2><div class="actions">${b('dream','Dream')}${b('note','Noticing')}${b('trigger','Triggered')}
         <button data-act="meditate"><i style="--c:var(--practice)"></i>Meditate</button>${b('yoga','Yoga')}</div>`;
   h += `<h2 class="group">Creative</h2><div class="actions">${b('idea','Idea')}${b('creative','Creative work')}${b('retreat','Retreat')}
         ${open ? `<button data-act="ideas"><i style="--c:var(--creative)"></i>Ideas to try<small>${open}</small></button>` : ''}</div>`;
@@ -425,6 +455,14 @@ function settingsHTML() {
   <section class="set"><h2>Summary to share</h2>
     <p class="small">A PDF of a chosen period, for a psychologist, counsellor or social worker. You choose what goes in.</p>
     <button class="secondary" data-act="summary">Make a summary PDF</button></section>
+  <section class="set"><h2>Things that help</h2>
+    <p class="small">Your self-soothing options, one per line. They appear under “What helped?”.</p>
+    <textarea id="help-edit" rows="6">${esc((st.helps || []).join('\n'))}</textarea>
+    <button class="secondary" data-act="save-helps">Save</button></section>
+  <section class="set"><h2>Schemas</h2>
+    <p class="small">The ones you and your therapist are working on, one per line. They appear under “Which part of me was here?” on every entry.</p>
+    <textarea id="sch-edit" rows="4" placeholder="Defectiveness / shame&#10;Unrelenting standards">${esc((st.schemas || []).join('\n'))}</textarea>
+    <button class="secondary" data-act="save-sch">Save schemas</button></section>
   <section class="set"><h2>Feelings</h2>
     <p class="small">Your everyday pairs, shown on every entry. One pair per line. The full iRest list, ${LIB_EMO.length} emotion pairs and ${LIB_BODY.length} body-feeling pairs from the Level 1 and 2 manuals, is searchable under Feelings on any entry.</p>
     <textarea id="emo-edit" rows="9" autocapitalize="none">${esc(st.emotions.map(p => p.join(' / ')).join('\n'))}</textarea>
@@ -444,8 +482,8 @@ function settingsHTML() {
 
 /* ---------- forms ---------- */
 function suggestions() {
-  const emo = emotionWords(), c = new Map();
-  for (const e of S.entries) for (const t of e.tags) if (!emo.has(t)) c.set(t, (c.get(t) || 0) + 1);
+  const emo = emotionWords(), parts = partWords(), c = new Map();
+  for (const e of S.entries) for (const t of e.tags) if (!emo.has(t) && !parts.has(t)) c.set(t, (c.get(t) || 0) + 1);
   const used = [...c].sort((a, b) => b[1] - a[1]).map(x => x[0]);
   return [...new Set([...S.settings.seedTags, ...used])].slice(0, 16);
 }
@@ -453,7 +491,7 @@ function fieldHTML(f, val) {
   val = val ?? '';
   if (f.kind === 'line') return `<label class="fld"><span>${f.label}</span><input type="text" data-k="${f.k}" value="${esc(val)}" autocapitalize="sentences"></label>`;
   if (f.kind === 'num') return `<label class="fld"><span>${f.label}</span><input type="text" inputmode="decimal" data-k="${f.k}" value="${esc(val)}"></label>`;
-  if (f.kind === 'choice') return `<div class="fld"><span>${f.label}</span><div class="chips" data-k-choice="${f.k}">${f.options.map(o => `<button type="button" class="chip${val === o ? ' on' : ''}" data-act="choice" data-val="${esc(o)}">${esc(o)}</button>`).join('')}</div></div>`;
+  if (f.kind === 'choice') return `<div class="fld ci"><span>${f.label}</span><div class="chips" data-k-choice="${f.k}">${f.options.map(o => `<button type="button" class="chip${val === o ? ' on' : ''}" data-act="choice" data-val="${esc(o)}">${esc(o)}</button>`).join('')}</div></div>`;
   return `<label class="fld"${f.accent ? ` data-acc="${f.accent}"` : ''}><span>${f.label}</span><textarea data-k="${f.k}" rows="${f.rows || 3}">${esc(val)}</textarea></label>`;
 }
 function reviewSummary() {
@@ -485,13 +523,24 @@ function formHTML(ctx) {
   const d = e ? new Date(e.date) : new Date();
   const emo = emotionWords(), etags = new Set(e ? e.tags : (ctx.prefill?.tags || []));
   const textTags = new Set(parseTags(T.fields.map(f => v[f.k] || '').join(' ')));
-  const manual = [...etags].filter(t => !textTags.has(t) && !emo.has(t));
+  const parts = partWords(), manual = [...etags].filter(t => !textTags.has(t) && !emo.has(t) && !parts.has(t));
   let h = `<div class="sh-head"><h2>${esc(e ? T.label : (T.title || T.label))}</h2><button class="x" data-act="close">Cancel</button></div>`;
   if (T.intro && !e) h += `<p class="small">${T.intro}</p>`;
   if (ctx.type === 'review') h += reviewSummary();
   for (const f of T.fields) h += fieldHTML(f, v[f.k]);
   const coreWords = new Set(S.settings.emotions.flat());
   const extra = [...etags].filter(t => emo.has(t) && !coreWords.has(t));
+  if (T.soothe) {
+    const had = new Set(e?.helped || []), list = [...new Set([...(S.settings.helps || []), ...had])];
+    h += `<details class="emo helps"${T.sootheOpen || had.size ? ' open' : ''}><summary>${T.soothe}</summary>
+        <div class="chips" style="margin-top:6px">${list.map(x => `<button type="button" class="chip${had.has(x) ? ' on' : ''}" data-act="emo" data-h="${esc(x)}">${esc(x)}</button>`).join('')}</div>
+        <div style="display:flex;gap:8px;margin-top:10px"><input id="help-new" type="text" placeholder="Something else" style="flex:1"><button type="button" class="chip" data-act="help-add">Add</button></div></details>`;
+  }
+  const sch = (S.settings.schemas || []).map(x => [schemaSlug(x), x]).filter(x => x[0]);
+  h += `<details class="emo parts"${T.parts || [...etags].some(t => parts.has(t)) ? ' open' : ''}><summary>Which part of me was here?</summary>
+        <div class="chips" style="margin-top:6px">${MODES.map(([k, l]) => `<button type="button" class="chip${etags.has(k) ? ' on' : ''}" data-act="emo" data-tag="${k}">${l}</button>`).join('')}</div>
+        ${sch.length ? `<p class="label">Schemas</p><div class="chips">${sch.map(([k, l]) => `<button type="button" class="chip${etags.has(k) ? ' on' : ''}" data-act="emo" data-tag="${esc(k)}">${esc(l)}</button>`).join('')}</div>`
+          : `<p class="small">Add the schemas you’re working on in Settings and they’ll appear here.</p>`}</details>`;
   h += `<details class="emo"${[...etags].some(t => emo.has(t)) ? ' open' : ''}><summary>Feelings</summary>
         <div class="core">${S.settings.emotions.map(p => `<div class="pair">${p.map(w => `<button type="button" class="chip${etags.has(w) ? ' on' : ''}" data-act="emo" data-tag="${esc(w)}">${esc(w)}</button>`).join('')}</div>`).join('')}</div>
         <div class="chips extra" style="margin-top:8px">${extra.map(w => `<button type="button" class="chip on" data-act="emo" data-tag="${esc(w)}">${esc(w)}</button>`).join('')}</div>
@@ -513,7 +562,7 @@ async function saveForm(silent) {
   }
   if (ctx.entry?.fields?.done) fields.done = true;
   if (!T.fields.some(f => f.kind !== 'choice' && fields[f.k])) { if (!silent) toast('Write something first.'); return false; }
-  const emo = $$('.emo .core .chip.on, .emo .extra .chip.on', p).map(b => b.dataset.tag);
+  const emo = $$('.emo .core .chip.on, .emo .extra .chip.on, .parts .chip.on', p).map(b => b.dataset.tag);
   const manual = parseTagInput($('#ftags', p)?.value || '');
   const textTags = parseTags(T.fields.map(f => fields[f.k] || '').join(' '));
   const tags = [...new Set([...textTags, ...emo, ...manual])];
@@ -521,6 +570,7 @@ async function saveForm(silent) {
   let entry = ctx.entry; const isNew = !entry;
   if (entry) Object.assign(entry, {fields, tags, date:date.toISOString(), updated:new Date().toISOString()});
   else { entry = {id:uid(), type:ctx.type, date:date.toISOString(), fields, tags, created:new Date().toISOString()}; S.entries.push(entry); }
+  if (T.soothe) entry.helped = $$('.helps .chip.on', p).map(b => b.dataset.h);
   await persist();
   if (silent) return true;
   popSheet(); ctx.afterSave?.(entry); renderView();
@@ -541,6 +591,7 @@ function viewObj(id) {
       h += f.accent ? `<div class="laf-row" data-acc="${f.accent}" style="margin-top:16px"><span class="bar"></span><div><p class="label" style="margin-top:0">${f.label}</p><p class="txt">${esc(v)}</p></div></div>`
                     : `<p class="label">${f.label}</p><p class="txt">${esc(v)}</p>`;
     }
+    if (e.helped?.length) h += `<p class="label">What helped</p><p class="txt">${esc(e.helped.join(', '))}</p>`;
     if (e.tags.length) h += `<div class="chips" style="margin-top:20px">${e.tags.map(t => `<button class="chip" data-act="tag-journal" data-tag="${esc(t)}">#${esc(t)}</button>`).join('')}</div>`;
     h += `<div class="btnrow"><button class="link" data-act="edit" data-id="${e.id}">Edit</button>
           ${e.type === 'idea' && !e.fields.done ? `<button class="link" data-act="idea-done" data-id="${e.id}">I did this</button>` : ''}
@@ -806,6 +857,69 @@ function tagObj(tag) {
 addEventListener('resize', () => { if (VIEW === 'map' && M.canvas?.isConnected) { sizeMap(); drawMap(); } });
 
 /* ---------- backup & restore ---------- */
+/* ---------- patterns ---------- */
+function helpStats(es) {
+  const m = new Map();
+  for (const e of es) for (const h of e.helped || []) {
+    let r = m.get(h); if (!r) m.set(h, r = {name:h, used:0, lot:0, bit:0, no:0});
+    r.used++;
+    const v = e.fields.helpedHow; if (v === 'A lot') r.lot++; else if (v === 'A bit') r.bit++; else if (v === 'Not really') r.no++;
+  }
+  return [...m.values()].sort((a, b) => (b.lot * 2 + b.bit - b.no) - (a.lot * 2 + a.bit - a.no) || b.used - a.used);
+}
+function dayStats(es) {
+  // one row per day that has a LAF check-in
+  const days = new Map();
+  for (const e of es) if (e.type === 'laf' && CHECKIN.some(k => e.fields[k])) days.set(ymd(new Date(e.date)), {ci:e.fields, practice:false, hard:false});
+  for (const e of es) {
+    const d = days.get(ymd(new Date(e.date))); if (!d) continue;
+    if (e.type === 'meditation' || e.type === 'yoga') d.practice = true;
+    if (e.type === 'trigger') d.hard = true;
+  }
+  return [...days.values()];
+}
+function compareLines(days, key, a, b) {
+  const A = days.filter(d => d[key]), B = days.filter(d => !d[key]), out = [];
+  if (A.length < 3 || B.length < 3) return null;
+  for (const k of CHECKIN) {
+    const f = TYPES.laf.fields.find(x => x.k === k), bad = HARD[k];
+    const na = A.filter(d => d.ci[k] === bad).length, nb = B.filter(d => d.ci[k] === bad).length;
+    const pa = na / A.length, pb = nb / B.length;
+    if (Math.abs(pa - pb) >= .2 && na + nb >= 2) out.push(`${f.label} ${bad.toLowerCase()}: ${na} of ${A.length} ${a}, ${nb} of ${B.length} ${b}.`);
+  }
+  return out;
+}
+function patternsHTML() {
+  const since = MAPP ? Date.now() - MAPP * DAY : 0, es = S.entries.filter(e => +new Date(e.date) >= since);
+  let h = `<h1>Patterns</h1><div class="seg">${[[30,'Month'],[90,'3 months'],[0,'All']].map(([d, l]) => `<button class="chip${MAPP === d ? ' on' : ''}" data-act="period" data-d="${d}">${l}</button>`).join('')}</div>`;
+  const hs = helpStats(es);
+  h += `<section class="set"><h2>What helps</h2>`;
+  if (!hs.length) h += `<p class="small">Tick what helped on your LAF, Noticing and Triggered entries, and this fills in.</p>`;
+  else h += `<div class="list">${hs.map(r => { const rated = r.lot + r.bit + r.no;
+      return `<div class="prow"><div class="pname">${esc(r.name)}<small>${r.used} ${r.used === 1 ? 'time' : 'times'}${rated ? ` · helped a lot ${r.lot}, a bit ${r.bit}, not really ${r.no}` : ''}</small></div>
+        ${rated ? `<div class="pbar"><i style="flex:${r.lot};background:var(--accept)"></i><i style="flex:${r.bit};background:var(--accept);opacity:.45"></i><i style="flex:${r.no};background:var(--line)"></i></div>` : ''}</div>`; }).join('')}</div>
+      <p class="small">“Helped a lot” comes from rating Triggered entries, which is where it matters most.</p>`;
+  h += `</section>`;
+  const days = dayStats(es), prac = compareLines(days, 'practice', 'days you meditated or did yoga', 'other days');
+  h += `<section class="set"><h2>Practice and your days</h2>`;
+  h += prac === null ? `<p class="small">Needs at least three check-in days with practice and three without.</p>`
+     : prac.length ? prac.map(l => `<p class="pline">${esc(l)}</p>`).join('') : `<p class="small">No clear difference yet.</p>`;
+  h += `</section>`;
+  const trig = es.filter(e => e.type === 'trigger'), hard = compareLines(days, 'hard', 'days with a Triggered entry', 'other days');
+  h += `<section class="set"><h2>Around hard moments</h2>`;
+  if (!trig.length) h += `<p class="small">Nothing logged as Triggered in this period.</p>`;
+  else {
+    const parts = partWords(), pc = new Map(), st = {};
+    for (const e of trig) { for (const t of e.tags) if (parts.has(t)) pc.set(t, (pc.get(t) || 0) + 1); if (e.fields.state) st[e.fields.state] = (st[e.fields.state] || 0) + 1; }
+    const label = t => (MODES.find(m => m[0] === t)?.[1]) || (S.settings.schemas || []).find(x => schemaSlug(x) === t) || t;
+    h += `<p class="pline">${trig.length} Triggered ${trig.length === 1 ? 'entry' : 'entries'}${Object.keys(st).length ? ': ' + Object.entries(st).map(([k, n]) => `${k.toLowerCase()} ${n}`).join(', ') : ''}.</p>`;
+    if (pc.size) h += `<p class="pline">Parts most often there: ${[...pc].sort((a, b) => b[1] - a[1]).slice(0, 5).map(([t, n]) => `${esc(label(t))} (${n})`).join(', ')}.</p>`;
+    if (hard?.length) h += hard.map(l => `<p class="pline">${esc(l)}</p>`).join('');
+  }
+  h += `</section><p class="small" style="margin-top:28px">Patterns, not proof. A few weeks of check-ins make these far more reliable than a few days.</p>`;
+  return h;
+}
+
 /* ---------- summary PDF ---------- */
 const SUM = {days:30, types:null, text:true, name:''};
 function summaryObj() {
@@ -916,8 +1030,18 @@ function summaryBlocks() {
     const top = Object.entries(tc).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([t, n]) => `${t} (${n})`).join(', ');
     P(`Meditation: ${med.length} sessions, about ${Math.round(mins / 60 * 10) / 10} hours. ${Object.entries(kinds).map(([k, n]) => `${k} ${n}`).join(', ')}.${top ? ' Most used: ' + top + '.' : ''}`, {font:'F1', size:10, space:4});
   }
-  const emo = emotionWords(), fc = new Map(), tg = new Map();
-  for (const e of es) for (const t of e.tags) (emo.has(t) ? fc : tg).set(t, ((emo.has(t) ? fc : tg).get(t) || 0) + 1);
+  const emo = emotionWords(), parts = partWords(), fc = new Map(), tg = new Map(), pc = new Map();
+  for (const e of es) for (const t of e.tags) { const m = parts.has(t) ? pc : emo.has(t) ? fc : tg; m.set(t, (m.get(t) || 0) + 1); }
+  const label = t => (MODES.find(m => m[0] === t)?.[1]) || (S.settings.schemas || []).find(x => schemaSlug(x) === t) || t;
+  const lafs = by('laf'), ci = CHECKIN.map(k => {
+    const c = {}; for (const e of lafs) if (e.fields[k]) c[e.fields[k]] = (c[e.fields[k]] || 0) + 1;
+    const f = TYPES.laf.fields.find(x => x.k === k);
+    return Object.keys(c).length ? `${f.label}: ${f.options.filter(o => c[o]).map(o => `${o.toLowerCase()} ${c[o]}`).join(', ')}` : '';
+  }).filter(Boolean);
+  if (ci.length) { P('Nightly check-in (days)', {font:'F2', size:10, space:10}); P(ci.join('.   ') + '.', {font:'F1', size:10}); }
+  const hs = helpStats(es);
+  if (hs.length) { P('What helped', {font:'F2', size:10, space:10}); P(hs.map(r => `${r.name} (${r.used}${r.lot + r.bit + r.no ? `; a lot ${r.lot}, a bit ${r.bit}, not really ${r.no}` : ''})`).join(', '), {font:'F1', size:10}); }
+  if (pc.size) { P('Modes and schemas noted most often', {font:'F2', size:10, space:10}); P([...pc].sort((a, b) => b[1] - a[1]).map(([t, n]) => `${label(t)} (${n})`).join(', '), {font:'F1', size:10}); }
   const top = m => [...m].sort((a, b) => b[1] - a[1]).slice(0, 14).map(([t, n]) => `${t} (${n})`).join(', ');
   if (fc.size) { P('Feelings noted most often', {font:'F2', size:10, space:10}); P(top(fc), {font:'F1', size:10}); }
   if (tg.size) { P('Themes (tags) noted most often', {font:'F2', size:10, space:10}); P(top(tg).replace(/(^|, )/g, '$1#'), {font:'F1', size:10}); }
@@ -931,14 +1055,15 @@ function summaryBlocks() {
       if (k !== lastDay) { P(fmtDay(d), {font:'F2', size:10.5, space:14, keep:40}); lastDay = k; }
       P(`${T.label} · ${fmtTime(d)}`, {font:'F1', size:8.5, color:grey, space:6, keep:30});
       const short = T.fields.filter(f => (f.kind === 'line' || f.kind === 'num' || f.kind === 'choice') && e.fields[f.k])
-        .map(f => e.fields[f.k] + (f.k === 'minutes' ? ' min' : f.k === 'hours' ? ' h' : ''));
+        .map(f => (CHECKIN.includes(f.k) || f.k === 'state' ? f.label + ': ' : '') + e.fields[f.k] + (f.k === 'minutes' ? ' min' : f.k === 'hours' ? ' h' : ''));
       if (short.length) P(short.join(' · '), {font:'F1', size:9.5, space:1});
       for (const f of T.fields) {
         const v = e.fields[f.k]; if (!v || f.kind === 'line' || f.kind === 'num' || f.kind === 'choice') continue;
         if (f.accent) { P(f.label, {font:'F1', size:8.5, color:grey, space:3, indent:9}); P(v, {indent:9, bar:BAR[f.accent]}); }
         else { if (T.fields.length > 1) P(f.label, {font:'F1', size:8.5, color:grey, space:3}); P(v); }
       }
-      if (e.tags.length) P(e.tags.map(t => emo.has(t) ? t : '#' + t).join('  '), {font:'F1', size:8.5, color:grey, space:2});
+      if (e.helped?.length) P('What helped: ' + e.helped.join(', '), {font:'F1', size:9.5, space:2});
+      if (e.tags.length) P(e.tags.map(t => parts.has(t) ? label(t) : emo.has(t) ? t : '#' + t).join('  '), {font:'F1', size:8.5, color:grey, space:2});
     }
   }
   return B;
@@ -1044,6 +1169,13 @@ const A = {
   'sum-type': el => { SUM.name = $('#sum-name').value; const t = el.dataset.t; SUM.types.has(t) ? SUM.types.delete(t) : SUM.types.add(t); drawSheet(); },
   'sum-text': el => { SUM.name = $('#sum-name').value; SUM.text = el.dataset.v === '1'; drawSheet(); },
   'sum-make': () => exportSummary(),
+  'help-add': () => {
+    const inp = $('#help-new'), v = inp.value.trim(); if (!v) return;
+    if (!S.settings.helps.includes(v)) { S.settings.helps.push(v); persist(); }
+    const box = $('.helps .chips'), have = $$('.chip', box).find(b => b.dataset.h === v);
+    if (have) have.classList.add('on'); else box.insertAdjacentHTML('beforeend', `<button type="button" class="chip on" data-act="emo" data-h="${esc(v)}">${esc(v)}</button>`);
+    inp.value = '';
+  },
   'lib-sort': el => { LIB_UI.sort = el.dataset.s; drawSheet(); },
   'track-edit': el => pushSheet(trackEditObj(el.dataset.id)),
   async 'track-save'(el) {
@@ -1107,6 +1239,8 @@ const A = {
     S.settings.emotions = pairs; S.settings.emoCustom = true; await persist(); toast('Feelings saved');
   },
   async 'emo-reset'() { S.settings.emotions = DEFAULT_EMOTIONS; S.settings.emoCustom = false; await persist(); renderView(); toast('Suggested pairs restored'); },
+  async 'save-helps'() { S.settings.helps = $('#help-edit').value.split('\n').map(x => x.trim()).filter(Boolean); await persist(); toast('Saved'); },
+  async 'save-sch'() { S.settings.schemas = $('#sch-edit').value.split('\n').map(x => x.trim()).filter(Boolean); await persist(); toast('Schemas saved'); },
   async 'save-seed'() { S.settings.seedTags = parseTagInput($('#seed-edit').value); await persist(); toast('Tags saved'); },
   async erase() {
     if (prompt('This deletes every entry and recording on this phone. Type ERASE to confirm.') !== 'ERASE') return;
