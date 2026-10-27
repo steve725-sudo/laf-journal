@@ -136,6 +136,9 @@ input[type=range]{padding:0;border:0;background:none;accent-color:var(--practice
 .times{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);margin-top:6px;font-variant-numeric:tabular-nums}
 .track{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line)}
 .trk{flex:1;padding:14px 0;font-family:var(--serif);font-size:1.05rem}
+.libbar{display:flex;gap:8px;align-items:center;margin-top:10px;flex-wrap:wrap}
+.libbar input{flex:1 1 100%}
+.grp{margin:18px 0 0;font-size:.75rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 .trk small{display:block;font-family:var(--sans);font-size:.8rem;color:var(--muted);margin-top:2px}
 
 .set{margin-top:34px}
@@ -185,6 +188,7 @@ const TYPES = {
   note:      {label:'Noticing', color:'--forgive', intro:'Whatever is here right now.', fields:[
                {k:'text', label:'What’s coming up', rows:5, focus:true}]},
   meditation:{label:'Meditation', color:'--practice', fields:[
+               {k:'kind', label:'Kind', kind:'choice', options:['Recording','Silent','Lumenate']},
                {k:'track', label:'Practice', kind:'line'}, {k:'minutes', label:'Minutes', kind:'num'},
                {k:'text', label:'Reflection', rows:5, focus:true}]},
   yoga:      {label:'Yoga', color:'--practice', fields:[
@@ -338,7 +342,7 @@ function preview(e) {
   const f = e.fields;
   switch (e.type) {
     case 'laf': return f.love || f.accept || f.forgive || f.notice || '';
-    case 'meditation': return [f.minutes ? f.minutes + ' min' : '', f.track, f.text].filter(Boolean).join(', ');
+    case 'meditation': return [f.minutes ? f.minutes + ' min' : '', f.kind === 'Lumenate' && f.track !== 'Lumenate' ? 'Lumenate' : '', f.track, f.text].filter(Boolean).join(', ');
     case 'yoga': return [f.minutes ? f.minutes + ' min' : '', f.style, f.text].filter(Boolean).join(', ');
     case 'retreat': return [f.focus, f.hours ? f.hours + ' h' : '', f.text].filter(Boolean).join(', ');
     case 'creative': return [f.what, f.text].filter(Boolean).join('. ');
@@ -418,6 +422,9 @@ function settingsHTML() {
     Backups are encrypted with your passphrase. Choose “Save to Files” and pick On My iPhone, or AirDrop it to your computer. Your MP3s aren’t included, so keep the originals.</p>
     <button class="primary" data-act="backup">Save a backup</button>
     <button class="secondary" data-act="restore-start">Restore from a backup</button></section>
+  <section class="set"><h2>Summary to share</h2>
+    <p class="small">A PDF of a chosen period, for a psychologist, counsellor or social worker. You choose what goes in.</p>
+    <button class="secondary" data-act="summary">Make a summary PDF</button></section>
   <section class="set"><h2>Feelings</h2>
     <p class="small">Your everyday pairs, shown on every entry. One pair per line. The full iRest list, ${LIB_EMO.length} emotion pairs and ${LIB_BODY.length} body-feeling pairs from the Level 1 and 2 manuals, is searchable under Feelings on any entry.</p>
     <textarea id="emo-edit" rows="9" autocapitalize="none">${esc(st.emotions.map(p => p.join(' / ')).join('\n'))}</textarea>
@@ -545,14 +552,59 @@ function viewObj(id) {
 /* ---------- meditation ---------- */
 const ICON_PLAY = `<svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg>`;
 const ICON_PAUSE = `<svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></svg>`;
+const LIB_UI = {q:'', sort:'recent'};
+function lastPlayed() {
+  const m = new Map();
+  for (const e of S.entries) {
+    if (e.type !== 'meditation') continue;
+    const t = e.trackId ? S.tracks.find(x => x.id === e.trackId) : S.tracks.find(x => x.name === e.fields.track);
+    if (!t) continue;
+    const d = +new Date(e.date); if (!m.has(t.id) || m.get(t.id) < d) m.set(t.id, d);
+  }
+  return m;
+}
+function ago(ms) {
+  const d = Math.floor((Date.now() - ms) / DAY);
+  return d <= 0 ? 'today' : d === 1 ? 'yesterday' : d < 14 ? d + ' days ago' : new Date(ms).toLocaleDateString(undefined, {day:'numeric', month:'short'});
+}
+function trackList() {
+  const lp = lastPlayed(), q = LIB_UI.q.trim().toLowerCase();
+  let ts = S.tracks.filter(t => !q || t.name.toLowerCase().includes(q) || (t.group || '').toLowerCase().includes(q));
+  ts.sort(LIB_UI.sort === 'az' ? (a, b) => a.name.localeCompare(b.name) : (a, b) => (lp.get(b.id) || 0) - (lp.get(a.id) || 0) || a.name.localeCompare(b.name));
+  if (!ts.length) return '<p class="small">Nothing matches.</p>';
+  const groups = new Map();
+  for (const t of ts) { const g = t.group || ''; if (!groups.has(g)) groups.set(g, []); groups.get(g).push(t); }
+  const keys = [...groups.keys()].sort((a, b) => (a === '') - (b === '') || a.localeCompare(b));
+  const many = keys.length > 1 || keys[0] !== '';
+  return keys.map(g => (many ? `<p class="grp">${esc(g || 'Other')}</p>` : '') + `<div class="list">${groups.get(g).map(t => `<div class="track">
+      <button class="trk" data-act="play" data-id="${t.id}">${esc(t.name)}<small>${[t.dur ? mmss(t.dur) : '', lp.has(t.id) ? 'played ' + ago(lp.get(t.id)) : 'not played yet'].filter(Boolean).join(' · ')}</small></button>
+      <button class="x" data-act="track-edit" data-id="${t.id}">Edit</button></div>`).join('')}</div>`).join('');
+}
 function meditateObj() {
   return {kind:'meditate', render: () => `<div class="sh-head"><h2>Meditate</h2><button class="x" data-act="close">Close</button></div>
-    ${S.tracks.length ? `<div class="list" style="margin-top:10px">${S.tracks.map(t => `<div class="track">
-        <button class="trk" data-act="play" data-id="${t.id}">${esc(t.name)}<small>${t.dur ? mmss(t.dur) : ''}</small></button>
-        <button class="x" data-act="track-del" data-id="${t.id}">Remove</button></div>`).join('')}</div>`
+    ${S.tracks.length ? `<div class="libbar">${S.tracks.length > 5 ? `<input type="search" id="lib-q" placeholder="Find a recording" autocapitalize="none" autocorrect="off" value="${esc(LIB_UI.q)}">` : ''}
+        <button class="chip${LIB_UI.sort === 'recent' ? ' on' : ''}" data-act="lib-sort" data-s="recent">Recent</button>
+        <button class="chip${LIB_UI.sort === 'az' ? ' on' : ''}" data-act="lib-sort" data-s="az">A–Z</button></div>
+      <div id="lib-list">${trackList()}</div>`
       : `<p class="small">Add your own MP3 meditations. They’re kept encrypted on this phone.</p>`}
     <button class="primary" data-act="add-mp3">Add MP3s</button>
-    <button class="quiet" data-act="sit">Log a sit without audio</button>`};
+    <button class="quiet" data-act="lumenate">Log a Lumenate session</button>
+    <button class="quiet" data-act="sit">Log a sit without audio</button>`,
+    after: p => { $('#lib-q', p)?.addEventListener('input', ev => { LIB_UI.q = ev.target.value; $('#lib-list', p).innerHTML = trackList(); }); }};
+}
+function trackEditObj(id) {
+  const t = S.tracks.find(x => x.id === id), groups = [...new Set(S.tracks.map(x => x.group).filter(Boolean))].sort();
+  return {kind:'track-edit', render: () => `<div class="sh-head"><h2>Recording</h2><button class="x" data-act="close">Cancel</button></div>
+    <label class="fld"><span>Name</span><input id="tr-name" type="text" value="${esc(t.name)}"></label>
+    <label class="fld"><span>Collection</span><input id="tr-group" type="text" list="tr-groups" placeholder="e.g. Yoga nidra, iRest" value="${esc(t.group || '')}"></label>
+    <datalist id="tr-groups">${groups.map(g => `<option value="${esc(g)}">`).join('')}</datalist>
+    <button class="primary" data-act="track-save" data-id="${t.id}">Save</button>
+    <button class="quiet" data-act="track-del" data-id="${t.id}">Remove recording</button>`};
+}
+async function logSession(track, secs) {
+  const e = {id:uid(), type:'meditation', date:new Date().toISOString(), trackId:track.id,
+    fields:{kind:'Recording', track:track.name, minutes:String(Math.max(1, Math.round(secs / 60))), text:''}, tags:[], created:new Date().toISOString()};
+  S.entries.push(e); await persist(); return e;
 }
 async function playTrack(id) {
   const t = S.tracks.find(x => x.id === id); if (!t) return;
@@ -568,7 +620,7 @@ async function playTrack(id) {
   audio.addEventListener('play', updPlayer); audio.addEventListener('pause', updPlayer);
   audio.addEventListener('ended', () => finishPlayer(true));
   if ('mediaSession' in navigator) try { navigator.mediaSession.metadata = new MediaMetadata({title:t.name, artist:'LAF'}); } catch {}
-  pushSheet({kind:'player', onClose: stopPlayer, render: () => `<div class="player">
+  pushSheet({kind:'player', onClose: () => endSession(), render: () => `<div class="player">
       <p class="label">Meditation</p><h2>${esc(t.name)}</h2>
       <button class="pp" data-act="pp" aria-label="Play or pause">${ICON_PAUSE}</button>
       <input type="range" id="seek" min="0" max="${t.dur || 0}" step="1" value="0" aria-label="Position">
@@ -592,19 +644,23 @@ function stopPlayer() {
   const p = player; player = null;
   p.audio.pause(); p.audio.removeAttribute('src'); p.audio.load(); URL.revokeObjectURL(p.url);
 }
+async function endSession() {
+  if (!player) return;
+  const secs = Math.max(player.max, player.audio.currentTime), t = player.track;
+  stopPlayer();
+  if (secs >= 60) { await logSession(t, secs); toast('Session logged. Open it in the journal to reflect.', 3500); renderView(); }
+}
 async function finishPlayer(auto) {
   if (!player) return;
-  const mins = String(Math.max(1, Math.round(Math.max(player.max, player.audio.currentTime) / 60)));
-  const name = player.track.name;
+  const secs = Math.max(player.max, player.audio.currentTime), t = player.track;
   stopPlayer();
+  const e = await logSession(t, secs);
   if (auto && document.hidden) {
-    S.entries.push({id:uid(), type:'meditation', date:new Date().toISOString(), fields:{track:name, minutes:mins, text:''}, tags:[], created:new Date().toISOString()});
-    await persist();
     PENDING_MSG = 'Your meditation was logged. Open it in the journal to add a reflection.';
     lock(); return;
   }
-  closeAllSheets();
-  openForm('meditation', null, {track:name, minutes:mins});
+  closeAllSheets(); renderView();
+  openForm('meditation', e);
 }
 function audioDuration(file) {
   return new Promise(res => {
@@ -750,6 +806,155 @@ function tagObj(tag) {
 addEventListener('resize', () => { if (VIEW === 'map' && M.canvas?.isConnected) { sizeMap(); drawMap(); } });
 
 /* ---------- backup & restore ---------- */
+/* ---------- summary PDF ---------- */
+const SUM = {days:30, types:null, text:true, name:''};
+function summaryObj() {
+  SUM.types ||= new Set(TYPE_ORDER);
+  return {kind:'summary', full:true, render: () => `<div class="sh-head"><h2>Summary PDF</h2><button class="x" data-act="close">Cancel</button></div>
+    <div class="fld"><span>Period</span><div class="chips">${[[14,'2 weeks'],[30,'Month'],[90,'3 months'],[0,'Everything']].map(([d, l]) =>
+      `<button class="chip${SUM.days === d ? ' on' : ''}" data-act="sum-days" data-d="${d}">${l}</button>`).join('')}</div></div>
+    <div class="fld"><span>Include</span><div class="chips">${TYPE_ORDER.map(t =>
+      `<button class="chip${SUM.types.has(t) ? ' on' : ''}" data-act="sum-type" data-t="${t}">${TYPES[t].label}</button>`).join('')}</div></div>
+    <div class="fld"><span>Detail</span><div class="chips">
+      <button class="chip${SUM.text ? ' on' : ''}" data-act="sum-text" data-v="1">Overview and entries</button>
+      <button class="chip${!SUM.text ? ' on' : ''}" data-act="sum-text" data-v="0">Overview only</button></div></div>
+    <label class="fld"><span>Name on the summary (optional)</span><input id="sum-name" type="text" value="${esc(SUM.name)}"></label>
+    <p class="small" id="sum-count">${sumEntries().length} entries</p>
+    <p class="small">The PDF isn’t encrypted. Once it leaves the app, anyone with the file can read it. Printing it or showing it on screen is the most private option.</p>
+    <button class="primary" data-act="sum-make">Make PDF</button>`};
+}
+function sumEntries() {
+  const since = SUM.days ? Date.now() - SUM.days * DAY : 0;
+  return S.entries.filter(e => SUM.types.has(e.type) && +new Date(e.date) >= since).sort((a, b) => a.date.localeCompare(b.date));
+}
+// Minimal PDF writer: A4, built-in fonts, WinAnsi text. No libraries, nothing leaves the phone.
+const W1252 = {0x20AC:128,0x201A:130,0x192:131,0x201E:132,0x2026:133,0x2020:134,0x2021:135,0x2C6:136,0x2030:137,0x160:138,0x2039:139,0x152:140,0x17D:142,
+  0x2018:145,0x2019:146,0x201C:147,0x201D:148,0x2022:149,0x2013:150,0x2014:151,0x2DC:152,0x2122:153,0x161:154,0x203A:155,0x153:156,0x17E:158,0x178:159};
+function pdfStr(t) {
+  let o = '';
+  for (const ch of String(t).normalize('NFC')) {
+    const c = ch.codePointAt(0), b = c < 128 || (c >= 160 && c < 256) ? c : W1252[c];
+    const k = b === undefined ? 63 : b;
+    o += k === 40 || k === 41 || k === 92 ? '\\' + String.fromCharCode(k) : String.fromCharCode(k);
+  }
+  return o;
+}
+function makePDF(blocks) {
+  const PW = 595.28, PH = 841.89, M = 56, TW = PW - M * 2;
+  const meas = document.createElement('canvas').getContext('2d');
+  const FONT = {F1:'Helvetica, Arial, sans-serif', F2:'Helvetica, Arial, sans-serif', F3:'"Times New Roman", Times, serif'};
+  const width = (t, f, sz) => { meas.font = f === 'F2' ? `bold ${sz}px Helvetica, Arial, sans-serif` : `${sz}px ${FONT[f]}`; return meas.measureText(t).width; };
+  const wrap = (t, f, sz, w) => {
+    const out = [];
+    for (const para of String(t).split('\n')) {
+      let line = '';
+      for (const word of para.split(/\s+/)) {
+        const tryL = line ? line + ' ' + word : word;
+        if (width(tryL, f, sz) <= w || !line) line = tryL; else { out.push(line); line = word; }
+      }
+      out.push(line);
+    }
+    return out;
+  };
+  const pages = []; let ops = [], y = PH - M;
+  const newPage = () => { if (ops.length) pages.push(ops); ops = []; y = PH - M; };
+  const need = h => { if (y - h < M + 20) newPage(); };
+  const rgb = hex => hex.match(/\w\w/g).map(h => (parseInt(h, 16) / 255).toFixed(3)).join(' ');
+  for (const b of blocks) {
+    const sz = b.size || 10.5, lh = sz * (b.lead || 1.4), f = b.font || 'F3', ind = b.indent || 0;
+    if (b.space) { y -= b.space; }
+    if (b.rule) { need(10); ops.push(`0.85 0.83 0.80 RG 0.5 w ${M} ${y.toFixed(2)} m ${PW - M} ${y.toFixed(2)} l S`); y -= 10; continue; }
+    const lines = wrap(b.text, f, sz, TW - ind);
+    if (b.keep) need(lh * Math.min(lines.length, 3) + (b.keep || 0));
+    const top = y;
+    for (const ln of lines) {
+      need(lh); const yy = y - sz;
+      ops.push(`BT /${f} ${sz} Tf ${rgb(b.color || '2d2c2a')} rg ${(M + ind).toFixed(2)} ${yy.toFixed(2)} Td (${pdfStr(ln)}) Tj ET`);
+      y -= lh;
+    }
+    if (b.bar && y < top) ops.push(`${rgb(b.bar)} rg ${M} ${(y + lh - sz - 2).toFixed(2)} 2.5 ${(top - y - lh + sz + 4).toFixed(2)} re f`);
+  }
+  newPage();
+  const objs = [], add = o => (objs.push(o), objs.length);
+  const cat = add(''), pagesId = add(''), f1 = add('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica /Encoding /WinAnsiEncoding >>'),
+        f2 = add('<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold /Encoding /WinAnsiEncoding >>'),
+        f3 = add('<< /Type /Font /Subtype /Type1 /BaseFont /Times-Roman /Encoding /WinAnsiEncoding >>');
+  const kids = [];
+  pages.forEach((po, i) => {
+    po.push(`BT /F1 8 Tf 0.48 0.46 0.44 rg ${M} 30 Td (${pdfStr(`Page ${i + 1} of ${pages.length}`)}) Tj ET`);
+    const body = po.join('\n'), cs = add(`<< /Length ${body.length} >>\nstream\n${body}\nendstream`);
+    kids.push(add(`<< /Type /Page /Parent ${pagesId} 0 R /MediaBox [0 0 ${PW} ${PH}] /Resources << /Font << /F1 ${f1} 0 R /F2 ${f2} 0 R /F3 ${f3} 0 R >> >> /Contents ${cs} 0 R >>`));
+  });
+  objs[cat - 1] = `<< /Type /Catalog /Pages ${pagesId} 0 R >>`;
+  objs[pagesId - 1] = `<< /Type /Pages /Kids [${kids.map(k => k + ' 0 R').join(' ')}] /Count ${kids.length} >>`;
+  let out = '%PDF-1.4\n', offs = [];
+  objs.forEach((o, i) => { offs.push(out.length); out += `${i + 1} 0 obj\n${o}\nendobj\n`; });
+  const xref = out.length;
+  out += `xref\n0 ${objs.length + 1}\n0000000000 65535 f \n` + offs.map(o => String(o).padStart(10, '0') + ' 00000 n \n').join('');
+  out += `trailer\n<< /Size ${objs.length + 1} /Root ${cat} 0 R >>\nstartxref\n${xref}\n%%EOF`;
+  return new Blob([Uint8Array.from(out, c => c.charCodeAt(0) & 255)], {type:'application/pdf'});
+}
+function summaryBlocks() {
+  const es = sumEntries(), B = [], H = (t, sp = 18) => B.push({text:t, font:'F2', size:12, space:sp, lead:1.5, keep:30});
+  const P = (t, o = {}) => B.push({text:t, ...o}), grey = '7a766f';
+  const first = es[0] ? new Date(es[0].date) : new Date(), last = new Date();
+  const from = SUM.days ? new Date(Date.now() - SUM.days * DAY) : first;
+  const dl = d => d.toLocaleDateString('en-AU', {day:'numeric', month:'long', year:'numeric'});
+  P('LAF journal summary', {font:'F3', size:22, lead:1.25});
+  P([SUM.name, `${dl(from)} to ${dl(last)}`].filter(Boolean).join(' · '), {font:'F1', size:10, color:grey, space:4});
+  P('Personal reflections, shared by choice. LAF stands for love, acceptance and forgiveness: each night I note one thing about myself for each.', {font:'F1', size:9, color:grey, space:6});
+  B.push({rule:true, space:12});
+  H('Overview', 6);
+  const by = t => es.filter(e => e.type === t);
+  const counts = TYPE_ORDER.filter(t => SUM.types.has(t) && by(t).length).map(t => `${TYPES[t].label}: ${by(t).length}`);
+  P(counts.length ? counts.join('   ') : 'No entries in this period.', {font:'F1', size:10});
+  const med = by('meditation');
+  if (med.length) {
+    const mins = med.reduce((a, e) => a + (+e.fields.minutes || 0), 0), kinds = {};
+    for (const e of med) { const k = e.fields.kind || 'Recording'; kinds[k] = (kinds[k] || 0) + 1; }
+    const tc = {}; for (const e of med) if (e.fields.track) tc[e.fields.track] = (tc[e.fields.track] || 0) + 1;
+    const top = Object.entries(tc).sort((a, b) => b[1] - a[1]).slice(0, 5).map(([t, n]) => `${t} (${n})`).join(', ');
+    P(`Meditation: ${med.length} sessions, about ${Math.round(mins / 60 * 10) / 10} hours. ${Object.entries(kinds).map(([k, n]) => `${k} ${n}`).join(', ')}.${top ? ' Most used: ' + top + '.' : ''}`, {font:'F1', size:10, space:4});
+  }
+  const emo = emotionWords(), fc = new Map(), tg = new Map();
+  for (const e of es) for (const t of e.tags) (emo.has(t) ? fc : tg).set(t, ((emo.has(t) ? fc : tg).get(t) || 0) + 1);
+  const top = m => [...m].sort((a, b) => b[1] - a[1]).slice(0, 14).map(([t, n]) => `${t} (${n})`).join(', ');
+  if (fc.size) { P('Feelings noted most often', {font:'F2', size:10, space:10}); P(top(fc), {font:'F1', size:10}); }
+  if (tg.size) { P('Themes (tags) noted most often', {font:'F2', size:10, space:10}); P(top(tg).replace(/(^|, )/g, '$1#'), {font:'F1', size:10}); }
+  if (SUM.text && es.length) {
+    B.push({rule:true, space:16});
+    H('Entries', 4);
+    const BAR = {love:'c4848b', accept:'86a085', forgive:'7f98b3'};
+    let lastDay = '';
+    for (const e of es) {
+      const d = new Date(e.date), T = TYPES[e.type], k = ymd(d);
+      if (k !== lastDay) { P(fmtDay(d), {font:'F2', size:10.5, space:14, keep:40}); lastDay = k; }
+      P(`${T.label} · ${fmtTime(d)}`, {font:'F1', size:8.5, color:grey, space:6, keep:30});
+      const short = T.fields.filter(f => (f.kind === 'line' || f.kind === 'num' || f.kind === 'choice') && e.fields[f.k])
+        .map(f => e.fields[f.k] + (f.k === 'minutes' ? ' min' : f.k === 'hours' ? ' h' : ''));
+      if (short.length) P(short.join(' · '), {font:'F1', size:9.5, space:1});
+      for (const f of T.fields) {
+        const v = e.fields[f.k]; if (!v || f.kind === 'line' || f.kind === 'num' || f.kind === 'choice') continue;
+        if (f.accent) { P(f.label, {font:'F1', size:8.5, color:grey, space:3, indent:9}); P(v, {indent:9, bar:BAR[f.accent]}); }
+        else { if (T.fields.length > 1) P(f.label, {font:'F1', size:8.5, color:grey, space:3}); P(v); }
+      }
+      if (e.tags.length) P(e.tags.map(t => emo.has(t) ? t : '#' + t).join('  '), {font:'F1', size:8.5, color:grey, space:2});
+    }
+  }
+  return B;
+}
+async function exportSummary() {
+  SUM.name = ($('#sum-name')?.value || '').trim();
+  if (!sumEntries().length) { toast('No entries in that period.'); return; }
+  const blob = makePDF(summaryBlocks()), name = `laf-summary-${ymd(new Date())}.pdf`;
+  suspendLock();
+  try {
+    const f = new File([blob], name, {type:'application/pdf'});
+    if (navigator.canShare?.({files:[f]})) { await navigator.share({files:[f]}); toast('Summary ready'); return; }
+  } catch (e) { if (e.name === 'AbortError') return; }
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+}
 async function exportBackup() {
   await saving;
   const v = await get('kv', 'vault');
@@ -832,7 +1037,22 @@ const A = {
   tab: el => showView(el.dataset.v),
   new: el => openForm(el.dataset.type),
   meditate: () => pushSheet(meditateObj()),
-  sit: () => { popSheet(); openForm('meditation'); },
+  sit: () => { popSheet(); openForm('meditation', null, {kind:'Silent'}); },
+  lumenate: () => { popSheet(); openForm('meditation', null, {kind:'Lumenate', track:'Lumenate'}); },
+  summary: () => pushSheet(summaryObj()),
+  'sum-days': el => { SUM.name = $('#sum-name').value; SUM.days = +el.dataset.d; drawSheet(); },
+  'sum-type': el => { SUM.name = $('#sum-name').value; const t = el.dataset.t; SUM.types.has(t) ? SUM.types.delete(t) : SUM.types.add(t); drawSheet(); },
+  'sum-text': el => { SUM.name = $('#sum-name').value; SUM.text = el.dataset.v === '1'; drawSheet(); },
+  'sum-make': () => exportSummary(),
+  'lib-sort': el => { LIB_UI.sort = el.dataset.s; drawSheet(); },
+  'track-edit': el => pushSheet(trackEditObj(el.dataset.id)),
+  async 'track-save'(el) {
+    const t = S.tracks.find(x => x.id === el.dataset.id); if (!t) return;
+    const name = $('#tr-name').value.trim(), group = $('#tr-group').value.trim();
+    if (!name) { toast('Give it a name.'); return; }
+    if (name !== t.name) for (const e of S.entries) if (e.type === 'meditation' && (e.trackId === t.id || (!e.trackId && e.fields.track === t.name))) { e.trackId = t.id; e.fields.track = name; }
+    t.name = name; t.group = group; await persist(); popSheet(); toast('Saved');
+  },
   ideas: () => { JF.type = 'idea'; JF.tag = null; JF.q = ''; showView('journal'); },
   view: el => pushSheet(viewObj(el.dataset.id)),
   edit: el => { const e = byId(el.dataset.id); if (e) replaceSheet(formObj({type:e.type, entry:e})); },
@@ -874,7 +1094,8 @@ const A = {
   async 'track-del'(el) {
     const t = S.tracks.find(x => x.id === el.dataset.id);
     if (!t || !confirm(`Remove “${t.name}”? Logged sessions stay in the journal.`)) return;
-    await del('audio', t.id); S.tracks = S.tracks.filter(x => x !== t); await persist(); drawSheet();
+    await del('audio', t.id); S.tracks = S.tracks.filter(x => x !== t); await persist();
+    if (STACK.at(-1)?.kind === 'track-edit') popSheet(); else drawSheet();
   },
   pp: () => { if (!player) return; player.audio.paused ? player.audio.play() : player.audio.pause(); },
   finish: () => finishPlayer(false),
