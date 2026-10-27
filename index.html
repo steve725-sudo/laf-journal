@@ -1,0 +1,941 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'unsafe-inline'; style-src 'unsafe-inline'; img-src 'self' data: blob:; media-src blob:; manifest-src 'self'; worker-src 'self'; connect-src 'none'; form-action 'none'; base-uri 'none'">
+<meta name="referrer" content="no-referrer">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="LAF">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#F6F3EE" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#1B1C1E" media="(prefers-color-scheme: dark)">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-192.png">
+<title>LAF</title>
+<style>
+:root{
+  --bg:#F6F3EE;--surface:#FFFDFA;--ink:#2D2C2A;--muted:#7A766F;--line:#E3DDD3;
+  --love:#C4848B;--accept:#86A085;--forgive:#7F98B3;--dream:#9890BC;--practice:#6F9C95;--creative:#C39A5A;
+  --serif:"Iowan Old Style","Palatino Linotype",Palatino,Georgia,serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#1B1C1E;--surface:#242528;--ink:#E8E4DD;--muted:#9C978F;--line:#36383C;
+  --love:#D1979D;--accept:#9BB59A;--forgive:#95ADC7;--dream:#ABA3CF;--practice:#86B1AA;--creative:#D3AD70;
+  color-scheme:dark;
+}}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{min-height:100%;background:var(--bg);color:var(--ink);font-family:var(--sans);-webkit-text-size-adjust:100%}
+body{-webkit-tap-highlight-color:transparent}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer;text-align:inherit}
+:focus-visible{outline:2px solid var(--forgive);outline-offset:2px;border-radius:6px}
+[data-acc="love"]{--c:var(--love)}[data-acc="accept"]{--c:var(--accept)}[data-acc="forgive"]{--c:var(--forgive)}
+
+.app{max-width:640px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 22px) 20px calc(env(safe-area-inset-bottom) + 100px)}
+h1{font-family:var(--serif);font-weight:400;font-size:2rem;line-height:1.15;letter-spacing:-.01em}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
+.label{font-size:.82rem;color:var(--muted);margin:18px 0 6px}
+.small{font-size:.86rem;color:var(--muted);line-height:1.5;margin-top:10px}
+.hint{color:var(--muted);font-style:italic}
+.x{color:var(--muted);font-size:.95rem;padding:6px 0;white-space:nowrap}
+
+.laf{margin:26px 0 6px;display:grid;gap:14px}
+.laf .label{margin:0}
+.laf.done{cursor:pointer}
+.laf-row{display:grid;grid-template-columns:3px 1fr;gap:14px}
+.laf-row .bar{border-radius:3px;background:var(--c)}
+.laf-row p{font-family:var(--serif);font-size:1.15rem;line-height:1.5;padding:2px 0}
+
+.primary{display:block;width:100%;padding:15px 18px;border-radius:14px;background:var(--ink);color:var(--bg);font-weight:600;font-size:1rem;margin-top:14px;text-align:center}
+.primary:disabled{opacity:.5}
+.secondary{display:block;width:100%;padding:13px;border-radius:14px;border:1px solid var(--line);font-size:.95rem;margin-top:10px;text-align:center}
+.quiet{display:block;width:100%;padding:13px;color:var(--muted);font-size:.95rem;margin-top:4px;text-align:center}
+.link{color:var(--ink);text-decoration:underline;text-underline-offset:3px;font-size:.95rem;padding:4px 0}
+
+.group{font-family:var(--serif);font-weight:400;font-size:1.15rem;margin:32px 0 10px;color:var(--muted)}
+.actions{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:8px}
+.actions button{display:flex;align-items:center;gap:10px;padding:14px;border-radius:12px;background:var(--surface);border:1px solid var(--line);font-size:.98rem}
+.actions small{margin-left:auto;color:var(--muted)}
+.dot,.actions i{width:9px;height:9px;border-radius:50%;background:var(--c);flex:none;display:inline-block}
+
+.note{margin-top:24px;padding:16px;border-radius:12px;border:1px dashed var(--line)}
+.note p{line-height:1.45}
+.note .row{display:flex;gap:20px;margin-top:8px}
+
+.list{display:grid}
+.card{padding:14px 2px;border-bottom:1px solid var(--line);cursor:pointer}
+.meta{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--muted)}
+.meta span{margin-left:auto}
+.pv{font-family:var(--serif);font-size:1.02rem;line-height:1.45;margin-top:6px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.tags{display:flex;flex-wrap:wrap;gap:2px 10px;margin-top:6px;font-size:.8rem;color:var(--muted)}
+.day{font-size:.82rem;color:var(--muted);font-weight:600;margin:24px 0 0}
+.empty{font-family:var(--serif);color:var(--muted);font-size:1.05rem;line-height:1.5;margin-top:28px}
+
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips.scroll{flex-wrap:nowrap;overflow-x:auto;margin:14px -20px 0;padding:2px 20px;scrollbar-width:none}
+.chips.scroll::-webkit-scrollbar{display:none}
+.chip{padding:7px 12px;border-radius:999px;border:1px solid var(--line);font-size:.86rem;white-space:nowrap;color:var(--muted)}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sugg{margin-top:8px}
+.activetag{display:flex;justify-content:space-between;align-items:center;margin-top:14px;font-size:.92rem}
+
+input,textarea{font:inherit;font-size:17px;color:var(--ink);background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;width:100%;-webkit-appearance:none;appearance:none}
+input[type=search]{margin-top:16px}
+textarea{font-family:var(--serif);line-height:1.5;resize:vertical;field-sizing:content;min-height:4.5em}
+.fld{display:block;margin-top:16px}
+.fld>span{display:block;font-size:.85rem;color:var(--muted);margin-bottom:6px}
+.fld[data-acc] textarea{border-left:3px solid var(--c)}
+.emo{margin-top:18px}
+.emo summary{font-size:.9rem;color:var(--muted);cursor:pointer;padding:6px 0}
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:6px}
+.pair .chip{text-align:center}
+.txt{font-family:var(--serif);font-size:1.08rem;line-height:1.55;white-space:pre-wrap;overflow-wrap:anywhere}
+.btnrow{display:flex;gap:22px;margin-top:24px;flex-wrap:wrap}
+.del{color:var(--love)}
+
+.sheet{position:fixed;inset:0;z-index:40;display:none}
+.sheet.open{display:block}
+.sheet-back{position:absolute;inset:0;background:rgba(20,20,22,.34)}
+.sheet-panel{position:absolute;left:0;right:0;bottom:0;max-width:640px;margin:0 auto;max-height:calc(100dvh - env(safe-area-inset-top) - 28px);overflow-y:auto;background:var(--bg);border-radius:20px 20px 0 0;padding:22px 20px calc(env(safe-area-inset-bottom) + 28px);overscroll-behavior:contain;animation:up .22s ease-out}
+.sheet-panel.full{top:0;max-height:none;border-radius:0;padding-top:calc(env(safe-area-inset-top) + 18px)}
+@keyframes up{from{transform:translateY(24px);opacity:.6}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion:reduce){.sheet-panel{animation:none}}
+.sh-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.sh-head h2{font-family:var(--serif);font-weight:400;font-size:1.5rem;line-height:1.2}
+
+.tabs{position:fixed;left:0;right:0;bottom:0;z-index:20;display:flex;justify-content:center;gap:4px;padding:6px 12px calc(env(safe-area-inset-bottom) + 6px);background:var(--bg);background:color-mix(in srgb,var(--bg) 90%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-top:1px solid var(--line)}
+.tabs button{flex:1;max-width:140px;padding:11px 0;font-size:.84rem;color:var(--muted);text-align:center}
+.tabs button[aria-current="page"]{color:var(--ink);font-weight:600}
+
+.gate{max-width:440px;margin:0 auto;padding:calc(env(safe-area-inset-top) + 11vh) 24px 48px}
+.mark{display:block;width:64px;height:56px;margin-bottom:22px}
+.mark circle{mix-blend-mode:multiply}
+@media (prefers-color-scheme:dark){.mark circle{mix-blend-mode:screen}}
+.gate h1{font-size:2.6rem}
+.lede{font-family:var(--serif);font-size:1.15rem;line-height:1.5;color:var(--muted);margin:10px 0 26px}
+.gate .fld{margin-top:14px}
+.err{color:var(--love);margin-top:12px;font-size:.92rem;min-height:1.3em}
+
+.mapview{display:flex;flex-direction:column;height:100vh;height:100dvh;padding:calc(env(safe-area-inset-top) + 22px) 0 calc(env(safe-area-inset-bottom) + 58px)}
+.mapview header{padding:0 20px}
+.seg{display:flex;gap:6px;margin-top:12px}
+.mapwrap{flex:1;position:relative;min-height:0}
+#map{position:absolute;inset:0;width:100%;height:100%;touch-action:none}
+.mapempty{position:absolute;inset:auto 20px 40%;text-align:center;font-family:var(--serif);font-size:1.05rem}
+.legend{display:flex;flex-wrap:wrap;gap:4px 14px;padding:8px 20px;font-size:.78rem;color:var(--muted)}
+.legend span{display:flex;align-items:center;gap:6px}
+
+.player{text-align:center;padding:8px 0}
+.player h2{font-family:var(--serif);font-weight:400;font-size:1.6rem;margin:6px 0 28px}
+.pp{width:84px;height:84px;border-radius:50%;border:1.5px solid var(--ink);display:grid;place-items:center;margin:0 auto 28px}
+input[type=range]{padding:0;border:0;background:none;accent-color:var(--practice);-webkit-appearance:auto;appearance:auto}
+.times{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);margin-top:6px;font-variant-numeric:tabular-nums}
+.track{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--line)}
+.trk{flex:1;padding:14px 0;font-family:var(--serif);font-size:1.05rem}
+.trk small{display:block;font-family:var(--sans);font-size:.8rem;color:var(--muted);margin-top:2px}
+
+.set{margin-top:34px}
+.set h2{font-family:var(--serif);font-weight:400;font-size:1.3rem;margin-bottom:4px}
+.set textarea{font-family:var(--sans);font-size:16px;margin-top:10px}
+
+.toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 80px);transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:.9rem;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none;max-width:88vw;text-align:center}
+.toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<div id="sheet" class="sheet" aria-modal="true" role="dialog"><div class="sheet-back" data-act="close"></div><div class="sheet-panel"></div></div>
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<input type="file" id="file-mp3" accept="audio/*,.mp3,.m4a" multiple hidden>
+<input type="file" id="file-restore" hidden>
+<script>
+'use strict';
+/* ---------- basics ---------- */
+const ITER = 600000, DAY = 864e5, LOCK_AFTER = 5 * 60e3;
+const enc = new TextEncoder(), dec = new TextDecoder();
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid = () => Date.now().toString(36) + crypto.getRandomValues(new Uint32Array(1))[0].toString(36);
+const pad = n => String(n).padStart(2, '0');
+const ymd = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const localInput = d => `${ymd(d)}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+const fmtDay = d => d.toLocaleDateString('en-AU', {weekday:'long', day:'numeric', month:'long', ...(d.getFullYear() !== new Date().getFullYear() ? {year:'numeric'} : {})});
+const fmtTime = d => d.toLocaleTimeString('en-AU', {hour:'numeric', minute:'2-digit'});
+const mmss = s => { s = Math.max(0, Math.round(s || 0)); return `${Math.floor(s/60)}:${pad(s%60)}`; };
+const byDateDesc = (a, b) => b.date.localeCompare(a.date);
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const normalizeTag = t => String(t).trim().toLowerCase().replace(/^#+/, '').replace(/\s+/g, '-').replace(/[^\p{L}\p{N}_-]/gu, '');
+const parseTags = text => [...String(text).matchAll(/#([\p{L}\p{N}][\p{L}\p{N}_-]*)/gu)].map(m => m[1].toLowerCase());
+const parseTagInput = text => [...new Set(String(text).split(/[\s,]+/).map(normalizeTag).filter(Boolean))];
+
+/* ---------- entry types ---------- */
+const TYPES = {
+  laf:       {label:'LAF', title:"Tonight's LAF", color:'--love', fields:[
+               {k:'love', label:'What I love about myself today', accent:'love', rows:2, focus:true},
+               {k:'accept', label:'What I accept about myself today', accent:'accept', rows:2},
+               {k:'forgive', label:'What I forgive myself for today', accent:'forgive', rows:2},
+               {k:'notice', label:'Anything else that came up', rows:2}]},
+  dream:     {label:'Dream', color:'--dream', intro:'Tap the mic on the keyboard to dictate.', fields:[
+               {k:'text', label:'The dream', rows:7, focus:true}, {k:'title', label:'A title, if one comes', kind:'line'}]},
+  note:      {label:'Noticing', color:'--forgive', intro:'Whatever is here right now.', fields:[
+               {k:'text', label:'What’s coming up', rows:5, focus:true}]},
+  meditation:{label:'Meditation', color:'--practice', fields:[
+               {k:'track', label:'Practice', kind:'line'}, {k:'minutes', label:'Minutes', kind:'num'},
+               {k:'text', label:'Reflection', rows:5, focus:true}]},
+  yoga:      {label:'Yoga', color:'--practice', fields:[
+               {k:'style', label:'Style', kind:'line', focus:true}, {k:'minutes', label:'Minutes', kind:'num'},
+               {k:'text', label:'Notes', rows:4}]},
+  idea:      {label:'Idea', color:'--creative', fields:[
+               {k:'text', label:'Something I could make or try', rows:3, focus:true}]},
+  creative:  {label:'Creative work', color:'--creative', fields:[
+               {k:'what', label:'What I made or did', kind:'line', focus:true}, {k:'text', label:'Notes', rows:4}]},
+  retreat:   {label:'Retreat', color:'--creative', fields:[
+               {k:'focus', label:'Focus', kind:'choice', options:['Reflection','Creative','Both']},
+               {k:'hours', label:'Hours', kind:'num'}, {k:'place', label:'Where', kind:'line'},
+               {k:'text', label:'What came up', rows:9}]},
+  review:    {label:'Weekly review', color:'--muted', fields:[
+               {k:'text', label:'What keeps coming up?', rows:6, focus:true}]},
+};
+const TYPE_ORDER = ['laf','dream','note','meditation','yoga','idea','creative','retreat','review'];
+// Everyday pairs shown on every entry (editable in Settings)
+const DEFAULT_EMOTIONS = [['calm','agitated'],['safe','threatened'],['confident','insecure'],['peaceful','enraged'],['joyous','grieving'],['proud','ashamed'],['loving','hateful'],['fearless','frightened'],['satisfied','frustrated'],['grateful','ungrateful'],['vital','exhausted'],['trusting','suspicious']];
+// Full iRest library, Level 1 and Level 2 manuals, de-duplicated. Searchable from Feelings.
+const lib = s => s.split('|').map(p => p.split('/'));
+const LIB_EMO = lib('ashamed/proud|assured/perplexed|bashful/unreserved|blissful/unhappy|boastful/modest|boisterous/mellow|bold/unreserved|bored/interested|brash/demure|bright/idiotic|calm/agitated|calm/nervous|calm/raging|cautious/unafraid|certain/undecided|charmed/horrified|cheerful/sad|closemouthed/gossipy|collected/confused|comfortable/pained|comforted/martyred|competitive/cooperative|complete/desirous|complete/incomplete|composed/hysterical|composed/worried|concentrating/inattentive|confident/embarrassed|confident/insecure|confident/scared|abandoned/safe|congenial/incompatible|accepting/shocked|conniving/straightforward|active/passive|contemptuous/tolerant|aggressive/passive|content/discontent|content/lonely|agonized/peaceful|contented/bothered|alert/numb|contentious/empathic|amused/displeased|contracted/open|angelic/fiendish|angry/tolerant|cowardly/noble|animated/hung-over|cranky/easy-going|anxious/unafraid|creative/unproductive|apathetic/responsive|deep/shallow|apologetic/remorseless|deep/superficial|apprehensive/secure|defensive/undefended|approving/disapproving|deficient/full|arrogant/humble|delighted/disgusted|delighted/heavy-hearted|frightened/fearless|frustrated/satisfied|dependent/independent|depressed/happy|full/empty|derogatory/prideful|generous/greedy|generous/resentful|despairing/lighthearted|good-tempered/surly|despondent/lighthearted|determined/uncertain|grateful/ungrateful|disappointed/pleased|gratified/hurt|disbelieving/trusting|grieving/joyous|guilty/innocent|discouraged/optimistic|hard/soft|disidentified/identified|hateful/loving|disquiet/quiet|healthy/sick|dissatisfied/satisfied|distant/intimate|helpful/uncooperative|distasteful/satisfying|helpless/powerful|domineering/meek|helpless/self-reliant|earthly/transcended|hopeful/hopeless|easygoing/prudish|egotistical/humble|hostile/sympathetic|empathic/indifferent|humble/modest|energetic/lazy|energetic/tired|enraged/peaceful|enthusiastic/listless|envious/unselfish|ignorant/knowledgeable|exasperated/placid|important/insignificant|exhausted/vital|impoverished/rich|fair/prejudiced|false/truthful|flexible/obstinate|forgetful/thoughtful|forlorn/optimistic|forthright/scheming|forward/sheepish|forward/withdrawn|interested/uninterested|intolerant/thoughtful|positive/negative|invincible/vulnerable|potent/sterile|jealous/trusting|kind/surly|present/lacking|knowing/surprised|pressured/relaxed|puzzled/understanding|lighthearted/melancholy|reactive/responsive|regretful/remorseless|lustful/spiritual|meditative/unthinking|repelled/tempted|repellent/seductive|mischievous/thoughtful|miserable/satisfied|rested/overworked|nauseated/well|neglected/nourished|safe/threatened|nonchalant/perturbed|separate/unified|paranoid/sound|simple/sophisticated|skeptical/trusting|penetrable/vulnerable|smug/humble|spirited/sulky|two-faced/straightforward|unafraid/timid|strong/weak|uncommunicative/talkative|suspicious/trusting|talkative/aloof|tender/violent|vexed/contented|empathetic/indifferent|flexible/rigid|happy/sad|potent/impotent|sensitive/numb|unreserved/shy|vulnerable/invulnerable');
+const LIB_BODY = lib('faint/strong|floating/sinking|hard/soft|heavy/light|hot/cold|lethargic/alert|loose/tight|moist/dry|nauseous/well|nervous/calm|numb/sensitive|painful/pleasurable|queasy/steady|quiet/throbbing|relaxed/tense|restricted/spacious|rough/smooth|sharp/dull|sleepy/alert|spacious/claustrophobic|stable/unstable|strong/weak|superficial/deep|thick/thin|at-ease/uneasy|burning/cooling|uncomfortable/comfortable|coarse/smooth|warm/cool|well/sick|constricted/spacious|wet/dry|lethargic/awake|prickly/soft');
+const LIB = [...LIB_EMO.map(p => ({p, kind:'emotion'})), ...LIB_BODY.map(p => ({p, kind:'body'}))];
+const LIB_WORDS = new Set([...LIB_EMO.flat(), ...LIB_BODY.flat()]);
+const SEED_TAGS = ['self','people','work','body','creativity','nature','anger','fear','joy'];
+
+/* ---------- storage (IndexedDB) ---------- */
+let _db;
+function db() {
+  return _db ||= new Promise((res, rej) => {
+    const r = indexedDB.open('laf-journal', 1);
+    r.onupgradeneeded = () => { r.result.createObjectStore('kv'); r.result.createObjectStore('audio'); };
+    r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+  });
+}
+async function idb(store, mode, fn) {
+  const d = await db();
+  return new Promise((res, rej) => {
+    const tx = d.transaction(store, mode); let out;
+    const req = fn(tx.objectStore(store)); if (req) req.onsuccess = () => { out = req.result; };
+    tx.oncomplete = () => res(out); tx.onerror = () => rej(tx.error); tx.onabort = () => rej(tx.error);
+  });
+}
+const get = (s, k) => idb(s, 'readonly', o => o.get(k));
+const put = (s, k, v) => idb(s, 'readwrite', o => { o.put(v, k); });
+const del = (s, k) => idb(s, 'readwrite', o => { o.delete(k); });
+const clearStore = s => idb(s, 'readwrite', o => { o.clear(); });
+
+/* ---------- crypto ---------- */
+const b64 = buf => { const b = new Uint8Array(buf); let s = ''; for (let i = 0; i < b.length; i += 0x8000) s += String.fromCharCode.apply(null, b.subarray(i, i + 0x8000)); return btoa(s); };
+const unb64 = s => Uint8Array.from(atob(s), c => c.charCodeAt(0));
+async function deriveKey(pass, salt, iter) {
+  const base = await crypto.subtle.importKey('raw', enc.encode(pass.normalize('NFKC')), 'PBKDF2', false, ['deriveKey']);
+  return crypto.subtle.deriveKey({name:'PBKDF2', salt, iterations:iter, hash:'SHA-256'}, base, {name:'AES-GCM', length:256}, false, ['encrypt','decrypt']);
+}
+async function seal(key, data) {
+  const iv = crypto.getRandomValues(new Uint8Array(12));
+  return {iv, ct: await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, data)};
+}
+const unseal = (key, iv, ct) => crypto.subtle.decrypt({name:'AES-GCM', iv}, key, ct);
+
+/* ---------- state ---------- */
+let KEY = null, S = null, META = null, VIEW = 'today', player = null, PENDING_MSG = null;
+let lastActive = Date.now(), lockHold = 0;
+const JF = {type:'all', tag:null, q:''};
+let MAPP = 90;
+const freshState = () => ({v:1, created:new Date().toISOString(), entries:[], tracks:[],
+  settings:{emotions:DEFAULT_EMOTIONS, seedTags:SEED_TAGS, lastBackup:null, nudgeSeen:null}});
+function migrate(s) {
+  const f = freshState();
+  s.entries ||= []; s.tracks ||= []; s.created ||= f.created;
+  s.settings = {...f.settings, ...(s.settings || {})};
+  if (!s.settings.emoCustom) s.settings.emotions = DEFAULT_EMOTIONS;
+  return s;
+}
+let saving = Promise.resolve();
+function persist() {
+  const key = KEY, snapshot = JSON.stringify(S);
+  saving = saving.then(async () => {
+    const {iv, ct} = await seal(key, enc.encode(snapshot));
+    await put('kv', 'vault', {iv, ct});
+  }).catch(e => toast('Couldn’t save: ' + e.message));
+  return saving;
+}
+const byId = id => S.entries.find(e => e.id === id);
+const emotionWords = () => new Set([...S.settings.emotions.flat(), ...LIB_WORDS]);
+
+/* ---------- toast ---------- */
+let toastTimer;
+function toast(msg, ms = 2600) {
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), ms);
+}
+
+/* ---------- sheets ---------- */
+const STACK = [];
+function drawSheet() {
+  const el = $('#sheet'), p = $('.sheet-panel', el), top = STACK.at(-1);
+  if (!top) { el.classList.remove('open'); p.innerHTML = ''; document.body.style.overflow = ''; return; }
+  p.className = 'sheet-panel' + (top.full ? ' full' : '');
+  p.innerHTML = top.render(); p.scrollTop = 0;
+  el.classList.add('open'); document.body.style.overflow = 'hidden';
+  top.after?.(p);
+}
+function pushSheet(o) { STACK.push(o); drawSheet(); }
+function replaceSheet(o) { const t = STACK.pop(); t?.onClose?.(); STACK.push(o); drawSheet(); }
+function popSheet() { const t = STACK.pop(); t?.onClose?.(); drawSheet(); }
+function closeAllSheets() { while (STACK.length) STACK.pop().onClose?.(); drawSheet(); }
+
+/* ---------- gate screens ---------- */
+const MARK = `<svg class="mark" viewBox="0 0 64 56" aria-hidden="true"><circle cx="32" cy="19" r="15" fill="var(--love)" opacity=".85"/><circle cx="22" cy="36" r="15" fill="var(--accept)" opacity=".85"/><circle cx="42" cy="36" r="15" fill="var(--forgive)" opacity=".85"/></svg>`;
+function renderSetup() {
+  $('#root').innerHTML = `<main class="gate">${MARK}<h1>LAF</h1>
+    <p class="lede">Love, acceptance and forgiveness. A private journal that lives only on this phone.</p>
+    <label class="fld"><span>Choose a passphrase</span><input id="p1" type="password" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false"></label>
+    <label class="fld"><span>Type it again</span><input id="p2" type="password" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false"></label>
+    <p class="small">Four or more unrelated words works well, at least 12 characters. There’s no recovery: if the passphrase is forgotten, the journal can’t be opened.</p>
+    <button class="primary" data-act="create">Create journal</button>
+    <button class="quiet" data-act="restore-start">Restore from a backup</button>
+    <p class="err" id="err"></p></main>`;
+}
+function renderUnlock() {
+  $('#root').innerHTML = `<main class="gate">${MARK}<h1>LAF</h1>
+    <p class="lede">Locked.</p>
+    <label class="fld"><span>Passphrase</span><input id="pass" type="password" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" enterkeyhint="go"></label>
+    <button class="primary" data-act="unlock">Unlock</button>
+    <p class="err" id="err"></p>
+    <button class="quiet" data-act="erase" style="margin-top:48px">Forgotten it? Erase and start again</button></main>`;
+  $('#pass').addEventListener('keydown', e => { if (e.key === 'Enter') A.unlock(); });
+}
+function enterApp() {
+  $('#root').innerHTML = `<div id="view"></div><nav class="tabs" aria-label="Sections">${[['today','Today'],['journal','Journal'],['map','Map'],['settings','Settings']]
+    .map(([v, l]) => `<button data-act="tab" data-v="${v}">${l}</button>`).join('')}</nav>`;
+  lastActive = Date.now(); renderView();
+}
+
+/* ---------- views ---------- */
+function showView(v) { VIEW = v; renderView(); window.scrollTo(0, 0); }
+function renderView() {
+  if (!S || !$('#view')) return;
+  const root = $('#view');
+  $$('.tabs button').forEach(b => b.setAttribute('aria-current', b.dataset.v === VIEW ? 'page' : 'false'));
+  if (VIEW === 'map') { root.className = 'mapview'; root.innerHTML = mapHTML(); initMap(); return; }
+  root.className = 'app';
+  root.innerHTML = VIEW === 'today' ? todayHTML() : VIEW === 'journal' ? journalHTML() : settingsHTML();
+  if (VIEW === 'journal') { const q = $('#q'); q.addEventListener('input', () => { JF.q = q.value; $('#jlist').innerHTML = journalList(); }); }
+}
+const typeColor = t => `var(${TYPES[t]?.color || '--muted'})`;
+function preview(e) {
+  const f = e.fields;
+  switch (e.type) {
+    case 'laf': return f.love || f.accept || f.forgive || f.notice || '';
+    case 'meditation': return [f.minutes ? f.minutes + ' min' : '', f.track, f.text].filter(Boolean).join(', ');
+    case 'yoga': return [f.minutes ? f.minutes + ' min' : '', f.style, f.text].filter(Boolean).join(', ');
+    case 'retreat': return [f.focus, f.hours ? f.hours + ' h' : '', f.text].filter(Boolean).join(', ');
+    case 'creative': return [f.what, f.text].filter(Boolean).join('. ');
+    case 'dream': return f.title ? `${f.title}. ${f.text}` : f.text;
+    case 'idea': return (f.done ? 'Done. ' : '') + f.text;
+    default: return f.text || '';
+  }
+}
+function card(e) {
+  const d = new Date(e.date);
+  return `<article class="card" data-act="view" data-id="${e.id}" role="button" tabindex="0">
+    <div class="meta"><i class="dot" style="--c:${typeColor(e.type)}"></i>${TYPES[e.type]?.label || e.type}<span>${fmtTime(d)}</span></div>
+    <p class="pv">${esc(preview(e))}</p>
+    ${e.tags.length ? `<div class="tags">${e.tags.slice(0, 8).map(t => `<span>#${esc(t)}</span>`).join('')}</div>` : ''}</article>`;
+}
+function todayHTML() {
+  const now = new Date(), today = ymd(now);
+  const laf = S.entries.filter(e => e.type === 'laf' && ymd(new Date(e.date)) === today).sort(byDateDesc)[0];
+  const L = [['love','What do you love about yourself today?'],['accept','What do you accept about yourself today?'],['forgive','What do you forgive yourself for today?']];
+  let h = `<header class="top"><h1>${fmtDay(now)}</h1><button class="x" data-act="lock">Lock</button></header>`;
+  if (laf) h += `<section class="laf done" data-act="view" data-id="${laf.id}" role="button" tabindex="0"><p class="label">Tonight’s LAF</p>
+      ${L.map(([k]) => `<div class="laf-row" data-acc="${k}"><span class="bar"></span><p>${esc(laf.fields[k]) || '<span class="hint">Left blank</span>'}</p></div>`).join('')}</section>`;
+  else h += `<section class="laf"><p class="label">Tonight’s LAF</p>
+      ${L.map(([k, q]) => `<div class="laf-row" data-acc="${k}"><span class="bar"></span><p class="hint">${q}</p></div>`).join('')}
+      <button class="primary" data-act="new" data-type="laf">Write tonight’s LAF</button></section>`;
+  h += notesHTML();
+  const b = (t, l) => `<button data-act="new" data-type="${t}"><i style="--c:${typeColor(t)}"></i>${l}</button>`;
+  const open = S.entries.filter(e => e.type === 'idea' && !e.fields.done).length;
+  h += `<h2 class="group">Compassion</h2><div class="actions">${b('dream','Dream')}${b('note','Noticing')}
+        <button data-act="meditate"><i style="--c:var(--practice)"></i>Meditate</button>${b('yoga','Yoga')}</div>`;
+  h += `<h2 class="group">Creative</h2><div class="actions">${b('idea','Idea')}${b('creative','Creative work')}${b('retreat','Retreat')}
+        ${open ? `<button data-act="ideas"><i style="--c:var(--creative)"></i>Ideas to try<small>${open}</small></button>` : ''}</div>`;
+  const rec = [...S.entries].sort(byDateDesc).slice(0, 5);
+  if (rec.length) h += `<h2 class="group">Recent</h2><div class="list">${rec.map(card).join('')}</div>`;
+  return h;
+}
+function notesHTML() {
+  const st = S.settings, n = Date.now();
+  const lb = st.lastBackup ? +new Date(st.lastBackup) : 0;
+  const seen = st.nudgeSeen ? +new Date(st.nudgeSeen) : (lb || n);
+  let h = '';
+  const lastReview = S.entries.filter(e => e.type === 'review').sort(byDateDesc)[0];
+  const week = S.entries.filter(e => n - +new Date(e.date) < 7 * DAY).length;
+  if (week >= 3 && (!lastReview || n - +new Date(lastReview.date) >= 7 * DAY))
+    h += `<div class="note"><p>A week of entries is here. What keeps coming up?</p><div class="row"><button class="link" data-act="new" data-type="review">Look back at the week</button></div></div>`;
+  if (!lb && S.entries.length >= 3)
+    h += `<div class="note"><p>No backup yet. A backup is one encrypted file you keep.</p><div class="row"><button class="link" data-act="backup">Save a backup</button></div></div>`;
+  else if (lb && n - seen > 30 * DAY)
+    h += `<div class="note"><p>Copy a recent backup off this phone, to your computer or a USB drive.</p><div class="row"><button class="link" data-act="nudge-ok">Done</button><button class="link" data-act="nudge-ok">Not now</button></div></div>`;
+  return h;
+}
+function journalHTML() {
+  return `<h1>Journal</h1>
+    <input type="search" id="q" placeholder="Search words or #tags" value="${esc(JF.q)}" autocapitalize="none">
+    <div class="chips scroll">${['all', ...TYPE_ORDER].map(t => `<button class="chip${JF.type === t ? ' on' : ''}" data-act="jtype" data-t="${t}">${t === 'all' ? 'All' : TYPES[t].label}</button>`).join('')}</div>
+    ${JF.tag ? `<div class="activetag"><span>Showing #${esc(JF.tag)}</span><button class="link" data-act="jtag-clear">Show all</button></div>` : ''}
+    <div id="jlist" class="list">${journalList()}</div>`;
+}
+function journalList() {
+  const q = JF.q.trim().toLowerCase(), qt = q.replace(/^#/, '');
+  const es = S.entries.filter(e => (JF.type === 'all' || e.type === JF.type) && (!JF.tag || e.tags.includes(JF.tag)) &&
+    (!q || Object.values(e.fields).join(' ').toLowerCase().includes(q) || e.tags.some(t => t.includes(qt)))).sort(byDateDesc);
+  if (!es.length) return `<p class="empty">${S.entries.length ? 'No entries match.' : 'Nothing here yet. What you write shows up here, newest first.'}</p>`;
+  let h = '', last = '';
+  for (const e of es) {
+    const d = new Date(e.date), k = ymd(d);
+    if (k !== last) { h += `<h3 class="day">${fmtDay(d)}</h3>`; last = k; }
+    h += card(e);
+  }
+  return h;
+}
+function settingsHTML() {
+  const st = S.settings;
+  return `<h1>Settings</h1>
+  <section class="set"><h2>Backup</h2>
+    <p class="small">${st.lastBackup ? 'Last backup ' + new Date(st.lastBackup).toLocaleString('en-AU', {dateStyle:'medium', timeStyle:'short'}) : 'No backup yet.'}
+    Backups are encrypted with your passphrase. Choose “Save to Files” and pick On My iPhone, or AirDrop it to your computer. Your MP3s aren’t included, so keep the originals.</p>
+    <button class="primary" data-act="backup">Save a backup</button>
+    <button class="secondary" data-act="restore-start">Restore from a backup</button></section>
+  <section class="set"><h2>Feelings</h2>
+    <p class="small">Your everyday pairs, shown on every entry. One pair per line. The full iRest list, ${LIB_EMO.length} emotion pairs and ${LIB_BODY.length} body-feeling pairs from the Level 1 and 2 manuals, is searchable under Feelings on any entry.</p>
+    <textarea id="emo-edit" rows="9" autocapitalize="none">${esc(st.emotions.map(p => p.join(' / ')).join('\n'))}</textarea>
+    <button class="secondary" data-act="save-emo">Save feelings</button>
+    <button class="quiet" data-act="emo-reset">Go back to the suggested pairs</button></section>
+  <section class="set"><h2>Suggested tags</h2>
+    <p class="small">Shown under the tag box on every entry.</p>
+    <textarea id="seed-edit" rows="3" autocapitalize="none">${esc(st.seedTags.map(t => '#' + t).join(' '))}</textarea>
+    <button class="secondary" data-act="save-seed">Save tags</button></section>
+  <section class="set"><h2>Privacy</h2>
+    <p class="small">Every entry and recording is encrypted with AES-256, using a key made from your passphrase (PBKDF2, 600,000 rounds). The key is never stored. The app is blocked from connecting to the internet. It locks when you leave it, or after five minutes untouched.</p>
+    <button class="secondary" data-act="lock">Lock now</button></section>
+  <section class="set"><h2>Erase</h2>
+    <p class="small">Deletes every entry and recording on this phone. Backups you’ve saved elsewhere aren’t touched.</p>
+    <button class="secondary del" data-act="erase">Erase journal</button></section>`;
+}
+
+/* ---------- forms ---------- */
+function suggestions() {
+  const emo = emotionWords(), c = new Map();
+  for (const e of S.entries) for (const t of e.tags) if (!emo.has(t)) c.set(t, (c.get(t) || 0) + 1);
+  const used = [...c].sort((a, b) => b[1] - a[1]).map(x => x[0]);
+  return [...new Set([...S.settings.seedTags, ...used])].slice(0, 16);
+}
+function fieldHTML(f, val) {
+  val = val ?? '';
+  if (f.kind === 'line') return `<label class="fld"><span>${f.label}</span><input type="text" data-k="${f.k}" value="${esc(val)}" autocapitalize="sentences"></label>`;
+  if (f.kind === 'num') return `<label class="fld"><span>${f.label}</span><input type="text" inputmode="decimal" data-k="${f.k}" value="${esc(val)}"></label>`;
+  if (f.kind === 'choice') return `<div class="fld"><span>${f.label}</span><div class="chips" data-k-choice="${f.k}">${f.options.map(o => `<button type="button" class="chip${val === o ? ' on' : ''}" data-act="choice" data-val="${esc(o)}">${esc(o)}</button>`).join('')}</div></div>`;
+  return `<label class="fld"${f.accent ? ` data-acc="${f.accent}"` : ''}><span>${f.label}</span><textarea data-k="${f.k}" rows="${f.rows || 3}">${esc(val)}</textarea></label>`;
+}
+function reviewSummary() {
+  const since = Date.now() - 7 * DAY, c = new Map();
+  for (const e of S.entries) if (+new Date(e.date) >= since) for (const t of e.tags) c.set(t, (c.get(t) || 0) + 1);
+  const top = [...c].sort((a, b) => b[1] - a[1]).slice(0, 12);
+  return top.length ? `<p class="label">Tags from this week</p><div class="chips">${top.map(([t, n]) => `<span class="chip">#${esc(t)} ${n}</span>`).join('')}</div>`
+                    : `<p class="small">No tags this week yet.</p>`;
+}
+function formObj(ctx) {
+  return {full:true, kind:'form', ctx, render: () => formHTML(ctx), after: p => {
+    const q = $('#emo-q', p);
+    q?.addEventListener('input', () => { $('#emo-res', p).innerHTML = libResults(q.value); });
+    if (ctx.entry) return;
+    const f = TYPES[ctx.type].fields.find(f => f.focus);
+    if (f) $(`[data-k="${f.k}"]`, p)?.focus({preventScroll:true});
+  }};
+}
+function openForm(type, entry, prefill, afterSave) { pushSheet(formObj({type, entry, prefill, afterSave})); }
+function libResults(q) {
+  q = normalizeTag(q); if (q.length < 2) return '';
+  const hits = LIB.filter(x => x.p.some(w => w.startsWith(q))).concat(LIB.filter(x => !x.p.some(w => w.startsWith(q)) && x.p.some(w => w.includes(q)))).slice(0, 10);
+  if (!hits.length) return '<p class="small">Nothing in the iRest list matches.</p>';
+  return hits.map(x => `<div class="pair">${x.p.map(w => `<button type="button" class="chip" data-act="emo-add" data-tag="${esc(w)}">${esc(w)}</button>`).join('')}</div>`).join('')
+    + '<p class="small">Tap a word to add it.</p>';
+}
+function formHTML(ctx) {
+  const T = TYPES[ctx.type], e = ctx.entry, v = e ? e.fields : (ctx.prefill || {});
+  const d = e ? new Date(e.date) : new Date();
+  const emo = emotionWords(), etags = new Set(e ? e.tags : (ctx.prefill?.tags || []));
+  const textTags = new Set(parseTags(T.fields.map(f => v[f.k] || '').join(' ')));
+  const manual = [...etags].filter(t => !textTags.has(t) && !emo.has(t));
+  let h = `<div class="sh-head"><h2>${esc(e ? T.label : (T.title || T.label))}</h2><button class="x" data-act="close">Cancel</button></div>`;
+  if (T.intro && !e) h += `<p class="small">${T.intro}</p>`;
+  if (ctx.type === 'review') h += reviewSummary();
+  for (const f of T.fields) h += fieldHTML(f, v[f.k]);
+  const coreWords = new Set(S.settings.emotions.flat());
+  const extra = [...etags].filter(t => emo.has(t) && !coreWords.has(t));
+  h += `<details class="emo"${[...etags].some(t => emo.has(t)) ? ' open' : ''}><summary>Feelings</summary>
+        <div class="core">${S.settings.emotions.map(p => `<div class="pair">${p.map(w => `<button type="button" class="chip${etags.has(w) ? ' on' : ''}" data-act="emo" data-tag="${esc(w)}">${esc(w)}</button>`).join('')}</div>`).join('')}</div>
+        <div class="chips extra" style="margin-top:8px">${extra.map(w => `<button type="button" class="chip on" data-act="emo" data-tag="${esc(w)}">${esc(w)}</button>`).join('')}</div>
+        <input type="search" id="emo-q" placeholder="Find another feeling in the iRest list" autocapitalize="none" autocorrect="off" style="margin-top:12px">
+        <div id="emo-res"></div></details>`;
+  h += `<label class="fld"><span>Tags</span><input id="ftags" type="text" autocapitalize="none" autocorrect="off" spellcheck="false" placeholder="#self #people" value="${esc(manual.map(t => '#' + t).join(' '))}"></label>`;
+  h += `<div class="chips sugg">${suggestions().map(t => `<button type="button" class="chip${manual.includes(t) ? ' on' : ''}" data-act="sugg" data-tag="${esc(t)}">#${esc(t)}</button>`).join('')}</div>`;
+  h += `<label class="fld"><span>When</span><input id="fdate" type="datetime-local" value="${localInput(d)}"></label>`;
+  h += `<button class="primary" data-act="save-form">Save</button>`;
+  return h;
+}
+async function saveForm(silent) {
+  const top = STACK.at(-1);
+  if (!top || top.kind !== 'form') return false;
+  const {ctx} = top, T = TYPES[ctx.type], p = $('.sheet-panel'), fields = {};
+  for (const f of T.fields) {
+    if (f.kind === 'choice') { const on = $(`[data-k-choice="${f.k}"] .on`, p); fields[f.k] = on ? on.dataset.val : ''; }
+    else fields[f.k] = ($(`[data-k="${f.k}"]`, p)?.value || '').trim();
+  }
+  if (ctx.entry?.fields?.done) fields.done = true;
+  if (!T.fields.some(f => f.kind !== 'choice' && fields[f.k])) { if (!silent) toast('Write something first.'); return false; }
+  const emo = $$('.emo .core .chip.on, .emo .extra .chip.on', p).map(b => b.dataset.tag);
+  const manual = parseTagInput($('#ftags', p)?.value || '');
+  const textTags = parseTags(T.fields.map(f => fields[f.k] || '').join(' '));
+  const tags = [...new Set([...textTags, ...emo, ...manual])];
+  let date = new Date($('#fdate', p)?.value || ''); if (isNaN(date)) date = new Date();
+  let entry = ctx.entry; const isNew = !entry;
+  if (entry) Object.assign(entry, {fields, tags, date:date.toISOString(), updated:new Date().toISOString()});
+  else { entry = {id:uid(), type:ctx.type, date:date.toISOString(), fields, tags, created:new Date().toISOString()}; S.entries.push(entry); }
+  await persist();
+  if (silent) return true;
+  popSheet(); ctx.afterSave?.(entry); renderView();
+  if (isNew && ctx.type === 'laf') pushSheet({kind:'backup-prompt', render: () => `<div class="sh-head"><h2>Saved</h2></div>
+      <p class="small">Back up tonight? The file is encrypted with your passphrase.</p>
+      <button class="primary" data-act="backup">Save backup</button><button class="quiet" data-act="close">Not tonight</button>`});
+  else toast('Saved');
+  return true;
+}
+function viewObj(id) {
+  return {kind:'view', render: () => {
+    const e = byId(id); if (!e) return '<p class="empty">This entry was deleted.</p>';
+    const T = TYPES[e.type], d = new Date(e.date);
+    let h = `<div class="sh-head"><h2>${T.label}</h2><button class="x" data-act="close">Close</button></div>
+             <p class="small">${fmtDay(d)}, ${fmtTime(d)}</p>`;
+    for (const f of T.fields) {
+      const v = e.fields[f.k]; if (!v) continue;
+      h += f.accent ? `<div class="laf-row" data-acc="${f.accent}" style="margin-top:16px"><span class="bar"></span><div><p class="label" style="margin-top:0">${f.label}</p><p class="txt">${esc(v)}</p></div></div>`
+                    : `<p class="label">${f.label}</p><p class="txt">${esc(v)}</p>`;
+    }
+    if (e.tags.length) h += `<div class="chips" style="margin-top:20px">${e.tags.map(t => `<button class="chip" data-act="tag-journal" data-tag="${esc(t)}">#${esc(t)}</button>`).join('')}</div>`;
+    h += `<div class="btnrow"><button class="link" data-act="edit" data-id="${e.id}">Edit</button>
+          ${e.type === 'idea' && !e.fields.done ? `<button class="link" data-act="idea-done" data-id="${e.id}">I did this</button>` : ''}
+          <button class="link del" data-act="del" data-id="${e.id}">Delete</button></div>`;
+    return h;
+  }};
+}
+
+/* ---------- meditation ---------- */
+const ICON_PLAY = `<svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor"/></svg>`;
+const ICON_PAUSE = `<svg width="26" height="26" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5h3.5v14H7zM13.5 5H17v14h-3.5z" fill="currentColor"/></svg>`;
+function meditateObj() {
+  return {kind:'meditate', render: () => `<div class="sh-head"><h2>Meditate</h2><button class="x" data-act="close">Close</button></div>
+    ${S.tracks.length ? `<div class="list" style="margin-top:10px">${S.tracks.map(t => `<div class="track">
+        <button class="trk" data-act="play" data-id="${t.id}">${esc(t.name)}<small>${t.dur ? mmss(t.dur) : ''}</small></button>
+        <button class="x" data-act="track-del" data-id="${t.id}">Remove</button></div>`).join('')}</div>`
+      : `<p class="small">Add your own MP3 meditations. They’re kept encrypted on this phone.</p>`}
+    <button class="primary" data-act="add-mp3">Add MP3s</button>
+    <button class="quiet" data-act="sit">Log a sit without audio</button>`};
+}
+async function playTrack(id) {
+  const t = S.tracks.find(x => x.id === id); if (!t) return;
+  const rec = await get('audio', id);
+  if (!rec) { toast('This recording is missing. Remove it and add it again.'); return; }
+  let buf;
+  try { buf = await unseal(KEY, rec.iv, rec.ct); } catch { toast('This recording couldn’t be opened.'); return; }
+  const url = URL.createObjectURL(new Blob([buf], {type: rec.type || 'audio/mpeg'}));
+  const audio = new Audio(url); audio.preload = 'auto';
+  player = {audio, url, track:t, max:0};
+  audio.addEventListener('timeupdate', () => { if (player) { player.max = Math.max(player.max, audio.currentTime); updPlayer(); } });
+  audio.addEventListener('loadedmetadata', updPlayer);
+  audio.addEventListener('play', updPlayer); audio.addEventListener('pause', updPlayer);
+  audio.addEventListener('ended', () => finishPlayer(true));
+  if ('mediaSession' in navigator) try { navigator.mediaSession.metadata = new MediaMetadata({title:t.name, artist:'LAF'}); } catch {}
+  pushSheet({kind:'player', onClose: stopPlayer, render: () => `<div class="player">
+      <p class="label">Meditation</p><h2>${esc(t.name)}</h2>
+      <button class="pp" data-act="pp" aria-label="Play or pause">${ICON_PAUSE}</button>
+      <input type="range" id="seek" min="0" max="${t.dur || 0}" step="1" value="0" aria-label="Position">
+      <div class="times"><span id="tcur">0:00</span><span id="tdur">${mmss(t.dur)}</span></div>
+      <button class="primary" data-act="finish">Finish and reflect</button>
+      <button class="quiet" data-act="close">Stop</button></div>`,
+    after: p => { const s = $('#seek', p); s.addEventListener('input', () => { if (player) player.audio.currentTime = +s.value; }); }});
+  audio.play().catch(() => updPlayer());
+}
+function updPlayer() {
+  if (!player) return;
+  const a = player.audio, s = $('#seek'), pp = $('.pp');
+  if (!s) return;
+  if (isFinite(a.duration)) { s.max = Math.round(a.duration); $('#tdur').textContent = mmss(a.duration); }
+  if (document.activeElement !== s) s.value = Math.round(a.currentTime);
+  $('#tcur').textContent = mmss(a.currentTime);
+  const icon = a.paused ? ICON_PLAY : ICON_PAUSE; if (pp.dataset.icon !== String(a.paused)) { pp.innerHTML = icon; pp.dataset.icon = String(a.paused); }
+}
+function stopPlayer() {
+  if (!player) return;
+  const p = player; player = null;
+  p.audio.pause(); p.audio.removeAttribute('src'); p.audio.load(); URL.revokeObjectURL(p.url);
+}
+async function finishPlayer(auto) {
+  if (!player) return;
+  const mins = String(Math.max(1, Math.round(Math.max(player.max, player.audio.currentTime) / 60)));
+  const name = player.track.name;
+  stopPlayer();
+  if (auto && document.hidden) {
+    S.entries.push({id:uid(), type:'meditation', date:new Date().toISOString(), fields:{track:name, minutes:mins, text:''}, tags:[], created:new Date().toISOString()});
+    await persist();
+    PENDING_MSG = 'Your meditation was logged. Open it in the journal to add a reflection.';
+    lock(); return;
+  }
+  closeAllSheets();
+  openForm('meditation', null, {track:name, minutes:mins});
+}
+function audioDuration(file) {
+  return new Promise(res => {
+    const u = URL.createObjectURL(file), a = new Audio(); let done = false;
+    const fin = d => { if (done) return; done = true; URL.revokeObjectURL(u); res(isFinite(d) ? Math.round(d) : 0); };
+    a.preload = 'metadata'; a.onloadedmetadata = () => fin(a.duration); a.onerror = () => fin(0);
+    setTimeout(() => fin(0), 8000); a.src = u;
+  });
+}
+
+/* ---------- map ---------- */
+const M = {};
+const LEGEND = [['--love','LAF'],['--dream','Dream'],['--forgive','Noticing'],['--practice','Practice'],['--creative','Creative']];
+function mapHTML() {
+  return `<header><h1>Map</h1><div class="seg">${[[30,'Month'],[90,'3 months'],[0,'All']].map(([d, l]) => `<button class="chip${MAPP === d ? ' on' : ''}" data-act="period" data-d="${d}">${l}</button>`).join('')}</div></header>
+    <div class="mapwrap"><canvas id="map" aria-label="Map of tags and how they connect"></canvas>
+    <p id="mapempty" class="small mapempty" hidden>Add #tags to your entries. Tags that turn up together get linked here.</p></div>
+    <div class="legend">${LEGEND.map(([c, l]) => `<span><i class="dot" style="--c:var(${c})"></i>${l}</span>`).join('')}</div>`;
+}
+function graphData() {
+  const since = MAPP ? Date.now() - MAPP * DAY : 0, node = new Map(), edge = new Map();
+  for (const e of S.entries) {
+    if (+new Date(e.date) < since) continue;
+    const tags = [...new Set(e.tags)];
+    for (const t of tags) { let n = node.get(t); if (!n) node.set(t, n = {id:t, n:0, types:{}}); n.n++; n.types[e.type] = (n.types[e.type] || 0) + 1; }
+    for (let i = 0; i < tags.length; i++) for (let j = i + 1; j < tags.length; j++) {
+      const k = tags[i] < tags[j] ? tags[i] + '|' + tags[j] : tags[j] + '|' + tags[i];
+      edge.set(k, (edge.get(k) || 0) + 1);
+    }
+  }
+  const nodes = [...node.values()].sort((a, b) => b.n - a.n).slice(0, 90), keep = new Map(nodes.map(n => [n.id, n]));
+  const E = [];
+  for (const [k, w] of edge) { const [a, b] = k.split('|'); if (keep.has(a) && keep.has(b)) E.push({s:keep.get(a), t:keep.get(b), w}); }
+  return {nodes, E};
+}
+function layout(g) {
+  const N = g.nodes;
+  N.forEach((n, i) => { const a = i * 2.39996, r = 14 * Math.sqrt(i + 1); n.x = Math.cos(a) * r; n.y = Math.sin(a) * r; n.vx = n.vy = 0; n.r = 5 + Math.sqrt(n.n) * 3.5; });
+  const maxW = Math.max(1, ...g.E.map(e => e.w)); g.maxW = maxW;
+  for (let it = 0; it < 320; it++) {
+    const alpha = 1 - it / 320;
+    for (let i = 0; i < N.length; i++) for (let j = i + 1; j < N.length; j++) {
+      const a = N[i], b = N[j]; let dx = a.x - b.x, dy = a.y - b.y; const d2 = dx*dx + dy*dy || .01, d = Math.sqrt(d2), f = 2200 / d2;
+      dx /= d; dy /= d; a.vx += dx*f; a.vy += dy*f; b.vx -= dx*f; b.vy -= dy*f;
+    }
+    for (const e of g.E) {
+      let dx = e.t.x - e.s.x, dy = e.t.y - e.s.y; const d = Math.sqrt(dx*dx + dy*dy) || .01;
+      const f = (d - (55 + e.s.r + e.t.r)) * .035 * (.5 + e.w / maxW); dx /= d; dy /= d;
+      e.s.vx += dx*f; e.s.vy += dy*f; e.t.vx -= dx*f; e.t.vy -= dy*f;
+    }
+    for (const n of N) {
+      n.vx -= n.x * .012; n.vy -= n.y * .012;
+      n.x += Math.max(-18, Math.min(18, n.vx)) * alpha; n.y += Math.max(-18, Math.min(18, n.vy)) * alpha;
+      n.vx *= .5; n.vy *= .5;
+    }
+  }
+  return g;
+}
+function nodeColor(n) {
+  const top = Object.entries(n.types).sort((a, b) => b[1] - a[1])[0]?.[0];
+  return TYPES[top]?.color === '--muted' ? '--forgive' : (TYPES[top]?.color || '--muted');
+}
+function initMap() {
+  const c = $('#map'); M.canvas = c; M.ctx = c.getContext('2d'); M.g = layout(graphData()); M.sel = null;
+  $('#mapempty').hidden = M.g.nodes.length > 0;
+  sizeMap(); fitMap(); drawMap(); bindMap(c);
+}
+function sizeMap() {
+  const r = M.canvas.parentNode.getBoundingClientRect(), dpr = devicePixelRatio || 1;
+  M.w = r.width; M.h = r.height; M.canvas.width = Math.round(r.width * dpr); M.canvas.height = Math.round(r.height * dpr);
+}
+function fitMap() {
+  const N = M.g.nodes;
+  if (!N.length) { M.t = {x:M.w/2, y:M.h/2, k:1}; return; }
+  let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+  for (const n of N) { x0 = Math.min(x0, n.x - n.r); y0 = Math.min(y0, n.y - n.r); x1 = Math.max(x1, n.x + n.r + 50); y1 = Math.max(y1, n.y + n.r); }
+  const pad = 30, k = Math.min(1.5, (M.w - pad*2) / Math.max(1, x1 - x0), (M.h - pad*2) / Math.max(1, y1 - y0));
+  M.t = {k, x: M.w/2 - (x0 + x1)/2 * k, y: M.h/2 - (y0 + y1)/2 * k};
+}
+function drawMap() {
+  const {ctx, t, g} = M; if (!ctx) return;
+  const dpr = devicePixelRatio || 1, cs = getComputedStyle(document.documentElement), col = v => cs.getPropertyValue(v).trim();
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, M.w, M.h);
+  const sel = M.sel, nb = new Set();
+  if (sel) for (const e of g.E) { if (e.s.id === sel) nb.add(e.t.id); if (e.t.id === sel) nb.add(e.s.id); }
+  const X = n => t.x + n.x * t.k, Y = n => t.y + n.y * t.k, rk = Math.min(1.5, Math.max(.6, t.k));
+  ctx.lineCap = 'round'; ctx.strokeStyle = col('--muted');
+  for (const e of g.E) {
+    const on = !sel || e.s.id === sel || e.t.id === sel;
+    ctx.globalAlpha = on ? .16 + .5 * e.w / g.maxW : .04; ctx.lineWidth = .8 + 2.4 * e.w / g.maxW;
+    ctx.beginPath(); ctx.moveTo(X(e.s), Y(e.s)); ctx.lineTo(X(e.t), Y(e.t)); ctx.stroke();
+  }
+  ctx.font = `13px ${col('--sans')}`;
+  for (const n of g.nodes) {
+    const on = !sel || n.id === sel || nb.has(n.id);
+    ctx.globalAlpha = on ? 1 : .15; ctx.fillStyle = col(nodeColor(n));
+    ctx.beginPath(); ctx.arc(X(n), Y(n), n.r * rk, 0, Math.PI * 2); ctx.fill();
+    if (n.id === sel) { ctx.strokeStyle = col('--ink'); ctx.lineWidth = 2; ctx.stroke(); ctx.strokeStyle = col('--muted'); }
+    if (on && (sel || t.k > .75 || n.n >= 3)) { ctx.globalAlpha = on ? .9 : .2; ctx.fillStyle = col('--ink'); ctx.fillText('#' + n.id, X(n) + n.r * rk + 5, Y(n) + 4); }
+  }
+  ctx.globalAlpha = 1;
+}
+function bindMap(c) {
+  const P = new Map(); let moved = false, pinch = null;
+  const pinchState = () => { const [a, b] = [...P.values()]; return {mx:(a.x+b.x)/2, my:(a.y+b.y)/2, d:Math.hypot(a.x-b.x, a.y-b.y) || 1, ...M.t}; };
+  c.addEventListener('pointerdown', e => { c.setPointerCapture(e.pointerId); P.set(e.pointerId, {x:e.offsetX, y:e.offsetY, sx:e.offsetX, sy:e.offsetY}); if (P.size === 1) moved = false; if (P.size === 2) { moved = true; pinch = pinchState(); } });
+  c.addEventListener('pointermove', e => {
+    const p = P.get(e.pointerId); if (!p) return;
+    const dx = e.offsetX - p.x, dy = e.offsetY - p.y; p.x = e.offsetX; p.y = e.offsetY;
+    if (P.size === 1) { if (Math.hypot(p.x - p.sx, p.y - p.sy) > 6) moved = true; if (moved) { M.t.x += dx; M.t.y += dy; drawMap(); } }
+    else if (P.size === 2 && pinch) {
+      const s = pinchState(), k = Math.min(4, Math.max(.3, pinch.k * s.d / pinch.d));
+      const wx = (pinch.mx - pinch.x) / pinch.k, wy = (pinch.my - pinch.y) / pinch.k;
+      M.t = {k, x: s.mx - wx * k, y: s.my - wy * k}; drawMap();
+    }
+  });
+  const up = e => { if (P.size === 1 && !moved && P.has(e.pointerId)) tapMap(e.offsetX, e.offsetY); P.delete(e.pointerId); if (P.size < 2) pinch = null; };
+  c.addEventListener('pointerup', up); c.addEventListener('pointercancel', e => { P.delete(e.pointerId); pinch = null; });
+  c.addEventListener('wheel', e => { e.preventDefault(); const k = Math.min(4, Math.max(.3, M.t.k * Math.exp(-e.deltaY * .002))), wx = (e.offsetX - M.t.x) / M.t.k, wy = (e.offsetY - M.t.y) / M.t.k; M.t = {k, x:e.offsetX - wx*k, y:e.offsetY - wy*k}; drawMap(); }, {passive:false});
+}
+function tapMap(x, y) {
+  const rk = Math.min(1.5, Math.max(.6, M.t.k));
+  const hit = [...M.g.nodes].reverse().find(n => Math.hypot(M.t.x + n.x * M.t.k - x, M.t.y + n.y * M.t.k - y) <= n.r * rk + 10);
+  if (hit) openTag(hit.id); else { M.sel = null; drawMap(); }
+}
+function openTag(tag) {
+  const o = tagObj(tag);
+  if (STACK.at(-1)?.kind === 'tag') replaceSheet(o); else pushSheet(o);
+  M.sel = tag; drawMap();
+}
+function tagObj(tag) {
+  return {kind:'tag', onClose: () => { if (M.sel === tag) { M.sel = null; if (VIEW === 'map' && M.canvas?.isConnected) drawMap(); } }, render: () => {
+    const es = S.entries.filter(e => e.tags.includes(tag)).sort(byDateDesc), c = new Map();
+    for (const e of es) for (const t of e.tags) if (t !== tag) c.set(t, (c.get(t) || 0) + 1);
+    const nb = [...c].sort((a, b) => b[1] - a[1]).slice(0, 10);
+    return `<div class="sh-head"><h2>#${esc(tag)}</h2><button class="x" data-act="close">Close</button></div>
+      <p class="small">${es.length} ${es.length === 1 ? 'entry' : 'entries'}</p>
+      ${nb.length ? `<p class="label">Often turns up with</p><div class="chips">${nb.map(([t, n]) => `<button class="chip" data-act="map-select" data-tag="${esc(t)}">#${esc(t)} ${n}</button>`).join('')}</div>` : ''}
+      <div class="list" style="margin-top:8px">${es.slice(0, 40).map(card).join('')}</div>
+      <button class="secondary" data-act="tag-journal" data-tag="${esc(tag)}">Open in journal</button>`;
+  }};
+}
+addEventListener('resize', () => { if (VIEW === 'map' && M.canvas?.isConnected) { sizeMap(); drawMap(); } });
+
+/* ---------- backup & restore ---------- */
+async function exportBackup() {
+  await saving;
+  const v = await get('kv', 'vault');
+  const data = {app:'laf-journal', v:1, created:new Date().toISOString(), salt:b64(META.salt), iter:META.iter, iv:b64(v.iv), ct:b64(v.ct)};
+  const name = `laf-backup-${ymd(new Date())}.json`;
+  const blob = new Blob([JSON.stringify(data)], {type:'application/json'});
+  suspendLock();
+  let shared = false;
+  try {
+    const f = new File([blob], name, {type:'application/json'});
+    if (navigator.canShare?.({files:[f]})) { await navigator.share({files:[f]}); shared = true; }
+  } catch (e) { if (e.name === 'AbortError') { toast('Backup not saved'); return; } }
+  if (!shared) {
+    const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = name;
+    document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 5000);
+  }
+  S.settings.lastBackup = new Date().toISOString(); await persist();
+  if (STACK.at(-1)?.kind === 'backup-prompt') popSheet();
+  renderView(); toast('Backup saved');
+}
+function restoreObj(data) {
+  return {kind:'restore', render: () => `<div class="sh-head"><h2>Restore backup</h2><button class="x" data-act="close">Cancel</button></div>
+    <p class="small">From ${new Date(data.created).toLocaleString('en-AU', {dateStyle:'medium', timeStyle:'short'})}. Enter the passphrase this backup was made with.</p>
+    <label class="fld"><span>Passphrase</span><input id="rpass" type="password" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false"></label>
+    <button class="primary" data-act="restore-go">Restore</button><p class="err" id="rerr"></p>`};
+}
+
+/* ---------- lock ---------- */
+function suspendLock(ms = 90000) { lockHold = Date.now() + ms; }
+const playing = () => player && !player.audio.paused;
+async function lock() {
+  if (!KEY) return;
+  try { if (STACK.at(-1)?.kind === 'form') await saveForm(true); await saving; } catch {}
+  stopPlayer(); closeAllSheets();
+  KEY = null; S = null; M.ctx = null;
+  renderUnlock();
+}
+document.addEventListener('visibilitychange', () => { if (document.hidden && KEY && !playing() && Date.now() > lockHold) lock(); });
+['pointerdown','keydown','input','scroll'].forEach(ev => addEventListener(ev, () => { lastActive = Date.now(); }, {passive:true, capture:true}));
+setInterval(() => { if (KEY && !playing() && Date.now() > lockHold && Date.now() - lastActive > LOCK_AFTER) lock(); }, 20000);
+
+/* ---------- actions ---------- */
+const A = {
+  async create() {
+    const p1 = $('#p1').value, p2 = $('#p2').value, err = $('#err'), b = $('[data-act=create]');
+    if (p1.length < 12) { err.textContent = 'Use at least 12 characters.'; return; }
+    if (p1 !== p2) { err.textContent = 'The two passphrases don’t match.'; return; }
+    b.disabled = true; b.textContent = 'Creating…';
+    const salt = crypto.getRandomValues(new Uint8Array(16));
+    KEY = await deriveKey(p1, salt, ITER); META = {salt, iter:ITER};
+    await put('kv', 'meta', META); S = freshState(); await persist();
+    VIEW = 'today'; enterApp();
+  },
+  async unlock() {
+    const pass = $('#pass').value, b = $('[data-act=unlock]'); if (!pass || b.disabled) return;
+    b.disabled = true; b.textContent = 'Unlocking…';
+    try {
+      const key = await deriveKey(pass, META.salt, META.iter), v = await get('kv', 'vault');
+      S = migrate(JSON.parse(dec.decode(await unseal(key, v.iv, v.ct)))); KEY = key;
+      VIEW = 'today'; enterApp();
+      if (PENDING_MSG) { toast(PENDING_MSG, 5000); PENDING_MSG = null; }
+    } catch { $('#err').textContent = 'That passphrase didn’t open the journal.'; b.disabled = false; b.textContent = 'Unlock'; }
+  },
+  'restore-start'() { suspendLock(); $('#file-restore').click(); },
+  async 'restore-go'() {
+    const top = STACK.at(-1), data = top.data, b = $('[data-act=restore-go]');
+    b.disabled = true; b.textContent = 'Opening…';
+    try {
+      const salt = unb64(data.salt), key = await deriveKey($('#rpass').value, salt, data.iter);
+      const st = migrate(JSON.parse(dec.decode(await unseal(key, unb64(data.iv), unb64(data.ct)))));
+      if (KEY && !confirm('Replace everything in this journal with this backup?')) { b.disabled = false; b.textContent = 'Restore'; return; }
+      const same = META && b64(META.salt) === data.salt, had = st.tracks.length;
+      META = {salt, iter:data.iter}; await put('kv', 'meta', META);
+      if (!same) { await clearStore('audio'); st.tracks = []; }
+      KEY = key; S = st; await persist();
+      closeAllSheets(); VIEW = 'today'; enterApp();
+      toast(!same && had ? 'Backup restored. Add your MP3s again.' : 'Backup restored', 4000);
+    } catch { $('#rerr').textContent = 'That passphrase didn’t open this backup.'; b.disabled = false; b.textContent = 'Restore'; }
+  },
+  tab: el => showView(el.dataset.v),
+  new: el => openForm(el.dataset.type),
+  meditate: () => pushSheet(meditateObj()),
+  sit: () => { popSheet(); openForm('meditation'); },
+  ideas: () => { JF.type = 'idea'; JF.tag = null; JF.q = ''; showView('journal'); },
+  view: el => pushSheet(viewObj(el.dataset.id)),
+  edit: el => { const e = byId(el.dataset.id); if (e) replaceSheet(formObj({type:e.type, entry:e})); },
+  async del(el) {
+    if (!confirm('Delete this entry? This can’t be undone.')) return;
+    S.entries = S.entries.filter(e => e.id !== el.dataset.id); await persist();
+    popSheet(); renderView(); if (STACK.length) drawSheet(); toast('Deleted');
+  },
+  'idea-done': el => {
+    const idea = byId(el.dataset.id); if (!idea) return;
+    replaceSheet(formObj({type:'creative', prefill:{what:idea.fields.text, tags:idea.tags},
+      afterSave: () => { idea.fields.done = true; persist(); renderView(); }}));
+  },
+  close: () => popSheet(),
+  'save-form': () => saveForm(false),
+  emo: el => el.classList.toggle('on'),
+  'emo-add': el => {
+    const w = el.dataset.tag, p = $('.sheet-panel');
+    const have = $$('.emo .core .chip, .emo .extra .chip', p).find(b => b.dataset.tag === w);
+    if (have) have.classList.add('on');
+    else $('.emo .extra', p).insertAdjacentHTML('beforeend', `<button type="button" class="chip on" data-act="emo" data-tag="${esc(w)}">${esc(w)}</button>`);
+    el.classList.add('on'); toast(`Added ${w}`, 1200);
+  },
+  choice: el => $$('button', el.parentNode).forEach(b => b.classList.toggle('on', b === el && !b.classList.contains('on'))),
+  sugg: el => {
+    const inp = $('#ftags'), cur = parseTagInput(inp.value), t = el.dataset.tag, i = cur.indexOf(t);
+    if (i >= 0) cur.splice(i, 1); else cur.push(t);
+    inp.value = cur.map(x => '#' + x).join(' '); el.classList.toggle('on', i < 0);
+  },
+  jtype: el => { JF.type = el.dataset.t; renderView(); },
+  'jtag-clear': () => { JF.tag = null; renderView(); },
+  'tag-journal': el => { JF.type = 'all'; JF.tag = el.dataset.tag; JF.q = ''; closeAllSheets(); showView('journal'); },
+  'map-select': el => openTag(el.dataset.tag),
+  period: el => { MAPP = +el.dataset.d; renderView(); },
+  backup: () => exportBackup(),
+  'nudge-ok': async () => { S.settings.nudgeSeen = new Date().toISOString(); await persist(); renderView(); },
+  'add-mp3': () => { suspendLock(); $('#file-mp3').click(); },
+  play: el => playTrack(el.dataset.id),
+  async 'track-del'(el) {
+    const t = S.tracks.find(x => x.id === el.dataset.id);
+    if (!t || !confirm(`Remove “${t.name}”? Logged sessions stay in the journal.`)) return;
+    await del('audio', t.id); S.tracks = S.tracks.filter(x => x !== t); await persist(); drawSheet();
+  },
+  pp: () => { if (!player) return; player.audio.paused ? player.audio.play() : player.audio.pause(); },
+  finish: () => finishPlayer(false),
+  lock: () => lock(),
+  async 'save-emo'() {
+    const pairs = $('#emo-edit').value.split('\n')
+      .map(l => l.split(/\s*\/\s*|\s+[-–—]\s+|\s*,\s*/).map(normalizeTag).filter(Boolean).slice(0, 2)).filter(p => p.length);
+    if (!pairs.length) { toast('Add at least one pair, like: confident / insecure'); return; }
+    S.settings.emotions = pairs; S.settings.emoCustom = true; await persist(); toast('Feelings saved');
+  },
+  async 'emo-reset'() { S.settings.emotions = DEFAULT_EMOTIONS; S.settings.emoCustom = false; await persist(); renderView(); toast('Suggested pairs restored'); },
+  async 'save-seed'() { S.settings.seedTags = parseTagInput($('#seed-edit').value); await persist(); toast('Tags saved'); },
+  async erase() {
+    if (prompt('This deletes every entry and recording on this phone. Type ERASE to confirm.') !== 'ERASE') return;
+    stopPlayer(); closeAllSheets(); await clearStore('kv'); await clearStore('audio');
+    KEY = null; S = null; META = null; renderSetup(); toast('Journal erased');
+  },
+};
+document.addEventListener('click', e => {
+  const el = e.target.closest('[data-act]'); if (!el) return;
+  const f = A[el.dataset.act]; if (f) { e.preventDefault(); f(el, e); }
+});
+document.addEventListener('keydown', e => {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('[role=button][data-act]')) { e.preventDefault(); e.target.click(); }
+  if (e.key === 'Escape' && STACK.length) popSheet();
+});
+
+/* ---------- file inputs ---------- */
+$('#file-mp3').addEventListener('change', async ev => {
+  const files = [...ev.target.files]; ev.target.value = '';
+  if (!files.length || !KEY) return;
+  let i = 0;
+  for (const f of files) {
+    i++; toast(`Adding ${i} of ${files.length}…`, 60000);
+    try {
+      const dur = await audioDuration(f), {iv, ct} = await seal(KEY, await f.arrayBuffer()), id = uid();
+      await put('audio', id, {iv, ct, type: f.type || 'audio/mpeg'});
+      S.tracks.push({id, name: f.name.replace(/\.[^.]+$/, ''), dur, added: new Date().toISOString()});
+      await persist();
+    } catch (err) { toast(`Couldn’t add ${f.name}: ${err.message}`); await sleep(2500); }
+  }
+  toast(files.length === 1 ? 'Recording added' : 'Recordings added');
+  lastActive = Date.now();
+  if (STACK.at(-1)?.kind === 'meditate') drawSheet();
+});
+$('#file-restore').addEventListener('change', async ev => {
+  const f = ev.target.files[0]; ev.target.value = ''; if (!f) return;
+  let data;
+  try { data = JSON.parse(await f.text()); if (data.app !== 'laf-journal' || !data.ct) throw 0; }
+  catch { toast('That file isn’t a LAF backup.'); return; }
+  const o = restoreObj(data); o.data = data; pushSheet(o);
+});
+
+/* ---------- start ---------- */
+(async function boot() {
+  try { await navigator.storage?.persist?.(); } catch {}
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});
+  if (!window.crypto?.subtle || !window.indexedDB) { $('#root').innerHTML = '<main class="gate"><h1>LAF</h1><p class="lede">This browser can’t run the journal securely. Open it in Safari.</p></main>'; return; }
+  META = await get('kv', 'meta');
+  if (META) renderUnlock(); else renderSetup();
+})();
+</script>
+</body>
+</html>
