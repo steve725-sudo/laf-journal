@@ -182,6 +182,7 @@ input[type=range]{padding:0;border:0;background:none;accent-color:var(--practice
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 <input type="file" id="file-mp3" accept="audio/*,.mp3,.m4a" multiple hidden>
 <input type="file" id="file-restore" hidden>
+<input type="file" id="file-sleep" accept=".txt,.csv,text/plain,text/csv" hidden>
 <script>
 'use strict';
 /* ---------- basics ---------- */
@@ -411,6 +412,7 @@ function todayHTML() {
   const laf = S.entries.filter(e => e.type === 'laf' && ymd(new Date(e.date)) === today).sort(byDateDesc)[0];
   const L = [['love','What do you love about yourself today?'],['accept','What do you accept about yourself today?'],['forgive','What do you forgive yourself for today?']];
   let h = `<header class="top"><h1>${fmtDay(now)}</h1><button class="x" data-act="lock">Lock</button></header>`;
+  if (sleepOn(today)) h += `<p class="small" style="margin-top:-6px">Slept ${sleepOn(today)} h last night</p>`;
   if (laf) h += `<section class="laf done" data-act="view" data-id="${laf.id}" role="button" tabindex="0"><p class="label">Tonight’s LAF</p>
       ${L.map(([k]) => `<div class="laf-row" data-acc="${k}"><span class="bar"></span><p>${esc(laf.fields[k]) || '<span class="hint">Left blank</span>'}</p></div>`).join('')}</section>`;
   else h += `<section class="laf"><p class="label">Tonight’s LAF</p>
@@ -470,6 +472,11 @@ function settingsHTML() {
     Backups are encrypted with your passphrase. Choose “Save to Files” and pick On My iPhone, or AirDrop it to your computer. Your MP3s aren’t included, so keep the originals.</p>
     <button class="primary" data-act="backup">Save a backup</button>
     <button class="secondary" data-act="restore-start">Restore from a backup</button></section>
+  <section class="set"><h2>Sleep</h2>
+    <p class="small">${Object.keys(S.sleep || {}).length ? `${Object.keys(S.sleep).length} nights imported, last on ${new Date(st.sleepImported).toLocaleDateString('en-AU', {day:'numeric', month:'short'})}.` : 'Import your sleep from Apple Health using the “Sleep for LAF” Shortcut.'}
+    Hours count towards the day you woke up.</p>
+    <button class="secondary" data-act="sleep-import">Import sleep file</button>
+    ${Object.keys(S.sleep || {}).length ? '<button class="quiet" data-act="sleep-clear">Remove sleep data</button>' : ''}</section>
   <section class="set"><h2>Summary to share</h2>
     <p class="small">A PDF of a chosen period, for a psychologist, counsellor or social worker. You choose what goes in.</p>
     <button class="secondary" data-act="summary">Make a summary PDF</button></section>
@@ -910,6 +917,43 @@ function learnHTML() {
   return h + `<p class="small" style="margin-top:26px">${esc(LEARN.src)} Tap a count to see those entries.</p>`;
 }
 
+/* ---------- sleep import ---------- */
+// Lines from the iOS Shortcut: start;end;value  (ISO 8601 dates). Commas or tabs also accepted.
+function parseSleep(text) {
+  const iso = /\d{4}-\d{2}-\d{2}[T ]\d{2}:\d{2}(:\d{2})?(\.\d+)?(Z|[+-]\d{2}:?\d{2})?/g, rows = [];
+  for (const line of text.split(/\r?\n/)) {
+    const d = line.match(iso); if (!d || d.length < 2) continue;
+    const a = new Date(d[0].replace(' ', 'T')), b = new Date(d[1].replace(' ', 'T'));
+    if (isNaN(a) || isNaN(b) || b <= a || b - a > 20 * 3600e3) continue;
+    const v = line.replace(iso, '').toLowerCase();
+    rows.push({a:+a, b:+b, kind: /awake/.test(v) ? 'awake' : /in ?bed/.test(v) ? 'bed' : 'asleep'});
+  }
+  return rows;
+}
+function mergeHours(iv) {
+  iv.sort((x, y) => x.a - y.a); let tot = 0, cur = null;
+  for (const r of iv) { if (!cur || r.a > cur.b) { if (cur) tot += cur.b - cur.a; cur = {a:r.a, b:r.b}; } else cur.b = Math.max(cur.b, r.b); }
+  if (cur) tot += cur.b - cur.a; return Math.round(tot / 360e3) / 10;
+}
+function nightsFrom(rows) {
+  // a night belongs to the day you woke up
+  const by = {};
+  for (const r of rows) { const k = ymd(new Date(r.b)); (by[k] ||= {asleep:[], bed:[]}); if (r.kind !== 'awake') by[k][r.kind].push(r); }
+  const out = {};
+  for (const [k, v] of Object.entries(by)) {
+    const hrs = v.asleep.length ? mergeHours(v.asleep) : mergeHours(v.bed);
+    if (hrs >= 1) out[k] = {h:hrs, inBed: !v.asleep.length};
+  }
+  return out;
+}
+async function importSleep(file) {
+  const nights = nightsFrom(parseSleep(await file.text())), n = Object.keys(nights).length;
+  if (!n) { toast('No sleep found in that file. Check the Shortcut saves dates as ISO 8601.', 5000); return; }
+  S.sleep = {...(S.sleep || {}), ...nights}; S.settings.sleepImported = new Date().toISOString();
+  await persist(); renderView(); toast(`${n} ${n === 1 ? 'night' : 'nights'} imported`);
+}
+const sleepOn = day => S.sleep?.[day]?.h;
+
 /* ---------- patterns ---------- */
 function helpStats(es) {
   const m = new Map();
@@ -923,7 +967,7 @@ function helpStats(es) {
 function dayStats(es) {
   // one row per day that has a LAF check-in
   const days = new Map();
-  for (const e of es) if (e.type === 'laf' && CHECKIN.some(k => e.fields[k])) days.set(ymd(new Date(e.date)), {ci:e.fields, practice:false, hard:false});
+  for (const e of es) if (e.type === 'laf' && CHECKIN.some(k => e.fields[k])) { const k = ymd(new Date(e.date)); days.set(k, {day:k, ci:e.fields, practice:false, hard:false, sleep:sleepOn(k)}); }
   for (const e of es) {
     const d = days.get(ymd(new Date(e.date))); if (!d) continue;
     if (e.type === 'meditation' || e.type === 'yoga') d.practice = true;
@@ -942,6 +986,23 @@ function compareLines(days, key, a, b) {
   }
   return out;
 }
+function sleepSection(since, es, days) {
+  const nights = Object.entries(S.sleep || {}).filter(([k]) => +new Date(k + 'T12:00') >= since);
+  if (!nights.length) return `<section class="set"><h2>Sleep</h2><p class="small">Import sleep in Settings to see it here.</p></section>`;
+  const avg = a => a.length ? Math.round(a.reduce((x, y) => x + y, 0) / a.length * 10) / 10 : null;
+  const hs = nights.map(([, v]) => v.h), short = hs.filter(h => h < 6).length;
+  let h = `<section class="set"><h2>Sleep</h2><p class="pline">Average ${avg(hs)} h over ${hs.length} nights; ${short} under 6 h.</p>`;
+  const trigDays = new Set(es.filter(e => e.type === 'trigger').map(e => ymd(new Date(e.date))));
+  const allDays = nights.map(([k, v]) => ({k, h:v.h})), tA = allDays.filter(d => trigDays.has(d.k)), tB = allDays.filter(d => !trigDays.has(d.k));
+  if (tA.length >= 2 && tB.length >= 3) h += `<p class="pline">Before days with a Triggered entry you slept ${avg(tA.map(d => d.h))} h on average; other days ${avg(tB.map(d => d.h))} h.</p>`;
+  const withS = days.filter(d => d.sleep), sh = withS.filter(d => d.sleep < 6), ok = withS.filter(d => d.sleep >= 6);
+  if (sh.length >= 3 && ok.length >= 3) for (const k of ['energy','focus','sensory']) {
+    const bad = HARD[k], f = TYPES.laf.fields.find(x => x.k === k);
+    const a = sh.filter(d => d.ci[k] === bad).length, b = ok.filter(d => d.ci[k] === bad).length;
+    if (Math.abs(a / sh.length - b / ok.length) >= .2) h += `<p class="pline">${f.label} ${bad.toLowerCase()}: ${a} of ${sh.length} days after under 6 h, ${b} of ${ok.length} after 6 h or more.</p>`;
+  }
+  return h + `</section>`;
+}
 function patternsHTML() {
   const since = MAPP ? Date.now() - MAPP * DAY : 0, es = S.entries.filter(e => +new Date(e.date) >= since);
   let h = `<h1>Patterns</h1><div class="seg">${[[30,'Month'],[90,'3 months'],[0,'All']].map(([d, l]) => `<button class="chip${MAPP === d ? ' on' : ''}" data-act="period" data-d="${d}">${l}</button>`).join('')}</div>`;
@@ -958,6 +1019,7 @@ function patternsHTML() {
   h += prac === null ? `<p class="small">Needs at least three check-in days with practice and three without.</p>`
      : prac.length ? prac.map(l => `<p class="pline">${esc(l)}</p>`).join('') : `<p class="small">No clear difference yet.</p>`;
   h += `</section>`;
+  h += sleepSection(since, es, days);
   const trig = es.filter(e => e.type === 'trigger'), hard = compareLines(days, 'hard', 'days with a Triggered entry', 'other days');
   h += `<section class="set"><h2>Around hard moments</h2>`;
   if (!trig.length) h += `<p class="small">Nothing logged as Triggered in this period.</p>`;
@@ -1092,6 +1154,8 @@ function summaryBlocks() {
     return Object.keys(c).length ? `${f.label}: ${f.options.filter(o => c[o]).map(o => `${o.toLowerCase()} ${c[o]}`).join(', ')}` : '';
   }).filter(Boolean);
   if (ci.length) { P('Nightly check-in (days)', {font:'F2', size:10, space:10}); P(ci.join('.   ') + '.', {font:'F1', size:10}); }
+  const sl = Object.entries(S.sleep || {}).filter(([k]) => +new Date(k + 'T12:00') >= (SUM.days ? Date.now() - SUM.days * DAY : 0)).map(([, v]) => v.h);
+  if (sl.length) P(`Sleep (from Apple Health): average ${Math.round(sl.reduce((a, b) => a + b, 0) / sl.length * 10) / 10} h over ${sl.length} nights; ${sl.filter(h => h < 6).length} nights under 6 h.`, {font:'F1', size:10, space:6});
   const hs = helpStats(es);
   if (hs.length) { P('What helped', {font:'F2', size:10, space:10}); P(hs.map(r => `${r.name} (${r.used}${r.lot + r.bit + r.no ? `; a lot ${r.lot}, a bit ${r.bit}, not really ${r.no}` : ''})`).join(', '), {font:'F1', size:10}); }
   if (pc.size) { P('Modes and schemas noted most often', {font:'F2', size:10, space:10}); P([...pc].sort((a, b) => b[1] - a[1]).map(([t, n]) => `${label(t)} (${n})`).join(', '), {font:'F1', size:10}); }
@@ -1196,6 +1260,8 @@ const A = {
       if (PENDING_MSG) { toast(PENDING_MSG, 5000); PENDING_MSG = null; }
     } catch { $('#err').textContent = 'That passphrase didn’t open the journal.'; b.disabled = false; b.textContent = 'Unlock'; }
   },
+  'sleep-import'() { suspendLock(); $('#file-sleep').click(); },
+  async 'sleep-clear'() { if (!confirm('Remove all imported sleep data?')) return; S.sleep = {}; S.settings.sleepImported = null; await persist(); renderView(); toast('Sleep data removed'); },
   'restore-start'() { suspendLock(); $('#file-restore').click(); },
   async 'restore-go'() {
     const top = STACK.at(-1), data = top.data, b = $('[data-act=restore-go]');
@@ -1328,6 +1394,9 @@ $('#file-mp3').addEventListener('change', async ev => {
   lastActive = Date.now();
   if (STACK.at(-1)?.kind === 'meditate') drawSheet();
 });
+$('#file-sleep').addEventListener('change', async ev => {
+  const f = ev.target.files[0]; ev.target.value = ''; if (f) importSleep(f);
+});
 $('#file-restore').addEventListener('change', async ev => {
   const f = ev.target.files[0]; ev.target.value = ''; if (!f) return;
   let data;
@@ -1339,7 +1408,17 @@ $('#file-restore').addEventListener('change', async ev => {
 /* ---------- start ---------- */
 (async function boot() {
   try { await navigator.storage?.persist?.(); } catch {}
-  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) navigator.serviceWorker.register('sw.js').catch(() => {});
+  if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+    const hadSW = !!navigator.serviceWorker.controller;
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      document.addEventListener('visibilitychange', () => { if (!document.hidden) reg.update().catch(() => {}); });
+    }).catch(() => {});
+    // A new version took over: reload straight away if locked, otherwise say so.
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (!hadSW) return;
+      if (!KEY) location.reload(); else toast('App updated. Close and reopen to see what’s new.', 5000);
+    });
+  }
   if (!window.crypto?.subtle || !window.indexedDB) { $('#root').innerHTML = '<main class="gate"><h1>LAF</h1><p class="lede">This browser can’t run the journal securely. Open it in Safari.</p></main>'; return; }
   META = await get('kv', 'meta');
   if (META) renderUnlock(); else renderSetup();
