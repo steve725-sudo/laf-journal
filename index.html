@@ -174,6 +174,154 @@ input[type=range]{padding:0;border:0;background:none;accent-color:var(--practice
 
 .toast{position:fixed;left:50%;bottom:calc(env(safe-area-inset-bottom) + 80px);transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:.9rem;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none;max-width:88vw;text-align:center}
 .toast.show{opacity:1}
+.tc button{cursor:pointer}
+.tc .t-seg{display:flex;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:3px}
+.tc .t-seg button{border:0;background:none;padding:7px 13px;border-radius:999px;min-height:38px;color:var(--ink2);font-weight:500}
+.tc .t-seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.tc .nav{display:flex;gap:6px}
+.tc .nav button{min-width:46px;height:44px;border-radius:999px;border:1px solid var(--line);background:var(--panel);font-size:20px;padding:0 14px}
+.tc .nav button.txt{font-size:14px;font-weight:600}
+.tc .t-card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px}
+.tc .read-date{font-family:var(--disp);font-size:24px;font-weight:600;line-height:1.15;margin:0 0 6px}
+.tc .read-line{margin:3px 0;color:var(--ink2)}
+.tc .read-line b{color:var(--ink);font-weight:600}
+.tc .read-items{display:grid;gap:2px;margin-top:6px}
+.tc .read-items button{display:flex;align-items:center;gap:8px;text-align:left;background:none;border:0;padding:5px 0;min-height:36px;width:100%}
+.tc .t-dot{display:inline-block;width:10px;height:10px;border-radius:50%;flex:none}
+.tc .read-actions{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+.tc .btn{min-height:42px;padding:0 18px;border-radius:999px;border:1px solid var(--ink);background:var(--ink);color:var(--bg);font-weight:600}
+.tc .btn.ghost{background:none;color:var(--ink);border-color:var(--line);font-weight:500}
+.tc .btn.warn{background:none;color:var(--accent);border-color:var(--accent)}
+.tc .kinds{display:flex;gap:6px;margin-bottom:10px}
+.tc .kinds button{flex:1;min-height:40px;border:1px solid var(--line);background:none;border-radius:10px}
+.tc .kinds button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tc .field{display:grid;gap:4px;margin-bottom:10px}
+.tc .field label,.tc .lbl{font-size:12px;color:var(--ink2)}
+.tc .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tc input[type=text],.tc input[type=date],.tc input[type=time],.tc input[type=number],.tc select,.tc textarea{width:100%;min-height:42px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+.tc textarea{min-height:64px;resize:vertical}
+.tc input.armed{border-color:var(--accent);box-shadow:0 0 0 2px color-mix(in srgb,var(--accent) 30%,transparent)}
+.tc .swatches{display:flex;gap:8px;flex-wrap:wrap}
+.tc .swatches button{width:34px;height:34px;border-radius:50%;border:2px solid var(--panel);box-shadow:0 0 0 1px var(--line)}
+.tc .swatches button[aria-pressed="true"]{box-shadow:0 0 0 2px var(--ink)}
+.tc .t-hint{font-size:13px;color:var(--ink2);margin:0 0 10px}
+.tc .btns{display:flex;gap:8px;flex-wrap:wrap}
+.tc ul.items{list-style:none;margin:0 0 6px;padding:0}
+.tc .items li button{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:none;border:0;border-bottom:1px solid var(--faint);padding:8px 0;min-height:48px}
+.tc .items .t{display:block;font-weight:500;overflow-wrap:anywhere}
+.tc .items .m{display:block;font-size:12px;color:var(--ink2);font-variant-numeric:tabular-nums}
+.tc .t-empty{color:var(--ink2);margin:0 0 8px}
+.tc details summary{cursor:pointer;font-weight:600;min-height:30px}
+.tc details>.field:first-of-type,.tc details>.row2:first-of-type{margin-top:10px}
+.tc .t-small{font-size:12px;color:var(--ink2);margin:6px 0 0}
+.tc .laneband{fill:none;stroke:var(--faint);stroke-width:50;opacity:.55}
+.tc .laneline{fill:none;stroke:var(--line);stroke-width:1.2}
+.tc .spoke{stroke:var(--line);stroke-width:.8;fill:none;opacity:.7}
+.tc .spokeS{stroke:var(--ink2);stroke-width:1.1;fill:none;opacity:.6}
+.tc .ringline{fill:none;stroke:var(--line);stroke-width:1}
+.tc .core{fill:var(--panel);stroke:var(--line);stroke-width:1;cursor:pointer}
+.tc .m0{fill:var(--m0)}
+.tc .m1{fill:var(--m1)}
+.tc .nA0{fill:var(--a0)}
+.tc .nA1{fill:var(--a1)}
+.tc .s-summer{fill:var(--summer)}
+.tc .s-autumn{fill:var(--autumn)}
+.tc .s-winter{fill:var(--winter)}
+.tc .s-spring{fill:var(--spring)}
+.tc .sep{stroke:var(--bg);stroke-width:1.5}
+.tc .lbl-b{font-family:var(--disp);font-weight:700;fill:var(--ink)}
+.tc .lbl-a{font-family:var(--disp);font-weight:700;fill:var(--on-season)}
+.tc .lbl-aN{font-family:var(--disp);font-weight:700;fill:var(--ink2)}
+.tc .daynum{font-family:var(--body);fill:var(--ink2);font-variant-numeric:tabular-nums;font-weight:500}
+.tc .daynum.we{fill:var(--ink);font-weight:700}
+.tc .tick{stroke:var(--ink2);stroke-width:.6;fill:none}
+.tc .tickM{stroke:var(--ink);stroke-width:1.2;fill:none}
+.tc .halo{paint-order:stroke;stroke:var(--bg);stroke-width:3px;stroke-linejoin:round}
+.tc .lanename{font-family:var(--body);fill:var(--ink2);font-weight:600;letter-spacing:.08em}
+.tc .ctr-t{font-family:var(--disp);font-weight:700;fill:var(--ink)}
+.tc .ctr-s{font-family:var(--body);fill:var(--ink2)}
+.tc .ctr-h{font-family:var(--body);fill:var(--ink2);opacity:.75}
+.tc .sunmark{fill:var(--ink);stroke:var(--bg);stroke-width:1.5}
+.tc .mdark{fill:var(--moon-dark);stroke:var(--ink2);stroke-width:.6}
+.tc .mlit{fill:var(--moon-lit)}
+.tc .mkey{stroke:var(--ink);stroke-width:.9}
+.tc .laneDot{fill:var(--ink2)}
+.tc .arclabel{font-family:var(--body);font-weight:600;fill:#fff;pointer-events:none}
+.tc .ptlabel{font-family:var(--body);font-weight:600;fill:var(--ink);pointer-events:none}
+.tc .todayline{stroke:var(--accent);stroke-width:1.8;fill:none;pointer-events:none}
+.tc .todaydot{fill:var(--accent);stroke:var(--bg);stroke-width:1.5;pointer-events:none}
+.tc .todaybar{fill:var(--accent);pointer-events:none}
+.tc .selwedge{fill:var(--ink);opacity:.1;pointer-events:none}
+.tc .dayband{fill:var(--day)}
+.tc .nightband{fill:var(--night)}
+.tc [data-iid]{cursor:pointer}
+.tc .zoomctl,.tc .ringsel{position:absolute;bottom:6px;display:flex;gap:6px}
+.tc .zoomctl{right:6px}
+.tc .ringsel{left:6px}
+.tc .zoomctl button{min-width:42px;height:42px;border-radius:999px;border:1px solid var(--line);background:var(--panel);font-size:20px;padding:0 12px}
+.tc .zoomctl button.txt{font-size:13px}
+.tc .ringsel button{height:36px;border-radius:999px;border:1px solid var(--line);background:var(--panel);font-size:13px;padding:0 12px;color:var(--ink2)}
+.tc .ringsel button[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tc .tpls{display:flex;flex-wrap:wrap;gap:6px}
+.tc .tpls button{min-height:36px;border-radius:999px;border:1px solid var(--line);background:none;padding:0 12px;font-size:13px}
+/* ---- cycle: layout and theme (scoped to .tc) ---- */
+.tc{--panel:var(--surface);--ink2:var(--muted);--faint:color-mix(in srgb,var(--line) 55%,var(--bg));
+  --accent:#B85C6B;--moon-lit:#F3EBD2;--moon-dark:#4A4F5C;
+  --m0:#E9E3D8;--m1:#F2EDE4;--a0:#DDD6C9;--a1:#E8E2D7;
+  --summer:#E3C07A;--autumn:#D69A78;--winter:#9DB4CC;--spring:#A9C3A6;--on-season:#2D2C2A;
+  --day:#E8CE8B;--night:#3D4658;--disp:var(--serif);--body:var(--sans);margin-top:12px}
+@media (prefers-color-scheme:dark){.tc{--accent:#D9808F;--moon-lit:#EDE5CB;--moon-dark:#17191C;
+  --m0:#2B2D31;--m1:#232529;--a0:#34363B;--a1:#2B2D31;
+  --summer:#8C7140;--autumn:#85533D;--winter:#4A6683;--spring:#55745A;--on-season:#F2EEE7;
+  --day:#9B7F3E;--night:#1B1D22}}
+.app.cyc{max-width:760px}
+.tc{font-size:15px;line-height:1.45}
+.tc button,.tc input,.tc select,.tc textarea{font:inherit;color:inherit}
+.tc button{text-align:center}
+.tc input,.tc select,.tc textarea{font-size:16px}
+.tc input[type=checkbox]{-webkit-appearance:checkbox;appearance:auto;width:auto;min-height:0;padding:0;border:0;margin:0 8px 0 0;vertical-align:-2px}
+.tc .t-top{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:center;margin-bottom:10px}
+.tc .t-top .t-seg{width:100%;overflow-x:auto;scrollbar-width:none}
+.tc .t-top .t-seg button{flex:1 1 auto;padding:7px 6px;font-size:.88rem;white-space:nowrap}
+.tc .t-top .nav{margin-right:auto}
+.tc .wheelwrap{width:100%;margin:0 auto;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px}
+.tc .wheelwrap #tc-wheel{flex:0 0 100%}
+.tc .wheelwrap .ringsel,.tc .wheelwrap .zoomctl{position:static}
+.tc #tc-wheel{display:block;width:100%;height:auto;aspect-ratio:1/1;touch-action:pan-y;user-select:none;-webkit-user-select:none;overflow:hidden}
+.tc .t-seg{display:flex;margin:0}
+.tc .stack{display:grid;gap:12px;margin-top:14px}
+.tc h2{font-family:var(--sans);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink2);margin:0 0 10px;font-weight:600}
+.tc details>summary{cursor:pointer;font-weight:600;min-height:30px}
+.tc .t-card{border-radius:14px;background:var(--panel)}
+.tc .t-card:not(.keep){cursor:default}
+.tc .read-date{font-size:22px}
+.tc textarea{font-family:var(--sans);min-height:64px;field-sizing:fixed}
+.tc .t-btn,.tc .btn{min-height:42px;padding:0 18px;border-radius:999px}
+@media (min-width:900px){.tc .wheelwrap{width:min(100%,calc(100vh - 160px))}}
+/* ---- rhythms ---- */
+.hb-list{display:grid;margin-top:8px}
+.hb-row{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px solid var(--line)}
+.hb-name{display:flex;align-items:center;gap:10px;font-family:var(--serif);font-size:1.05rem;min-width:0;flex:1 1 auto;padding:6px 0;overflow:hidden}
+.hb-name{white-space:nowrap;text-overflow:ellipsis}
+.hb-days{display:flex;gap:4px;flex:none}
+.hb-d{width:29px;height:29px;border-radius:50%;border:1.5px solid var(--line);display:grid;place-items:center;background:transparent;text-align:center;padding:0}
+.hb-d small{font-size:.6rem;color:var(--muted);line-height:1}
+.hb-d.on{background:var(--hc);border-color:var(--hc)}
+.hb-d.on small{color:var(--bg)}
+.hb-d.today{box-shadow:0 0 0 2px var(--bg),0 0 0 3.5px var(--ink)}
+.hb-sw{width:34px;height:34px;padding:0;border-radius:50%;background:var(--hc);border:2px solid var(--bg);box-shadow:0 0 0 1px var(--line)}
+.hb-sw.on{box-shadow:0 0 0 2px var(--ink)}
+.hb-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:14px}
+.hb-panel{display:flex;flex-direction:column;gap:6px;padding:8px;border-radius:14px;border:1px solid var(--line);background:var(--surface);text-align:center;min-width:0}
+.hb-svg{display:block;width:100%;height:auto}
+.hb-big{padding:6px 0 4px}
+.hb-none{min-height:120px;display:grid;place-items:center;color:var(--muted);font-family:var(--serif);font-size:.95rem}
+.hb-leg{display:flex;flex-wrap:wrap;justify-content:center;gap:2px 10px;font-size:.72rem;color:var(--muted)}
+.hb-leg span{display:flex;align-items:center;gap:5px}
+.hb-leg .dot{width:7px;height:7px}
+.hb-moon::before{content:"";width:12px;border-top:1.5px dashed var(--muted);display:inline-block;margin-right:3px}
+.tabs button{padding-left:0;padding-right:0;font-size:.68rem}
+
 </style>
 </head>
 <body>
@@ -304,11 +452,11 @@ const HARD = {energy:'Low', focus:'Scattered', sleep:'Poor', sensory:'Overloaded
 const DEFAULT_HELPS = ['Breathing','Yoga nidra','Lumenate','Meditation','Walk','Exercise','Music','Time alone','Quiet, dim room','Nature','Talking to someone','Creative work','Rest or sleep'];
 const schemaSlug = t => normalizeTag(String(t).replace(/[\/&]/g, ' '));
 const partWords = () => new Set([...MODES.map(m => m[0]), ...(S.settings.schemas || []).map(schemaSlug)]);
-const freshState = () => ({v:1, created:new Date().toISOString(), entries:[], tracks:[],
+const freshState = () => ({v:1, created:new Date().toISOString(), entries:[], tracks:[], cycle:cycDefaults(),
   settings:{helps:DEFAULT_HELPS, schemas:[], emotions:DEFAULT_EMOTIONS, seedTags:SEED_TAGS, lastBackup:null, nudgeSeen:null}});
 function migrate(s) {
   const f = freshState();
-  s.entries ||= []; s.tracks ||= []; s.created ||= f.created;
+  s.entries ||= []; s.tracks ||= []; s.created ||= f.created; s.cycle = normCycle(s.cycle);
   s.settings = {...f.settings, ...(s.settings || {})};
   if (!s.settings.emoCustom) s.settings.emotions = DEFAULT_EMOTIONS;
   return s;
@@ -369,7 +517,7 @@ function renderUnlock() {
   $('#pass').addEventListener('keydown', e => { if (e.key === 'Enter') A.unlock(); });
 }
 function enterApp() {
-  $('#root').innerHTML = `<div id="view"></div><nav class="tabs" aria-label="Sections">${[['today','Today'],['journal','Journal'],['map','Map'],['patterns','Patterns'],['learn','Learn'],['settings','Settings']]
+  $('#root').innerHTML = `<div id="view"></div><nav class="tabs" aria-label="Sections">${[['today','Today'],['journal','Journal'],['cycle','Cycle'],['map','Map'],['patterns','Patterns'],['learn','Learn'],['settings','Settings']]
     .map(([v, l]) => `<button data-act="tab" data-v="${v}">${l}</button>`).join('')}</nav>`;
   lastActive = Date.now(); renderView();
 }
@@ -381,6 +529,7 @@ function renderView() {
   const root = $('#view');
   $$('.tabs button').forEach(b => b.setAttribute('aria-current', b.dataset.v === VIEW ? 'page' : 'false'));
   if (VIEW === 'map') { root.className = 'mapview'; root.innerHTML = mapHTML(); initMap(); return; }
+  if (VIEW === 'cycle') { root.className = 'app cyc'; root.innerHTML = cycleHTML(); if (CYC.sub === 'wheel') mountCycle(); return; }
   root.className = 'app';
   root.innerHTML = VIEW === 'today' ? todayHTML() : VIEW === 'journal' ? journalHTML() : VIEW === 'patterns' ? patternsHTML() : VIEW === 'learn' ? learnHTML() : settingsHTML();
   if (VIEW === 'journal') { const q = $('#q'); q.addEventListener('input', () => { JF.q = q.value; $('#jlist').innerHTML = journalList(); }); }
@@ -419,6 +568,7 @@ function todayHTML() {
       ${L.map(([k, q]) => `<div class="laf-row" data-acc="${k}"><span class="bar"></span><p class="hint">${q}</p></div>`).join('')}
       <button class="primary" data-act="new" data-type="laf">Write tonight’s LAF</button></section>`;
   h += notesHTML();
+  h += habitsTodayHTML();
   const b = (t, l) => `<button data-act="new" data-type="${t}"><i style="--c:${typeColor(t)}"></i>${l}</button>`;
   const open = S.entries.filter(e => e.type === 'idea' && !e.fields.done).length;
   h += `<h2 class="group">Compassion</h2><div class="actions">${b('dream','Dream')}${b('note','Noticing')}${b('trigger','Triggered')}
@@ -1239,7 +1389,1199 @@ document.addEventListener('visibilitychange', () => { if (document.hidden && KEY
 setInterval(() => { if (KEY && !playing() && Date.now() > lockHold && Date.now() - lastActive > LOCK_AFTER) lock(); }, 20000);
 
 /* ---------- actions ---------- */
+/* ---------- cycle: shared state and rhythm (habit) tracking ---------- */
+const CYC = {sub:'wheel'};
+const TCP = {state:null};
+const HAB_DOMAINS = [['body','Body'],['mind','Mind'],['creative','Creative'],['work','Work'],['rest','Rest']];
+const HAB_COLORS = ['--love','--accept','--forgive','--dream','--practice','--creative'];
+const HAB_SRC = [['','Manual'],['yoga','Yoga entries'],['meditation','Meditation entries'],['creative','Creative work entries'],['retreat','Retreat entries']];
+const HAB_PRESETS = [['Gym','body',''],['Yoga','body','yoga'],['Meditation','mind','meditation'],['Drawing','creative','creative'],['Photography','creative',''],['Medication','body','']];
+const HAB_WINS = [[30,'1 month'],[60,'2 months'],[90,'3 months'],[180,'6 months']];
+const HAB_RAD = Math.PI / 180;
+const cycDefaults = () => ({v:2, lanes:['Work','Body','Making','People','Rest'],
+  set:{south:true, lat:-33.87, lon:151.21, moon:true, nums:true, sky:true, jr:true, outer:'season', scale:'year'},
+  items:[], habits:[], log:{}, panels:null, win:60, fdom:'all', hmoon:true});
+function normCycle(c) {
+  const d = cycDefaults(); c = c && typeof c === 'object' ? c : {};
+  c.v = 2; c.lanes = Array.isArray(c.lanes) ? c.lanes : d.lanes;
+  c.set = {...d.set, ...(c.set || {})}; c.items = Array.isArray(c.items) ? c.items : [];
+  c.habits = Array.isArray(c.habits) ? c.habits.filter(h => h && h.id && h.name) : [];
+  c.log = c.log && typeof c.log === 'object' ? c.log : {};
+  if (!Array.isArray(c.panels)) c.panels = null;
+  if (!HAB_WINS.some(w => w[0] === c.win)) c.win = d.win;
+  if (c.fdom !== 'all' && !HAB_DOMAINS.some(x => x[0] === c.fdom)) c.fdom = 'all';
+  if (typeof c.hmoon !== 'boolean') c.hmoon = true;
+  return c;
+}
+const hcol = h => `var(${HAB_COLORS[(h.c || 0) % 6]})`;
+const today0 = () => { const d = new Date(); d.setHours(0,0,0,0); return d; };
+const addDays = (d, n) => { const x = new Date(d); x.setDate(x.getDate() + n); return x; };
+function habSet(h) {
+  const s = new Set(Object.keys(S.cycle.log[h.id] || {}));
+  if (h.src) for (const e of S.entries) if (e.type === h.src) s.add(ymd(new Date(e.date)));
+  return s;
+}
+const habSets = () => new Map(S.cycle.habits.map(h => [h.id, habSet(h)]));
+const habFromJournal = (h, k) => !!h.src && S.entries.some(e => e.type === h.src && ymd(new Date(e.date)) === k);
+const habById = id => S.cycle.habits.find(h => h.id === id);
+
+/* moon: mean synodic approximation, good enough for a quiet reference line */
+const SYN = 29.530588853 * DAY, NEW0 = Date.UTC(2000, 0, 6, 18, 14);
+const moonPhase = t => (((t - NEW0) % SYN) + SYN) % SYN / SYN;
+const moonIllum = t => (1 - Math.cos(moonPhase(t) * 2 * Math.PI)) / 2;
+function moonDay(d) {            // 'full' or 'new' if that crossing falls inside local day d
+  const a = moonPhase(+d), b = moonPhase(+addDays(d, 1));
+  if (b < a) return 'new';
+  if (a < .5 && b >= .5) return 'full';
+  return '';
+}
+
+/* panels */
+function autoPanels() {
+  const ids = S.cycle.habits.map(h => h.id), a = ids.slice(0, 3), b = ids.slice(3, 6).length ? ids.slice(3, 6) : ids.slice(0, 1);
+  return [{mode:'circle', ids:a}, {mode:'curve', ids:a}, {mode:'circle', ids:b}, {mode:'curve', ids:b}];
+}
+function habPanels() {
+  const have = new Set(S.cycle.habits.map(h => h.id));
+  return (S.cycle.panels || autoPanels()).map(p => ({mode:p.mode === 'curve' ? 'curve' : 'circle', ids:(p.ids || []).filter(i => have.has(i))}));
+}
+const panelsW = () => (S.cycle.panels ||= autoPanels());
+
+/* drawings */
+function ringSVG(hs, sets, big) {
+  const win = S.cycle.win, t = today0(), days = Array.from({length:win}, (_, i) => addDays(t, -(win - 1) + i));
+  const P = (r, a) => [r * Math.sin(a * HAB_RAD), -r * Math.cos(a * HAB_RAD)];
+  const step = hs.length > 2 ? 24 : 28, r0 = 140;
+  let s = `<svg viewBox="-176 -176 352 352" class="hb-svg" role="img" aria-label="Rings, one per rhythm, each dot a day">`;
+  s += `<circle r="${r0 + 15}" fill="none" stroke="var(--line)" stroke-width=".8" opacity=".6"/>`;
+  if (S.cycle.hmoon) days.forEach((d, i) => {
+    const m = moonDay(d); if (!m) return;
+    const [x, y] = P(r0 + 15, (i + .5) / win * 360);
+    s += m === 'full' ? `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4.4" fill="var(--bg)" stroke="var(--ink)" stroke-width="1"/>`
+                      : `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="3.2" fill="var(--muted)"/>`;
+  });
+  days.forEach((d, i) => {
+    if (d.getDate() !== 1) return;
+    const a = i / win * 360, [x1, y1] = P(r0 - hs.length * step + 4, a), [x2, y2] = P(r0 + 8, a);
+    s += `<path d="M${x1.toFixed(1)} ${y1.toFixed(1)}L${x2.toFixed(1)} ${y2.toFixed(1)}" stroke="var(--line)" stroke-width=".9"/>`;
+    if (big) { const [x, y] = P(r0 + 29, a + 3); s += `<text x="${x.toFixed(1)}" y="${y.toFixed(1)}" font-size="9" fill="var(--muted)" text-anchor="middle">${d.toLocaleDateString('en-AU', {month:'short'})}</text>`; }
+  });
+  hs.forEach((h, k) => {
+    const r = r0 - k * step, set = sets.get(h.id), sp = 2 * Math.PI * r / win, dr = Math.max(1.3, Math.min(8, sp * .4)), col = hcol(h);
+    s += `<circle r="${r}" fill="none" stroke="var(--line)" stroke-width=".6" opacity=".5"/>`;
+    days.forEach((d, i) => {
+      const [x, y] = P(r, (i + .5) / win * 360), on = set.has(ymd(d));
+      s += on ? `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${dr.toFixed(1)}" fill="${col}"/>`
+              : `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${(dr * .38).toFixed(1)}" fill="var(--line)"/>`;
+    });
+  });
+  const a = (win - .5) / win * 360, [tx1, ty1] = P(34, a), [tx2, ty2] = P(r0 + 15, a);
+  s += `<path d="M${tx1.toFixed(1)} ${ty1.toFixed(1)}L${tx2.toFixed(1)} ${ty2.toFixed(1)}" stroke="var(--love)" stroke-width="1.6" opacity=".8"/>`;
+  s += `<text y="${big ? -2 : 4}" font-family="var(--serif)" font-size="${big ? 20 : 24}" text-anchor="middle" fill="var(--ink)">${(HAB_WINS.find(w => w[0] === win) || [0, win + ' days'])[1]}</text>`;
+  if (big) s += `<text y="18" font-size="10" text-anchor="middle" fill="var(--muted)">ending today</text>`;
+  return s + '</svg>';
+}
+function curveSVG(hs, sets, big) {
+  const win = S.cycle.win, t = today0(), W = 352, Hh = 210, x0 = 30, x1 = W - 8, y0 = 14, y1 = Hh - 26;
+  const X = i => x0 + i / (win - 1) * (x1 - x0), Y = v => y1 - v / 7 * (y1 - y0);
+  const days = Array.from({length:win}, (_, i) => addDays(t, -(win - 1) + i));
+  let s = `<svg viewBox="0 0 ${W} ${Hh}" class="hb-svg" role="img" aria-label="Days done per week for each rhythm">`;
+  [0, 3.5, 7].forEach(v => s += `<path d="M${x0} ${Y(v).toFixed(1)}H${x1}" stroke="var(--line)" stroke-width=".8" ${v === 3.5 ? 'stroke-dasharray="2 4"' : ''}/>`);
+  s += `<text x="${x0 - 6}" y="${Y(0) + 3}" font-size="9" text-anchor="end" fill="var(--muted)">0</text><text x="${x0 - 6}" y="${Y(7) + 3}" font-size="9" text-anchor="end" fill="var(--muted)">7</text>`;
+  if (big) s += `<text x="${x0}" y="9" font-size="9" fill="var(--muted)">days done per week</text>`;
+  days.forEach((d, i) => { if (d.getDate() === 1) {
+    s += `<path d="M${X(i).toFixed(1)} ${y1}V${y1 + 4}" stroke="var(--muted)" stroke-width=".8"/>`;
+    s += `<text x="${X(i).toFixed(1)}" y="${y1 + 16}" font-size="9" text-anchor="middle" fill="var(--muted)">${d.toLocaleDateString('en-AU', {month:'short'})}</text>`; } });
+  if (S.cycle.hmoon) {
+    const pts = days.map((d, i) => `${X(i).toFixed(1)} ${Y(moonIllum(+d + 12 * 36e5) * 7).toFixed(1)}`);
+    s += `<path d="M${pts.join('L')}" fill="none" stroke="var(--muted)" stroke-width="1.1" stroke-dasharray="3 3" opacity=".7"/>`;
+  }
+  hs.forEach(h => {
+    const set = sets.get(h.id), col = hcol(h);
+    const vals = days.map((d, i) => { let n = 0; for (let j = 0; j < 7; j++) if (set.has(ymd(addDays(d, -j)))) n++; return n; });
+    const pts = vals.map((v, i) => [X(i), Y(v)]);
+    let p = `M${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`;
+    for (let i = 1; i < pts.length - 1; i++) p += `Q${pts[i][0].toFixed(1)} ${pts[i][1].toFixed(1)} ${((pts[i][0] + pts[i + 1][0]) / 2).toFixed(1)} ${((pts[i][1] + pts[i + 1][1]) / 2).toFixed(1)}`;
+    p += `L${pts.at(-1)[0].toFixed(1)} ${pts.at(-1)[1].toFixed(1)}`;
+    s += `<path d="${p}L${x1} ${y1}L${x0} ${y1}Z" fill="${col}" opacity=".10"/>`;
+    s += `<path d="${p}" fill="none" stroke="${col}" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/>`;
+  });
+  return s + '</svg>';
+}
+function habLegend(hs) {
+  return `<div class="hb-leg">${hs.map(h => `<span><i class="dot" style="--c:${hcol(h)}"></i>${esc(h.name)}</span>`).join('')}${S.cycle.hmoon ? '<span class="hb-moon">Moon</span>' : ''}</div>`;
+}
+function habPanelBody(p, big) {
+  const hs = p.ids.map(habById).filter(Boolean);
+  if (!hs.length) return `<div class="hb-none">Tap to choose rhythms</div>`;
+  const sets = habSets();
+  return (p.mode === 'circle' ? ringSVG(hs, sets, big) : curveSVG(hs, sets, big)) + habLegend(hs);
+}
+
+/* check-in rows and pages */
+function habRow(h, sets) {
+  const t = today0(), set = sets.get(h.id); let days = '';
+  for (let i = 6; i >= 0; i--) {
+    const d = addDays(t, -i), k = ymd(d), on = set.has(k);
+    days += `<button type="button" class="hb-d${on ? ' on' : ''}${i === 0 ? ' today' : ''}" style="--hc:${hcol(h)}" data-act="hab-toggle" data-id="${h.id}" data-k="${k}" aria-pressed="${on}" aria-label="${esc(h.name)}, ${fmtDay(d)}"><small>${'SMTWTFS'[d.getDay()]}</small></button>`;
+  }
+  return `<div class="hb-row"><button class="hb-name" data-act="hab-edit" data-id="${h.id}"><i class="dot" style="--c:${hcol(h)}"></i>${esc(h.name)}</button><div class="hb-days">${days}</div></div>`;
+}
+function habitsTodayHTML() {
+  if (!S.cycle.habits.length) return '';
+  const sets = habSets();
+  return `<h2 class="group">Rhythms</h2><div class="hb-list">${S.cycle.habits.map(h => habRow(h, sets)).join('')}</div>`;
+}
+function habitsHTML() {
+  const C = S.cycle, hs = C.habits.filter(h => C.fdom === 'all' || h.domain === C.fdom), sets = habSets();
+  let h = `<div class="chips scroll">${[['all','All'], ...HAB_DOMAINS].map(([k, l]) => `<button class="chip${C.fdom === k ? ' on' : ''}" data-act="hab-dom" data-d="${k}">${l}</button>`).join('')}</div>`;
+  if (!C.habits.length) h += `<p class="empty">Rhythms are the things you repeat: gym, yoga, drawing, photography, medication. Tap a day to mark it done. Nothing is scored.</p>
+    <div class="chips" style="margin-top:14px">${HAB_PRESETS.map((p, i) => `<button class="chip" data-act="hab-preset-add" data-i="${i}">${p[0]}</button>`).join('')}</div>`;
+  else if (!hs.length) h += `<p class="empty">No rhythms in this group yet.</p>`;
+  else h += `<div class="hb-list">${hs.map(x => habRow(x, sets)).join('')}</div>`;
+  h += `<button class="link" data-act="hab-edit" data-id="" style="margin-top:12px">Add a rhythm</button>`;
+  if (C.habits.length) {
+    h += `<p class="label">Window</p><div class="chips scroll" style="margin-top:0">${HAB_WINS.map(([d, l]) => `<button class="chip${C.win === d ? ' on' : ''}" data-act="hab-win" data-d="${d}">${l}</button>`).join('')}<button class="chip${C.hmoon ? ' on' : ''}" data-act="hab-moon">Moon</button></div>`;
+    h += `<div class="hb-grid">${habPanels().map((p, i) => `<button class="hb-panel" data-act="hab-panel" data-i="${i}" aria-label="Panel ${i + 1}, ${p.mode}">${habPanelBody(p, false)}</button>`).join('')}</div>
+      <p class="small">Dots are days. The dashed line and open circles are the moon: full moons outlined, new moons filled. Tap a panel to enlarge or change it.</p>`;
+  }
+  return h;
+}
+function habPanelObj(i) {
+  return {full:true, kind:'hpanel', onClose: () => renderView(), render: () => {
+    const p = habPanels()[i], C = S.cycle;
+    return `<div class="sh-head"><h2>${p.mode === 'circle' ? 'Rings' : 'Waves'}</h2><button class="x" data-act="close">Done</button></div>
+      <div class="hb-big">${habPanelBody(p, true)}</div>
+      <p class="label">Shape</p><div class="chips"><button class="chip${p.mode === 'circle' ? ' on' : ''}" data-act="hp-mode" data-i="${i}" data-m="circle">Rings</button><button class="chip${p.mode === 'curve' ? ' on' : ''}" data-act="hp-mode" data-i="${i}" data-m="curve">Waves</button></div>
+      <p class="label">Rhythms (up to 3)</p><div class="chips">${C.habits.map(h => `<button class="chip${p.ids.includes(h.id) ? ' on' : ''}" data-act="hp-h" data-i="${i}" data-id="${h.id}">${esc(h.name)}</button>`).join('')}</div>
+      <p class="label">Window</p><div class="chips">${HAB_WINS.map(([d, l]) => `<button class="chip${C.win === d ? ' on' : ''}" data-act="hab-win" data-d="${d}">${l}</button>`).join('')}<button class="chip${C.hmoon ? ' on' : ''}" data-act="hab-moon">Moon</button></div>`;
+  }};
+}
+const HE = {id:'', name:'', domain:'body', c:0, src:''};
+function habEditObj() {
+  return {kind:'habit', render: () => `<div class="sh-head"><h2>${HE.id ? 'Rhythm' : 'New rhythm'}</h2><button class="x" data-act="close">Cancel</button></div>
+    ${HE.id ? '' : `<div class="chips" style="margin-top:12px">${HAB_PRESETS.map((p, i) => `<button class="chip" data-act="hab-preset" data-i="${i}">${p[0]}</button>`).join('')}</div>`}
+    <label class="fld"><span>Name</span><input id="hb-name" type="text" value="${esc(HE.name)}" autocapitalize="sentences" autocomplete="off" maxlength="40"></label>
+    <p class="label">Group</p><div class="chips">${HAB_DOMAINS.map(([k, l]) => `<button class="chip${HE.domain === k ? ' on' : ''}" data-act="he-dom" data-v="${k}">${l}</button>`).join('')}</div>
+    <p class="label">Colour</p><div class="chips">${HAB_COLORS.map((c, i) => `<button class="chip hb-sw${HE.c === i ? ' on' : ''}" style="--hc:var(${c})" data-act="he-col" data-v="${i}" aria-label="Colour ${i + 1}"></button>`).join('')}</div>
+    <p class="label">Also counts from the journal</p><div class="chips">${HAB_SRC.map(([k, l]) => `<button class="chip${HE.src === k ? ' on' : ''}" data-act="he-src" data-v="${k}">${l}</button>`).join('')}</div>
+    <button class="primary" data-act="hab-save">Save</button>
+    ${HE.id ? '<div class="btnrow"><button class="link del" data-act="hab-del">Delete this rhythm</button></div>' : ''}`};
+}
+const heSyncName = () => { const n = $('#hb-name'); if (n) HE.name = n.value; };
+const HABA = {};
+Object.assign(HABA, {
+  'cyc-sub': el => { CYC.sub = el.dataset.s; renderView(); },
+  async 'hab-toggle'(el) {
+    const h = habById(el.dataset.id), k = el.dataset.k; if (!h) return;
+    const lg = S.cycle.log[h.id] ||= {};
+    if (!lg[k] && habFromJournal(h, k)) { toast('Already counted from your journal', 1800); return; }
+    if (lg[k]) delete lg[k]; else lg[k] = 1;
+    await persist(); renderView();
+  },
+  'hab-dom': async el => { S.cycle.fdom = el.dataset.d; await persist(); renderView(); },
+  'hab-win': async el => { S.cycle.win = +el.dataset.d; await persist(); STACK.at(-1)?.kind === 'hpanel' ? drawSheet() : renderView(); },
+  'hab-moon': async () => { S.cycle.hmoon = !S.cycle.hmoon; await persist(); STACK.at(-1)?.kind === 'hpanel' ? drawSheet() : renderView(); },
+  'hab-panel': el => pushSheet(habPanelObj(+el.dataset.i)),
+  'hp-mode': async el => { panelsW()[+el.dataset.i].mode = el.dataset.m; await persist(); drawSheet(); },
+  async 'hp-h'(el) {
+    const p = panelsW()[+el.dataset.i], id = el.dataset.id, ids = (p.ids || []).filter(x => habById(x));
+    const k = ids.indexOf(id); if (k >= 0) ids.splice(k, 1); else if (ids.length < 3) ids.push(id); else { toast('Up to three per panel', 1600); return; }
+    p.ids = ids; await persist(); drawSheet();
+  },
+  'hab-edit': el => {
+    const h = habById(el.dataset.id);
+    if (h) Object.assign(HE, {id:h.id, name:h.name, domain:h.domain, c:h.c || 0, src:h.src || ''});
+    else { const used = new Set(S.cycle.habits.map(x => x.c)); Object.assign(HE, {id:'', name:'', domain:S.cycle.fdom === 'all' ? 'body' : S.cycle.fdom, c:[0,1,2,3,4,5].find(i => !used.has(i)) ?? 0, src:''}); }
+    pushSheet(habEditObj());
+  },
+  'hab-preset': el => { const p = HAB_PRESETS[+el.dataset.i]; Object.assign(HE, {name:p[0], domain:p[1], src:p[2]}); drawSheet(); },
+  async 'hab-preset-add'(el) {
+    const p = HAB_PRESETS[+el.dataset.i], used = new Set(S.cycle.habits.map(x => x.c));
+    S.cycle.habits.push({id:uid(), name:p[0], domain:p[1], src:p[2], c:[0,1,2,3,4,5].find(i => !used.has(i)) ?? 0, created:new Date().toISOString()});
+    await persist(); renderView();
+  },
+  'he-dom': el => { heSyncName(); HE.domain = el.dataset.v; drawSheet(); },
+  'he-col': el => { heSyncName(); HE.c = +el.dataset.v; drawSheet(); },
+  'he-src': el => { heSyncName(); HE.src = el.dataset.v; drawSheet(); },
+  async 'hab-save'() {
+    heSyncName(); const name = HE.name.trim(); if (!name) { toast('Give it a name.'); return; }
+    const h = HE.id ? habById(HE.id) : null;
+    if (h) Object.assign(h, {name, domain:HE.domain, c:HE.c, src:HE.src});
+    else S.cycle.habits.push({id:uid(), name, domain:HE.domain, c:HE.c, src:HE.src, created:new Date().toISOString()});
+    await persist(); popSheet(); renderView(); toast('Saved');
+  },
+  async 'hab-del'() {
+    const h = habById(HE.id); if (!h || !confirm(`Delete “${h.name}” and its days? This can’t be undone.`)) return;
+    S.cycle.habits = S.cycle.habits.filter(x => x !== h); delete S.cycle.log[h.id];
+    if (S.cycle.panels) S.cycle.panels.forEach(p => { p.ids = (p.ids || []).filter(i => i !== h.id); });
+    await persist(); popSheet(); renderView(); toast('Deleted');
+  },
+});
+
+/* ---------- cycle view ---------- */
+const TC_MARKUP = `<div class="tc"><header class="t-top">
+    <div class="t-seg" id="tc-scales" role="group" aria-label="Zoom level">
+      <button type="button" data-scale="year" aria-pressed="true">Year</button>
+      <button type="button" data-scale="season" aria-pressed="false">Season</button>
+      <button type="button" data-scale="month" aria-pressed="false">Month</button>
+      <button type="button" data-scale="week" aria-pressed="false">Week</button>
+      <button type="button" data-scale="day" aria-pressed="false">Day</button>
+      <button type="button" data-scale="moon" aria-pressed="false">Moon</button>
+    </div>
+    <div class="nav">
+      <button id="tc-prev" type="button" aria-label="Previous">&#8249;</button>
+      <button id="tc-today" type="button" class="txt">Today</button>
+      <button id="tc-next" type="button" aria-label="Next">&#8250;</button>
+    </div>
+  </header>
+
+  
+    <div class="wheelwrap">
+      <svg id="tc-wheel" viewBox="-500 -500 1000 1000" role="img" aria-label="Circular calendar. Tap a month, week or season ring to zoom in. Tap the centre to zoom out. Swipe sideways for the next or previous period.">
+        <g id="tc-view"><g id="tc-ghost"></g><g id="tc-scene"><g id="tc-static"></g><g id="tc-dyn"></g></g></g>
+      </svg>
+      <div class="ringsel" role="group" aria-label="Outer ring">
+        <button type="button" data-outer="season" aria-pressed="true">Seasons</button>
+        <button type="button" data-outer="sekki" aria-pressed="false">24 sekki</button>
+        <button type="button" data-outer="ko" aria-pressed="false">72 kō</button>
+      </div>
+      <div class="zoomctl">
+        <button id="tc-zin" type="button" aria-label="Zoom in">+</button>
+        <button id="tc-zout" type="button" aria-label="Zoom out">&#8722;</button>
+        <button id="tc-zreset" type="button" class="txt" style="visibility:hidden">Fit</button>
+      </div>
+    </div>
+
+    
+      <div class="stack">
+<section class="t-card" id="tc-readout" aria-live="polite"></section>
+
+      <section class="t-card" id="tc-formcard" aria-labelledby="tc-formh">
+        <h2 id="tc-formh">Add to the wheel</h2>
+        <div class="kinds" role="group" aria-label="Kind of item">
+          <button type="button" data-kind="span" aria-pressed="true">Span</button>
+          <button type="button" data-kind="point" aria-pressed="false">Point</button>
+          <button type="button" data-kind="line" aria-pressed="false">Line</button>
+        </div>
+        <div class="field"><span class="lbl">Quick rhythms</span><div class="tpls" id="tc-tpls"></div></div>
+        <div class="field"><label for="tc-f-title">Title</label><input type="text" id="tc-f-title" maxlength="80" placeholder="What is it?" autocomplete="off"></div>
+        <div class="field" id="tc-lanefield"><label for="tc-f-lane">Lane</label><select id="tc-f-lane"></select></div>
+        <div class="row2">
+          <div class="field"><label for="tc-f-start" id="tc-l-start">Start</label><input type="date" id="tc-f-start"></div>
+          <div class="field"><label for="tc-f-stime">Time (optional)</label><input type="time" id="tc-f-stime"></div>
+        </div>
+        <div class="row2" id="tc-endrow">
+          <div class="field"><label for="tc-f-end">End</label><input type="date" id="tc-f-end"></div>
+          <div class="field"><label for="tc-f-etime">End time</label><input type="time" id="tc-f-etime"></div>
+        </div>
+        <div class="field"><label for="tc-f-repeat">Repeats</label>
+          <select id="tc-f-repeat"><option value="none">Does not repeat</option><option value="weekly">Every week</option><option value="monthly">Every month</option><option value="yearly">Every year</option><option value="fullmoon">Every full moon</option><option value="newmoon">Every new moon</option><option value="quarter">Every solstice and equinox</option></select></div>
+        <div class="field"><span class="lbl" id="tc-l-col">Colour</span><div class="swatches" id="tc-swatches" role="group" aria-labelledby="tc-l-col"></div></div>
+        <div class="field"><label for="tc-f-notes">Notes</label><textarea id="tc-f-notes" maxlength="500"></textarea></div>
+        <p class="t-hint" id="tc-hint"></p>
+        <div class="btns">
+          <button class="btn" id="tc-add" type="button">Add to wheel</button>
+          <button class="btn ghost" id="tc-cancel" type="button" hidden>Cancel</button>
+          <button class="btn warn" id="tc-del" type="button" hidden>Delete</button>
+        </div>
+      </section>
+
+      <section class="t-card" aria-labelledby="tc-listh">
+        <h2 id="tc-listh">Coming up</h2>
+        <ul class="items" id="tc-list"></ul>
+        <details id="tc-earlier"><summary>Earlier and one-off past items</summary><ul class="items" id="tc-list2"></ul></details>
+      </section>
+
+      <details class="t-card">
+        <summary>Settings and import</summary>
+        <div class="t-seg" role="group" aria-label="Hemisphere" style="margin:10px 0">
+          <button id="tc-hs-s" type="button" aria-pressed="true">Southern</button>
+          <button id="tc-hs-n" type="button" aria-pressed="false">Northern</button>
+        </div>
+        <div class="row2">
+          <div class="field"><label for="tc-s-lat">Latitude (sunrise, sunset)</label><input type="number" id="tc-s-lat" step="0.01" min="-90" max="90"></div>
+          <div class="field"><label for="tc-s-lon">Longitude</label><input type="number" id="tc-s-lon" step="0.01" min="-180" max="180"></div>
+        </div>
+        <div class="field"><label><input type="checkbox" id="tc-t-moon"> Show moon phases</label></div>
+        <div class="field"><label><input type="checkbox" id="tc-t-nums"> Show day numbers</label></div>
+        <div class="field"><label><input type="checkbox" id="tc-t-jr"> Show journal marks</label><span class="t-small">Small dots near the moon ring for days with entries. Tap a day to open them.</span></div>
+        <div class="field"><label><input type="checkbox" id="tc-t-sky"> Show sky events</label><span class="t-small">Dark disc: solar eclipse. Copper disc: lunar eclipse. Star: meteor shower peak. Eclipses are worldwide, not necessarily visible from your location. The 24 sekki and 72 kō names describe Japan’s climate, so they run opposite to the seasons in the south.</span></div>
+        <div id="tc-lanenames"></div>
+        <div class="field"><span class="lbl">Move plans in and out</span></div>
+<div class="btns" style="margin-bottom:10px"><button class="btn ghost" id="tc-x-ics" type="button">Export to Calendar (.ics)</button><button class="btn ghost" id="tc-x-in" type="button">Import file</button></div>
+<input type="file" id="tc-x-file" accept=".json,.ics,text/calendar,application/json" hidden>
+<p class="t-small" id="tc-msg" role="status"></p>
+        <p class="t-small">Everything here is saved inside your encrypted journal. Calendar files you export are not encrypted.</p>
+      </details>
+    
+</div></div>`;
+function cycleHTML() {
+  const chip = (s, l) => `<button class="chip${CYC.sub === s ? ' on' : ''}" data-act="cyc-sub" data-s="${s}">${l}</button>`;
+  return `<header class="top"><h1>Cycle</h1><button class="x" data-act="lock">Lock</button></header>
+    <div class="chips" style="margin-top:14px">${chip('wheel', 'Wheel')}${chip('habits', 'Rhythms')}</div>
+    ${CYC.sub === 'wheel' ? TC_MARKUP : habitsHTML()}`;
+}
+function mountCycle(){
+
+const $=id=>document.getElementById('tc-'+id);
+const rad=Math.PI/180,H=36e5,D=864e5,Q=9e5;
+const COLORS=['var(--love)','var(--forgive)','var(--practice)','var(--creative)','var(--dream)','var(--muted)'];
+const COLORN=['Rose','Blue','Teal','Gold','Violet','Stone'];
+const MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const MON3=MONTHS.map(m=>m.slice(0,3));
+const DOW=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'];
+const DOWL=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+const SEA={summer:'Summer',autumn:'Autumn',winter:'Winter',spring:'Spring'};
+const ORDER=['year','season','month','week','day'];
+const REPS=['weekly','monthly','yearly','fullmoon','newmoon','quarter'];
+const SEKKI='立春|Risshun|Start of spring;雨水|Usui|Rain water;啓蟄|Keichitsu|Insects awaken;春分|Shunbun|Spring equinox;清明|Seimei|Clear and bright;穀雨|Kokuu|Grain rain;立夏|Rikka|Start of summer;小満|Shōman|Lesser fullness;芒種|Bōshu|Grain in ear;夏至|Geshi|Summer solstice;小暑|Shōsho|Lesser heat;大暑|Taisho|Greater heat;立秋|Risshū|Start of autumn;処暑|Shosho|End of heat;白露|Hakuro|White dew;秋分|Shūbun|Autumn equinox;寒露|Kanro|Cold dew;霜降|Sōkō|Frost descends;立冬|Rittō|Start of winter;小雪|Shōsetsu|Lesser snow;大雪|Taisetsu|Greater snow;冬至|Tōji|Winter solstice;小寒|Shōkan|Lesser cold;大寒|Daikan|Greater cold'.split(';').map(x=>x.split('|'));
+const KO='東風解凍|Harukaze kōri o toku|East wind melts the ice;黄鶯睍睆|Kōō kenkan su|Bush warblers start singing;魚上氷|Uo kōri o izuru|Fish emerge from the ice;土脉潤起|Tsuchi no shō uruoi okoru|Rain moistens the soil;霞始靆|Kasumi hajimete tanabiku|Mist starts to linger;草木萌動|Sōmoku mebae izuru|Grass sprouts, trees bud;蟄虫啓戸|Sugomori mushito o hiraku|Hibernating insects surface;桃始笑|Momo hajimete saku|First peach blossoms;菜虫化蝶|Namushi chō to naru|Caterpillars become butterflies;雀始巣|Suzume hajimete sukū|Sparrows start to nest;桜始開|Sakura hajimete saku|First cherry blossoms;雷乃発声|Kaminari sunawachi koe o hassu|Distant thunder;玄鳥至|Tsubame kitaru|Swallows return;鴻雁北|Kōgan kaeru|Wild geese fly north;虹始見|Niji hajimete arawaru|First rainbows;葭始生|Ashi hajimete shōzu|First reeds sprout;霜止出苗|Shimo yamite nae izuru|Last frost, rice seedlings grow;牡丹華|Botan hana saku|Peonies bloom;蛙始鳴|Kawazu hajimete naku|Frogs start singing;蚯蚓出|Mimizu izuru|Worms surface;竹笋生|Takenoko shōzu|Bamboo shoots sprout;蚕起食桑|Kaiko okite kuwa o hamu|Silkworms start feasting on mulberry leaves;紅花栄|Benibana sakau|Safflowers bloom;麦秋至|Mugi no toki itaru|Wheat ripens and is harvested;螳螂生|Kamakiri shōzu|Praying mantises hatch;腐草為螢|Kusaretaru kusa hotaru to naru|Rotten grass becomes fireflies;梅子黄|Ume no mi kibamu|Plums turn yellow;乃東枯|Natsukarekusa karuru|Self-heal withers;菖蒲華|Ayame hana saku|Irises bloom;半夏生|Hange shōzu|Crow-dipper sprouts;温風至|Atsukaze itaru|Warm winds blow;蓮始開|Hasu hajimete hiraku|First lotus blossoms;鷹乃学習|Taka sunawachi waza o narau|Young hawks learn to fly;桐始結花|Kiri hajimete hana o musubu|Paulownias produce seeds;土潤溽暑|Tsuchi uruōte mushi atsushi|Earth is damp, air is humid;大雨時行|Taiu tokidoki furu|Great rains sometimes fall;涼風至|Suzukaze itaru|Cool winds blow;寒蝉鳴|Higurashi naku|Evening cicadas sing;蒙霧升降|Fukaki kiri matō|Thick fog descends;綿柎開|Wata no hana shibe hiraku|Cotton flowers bloom;天地始粛|Tenchi hajimete samushi|Heat starts to die down;禾乃登|Kokumono sunawachi minoru|Rice ripens;草露白|Kusa no tsuyu shiroshi|Dew glistens white on grass;鶺鴒鳴|Sekirei naku|Wagtails sing;玄鳥去|Tsubame saru|Swallows leave;雷乃収声|Kaminari sunawachi koe o osamu|Thunder ceases;蟄虫坏戸|Mushi kakurete to o fusagu|Insects hole up underground;水始涸|Mizu hajimete karuru|Farmers drain fields;鴻雁来|Kōgan kitaru|Wild geese return;菊花開|Kiku no hana hiraku|Chrysanthemums bloom;蟋蟀在戸|Kirigirisu to ni ari|Crickets chirp around the door;霜始降|Shimo hajimete furu|First frost;霎時施|Kosame tokidoki furu|Light rains sometimes fall;楓蔦黄|Momiji tsuta kibamu|Maples and ivy turn yellow;山茶始開|Tsubaki hajimete hiraku|Camellias bloom;地始凍|Chi hajimete kōru|Land starts to freeze;金盞香|Kinsenka saku|Daffodils bloom;虹蔵不見|Niji kakurete miezu|Rainbows hide;朔風払葉|Kitakaze konoha o harau|North wind blows the leaves from the trees;橘始黄|Tachibana hajimete kibamu|Tachibana citrus leaves start to turn yellow;閉塞成冬|Sora samuku fuyu to naru|Cold sets in, winter begins;熊蟄穴|Kuma ana ni komoru|Bears start hibernating in their dens;鱖魚群|Sake no uo muragaru|Salmon gather and swim upstream;乃東生|Natsukarekusa shōzu|Self-heal sprouts;麋角解|Sawashika no tsuno otsuru|Deer shed antlers;雪下出麦|Yuki watarite mugi nobiru|Wheat sprouts under snow;芹乃栄|Seri sunawachi sakau|Parsley flourishes;水泉動|Shimizu atataka o fukumu|Springs thaw;雉始雊|Kiji hajimete naku|Pheasants start to call;款冬華|Fuki no hana saku|Butterburs bud;水沢腹堅|Sawamizu kōri tsumeru|Ice thickens on streams;鶏始乳|Niwatori hajimete toya ni tsuku|Hens start laying eggs'.split(';').map(x=>x.split('|'));
+const METEORS=[[1,3,'Quadrantids'],[4,22,'Lyrids'],[5,6,'Eta Aquariids'],[7,30,'Southern Delta Aquariids'],[8,12,'Perseids'],[10,21,'Orionids'],[11,17,'Leonids'],[12,14,'Geminids'],[12,22,'Ursids']];
+const TEMPLATES=[
+ {label:'Full moon',n:'Full moon pause',kind:'point',repeat:'fullmoon',lane:4,color:4},
+ {label:'New moon',n:'New moon intention',kind:'point',repeat:'newmoon',lane:2,color:1},
+ {label:'Solstices and equinoxes',n:'Season check-in',kind:'point',repeat:'quarter',lane:4,color:3},
+ {label:'Saturday creative',n:'Saturday creative session',kind:'point',repeat:'weekly',lane:2,color:2,time:'09:00',dow:5},
+ {label:'Weekly review',n:'Weekly review',kind:'point',repeat:'weekly',lane:0,color:5,time:'17:00',dow:6},
+ {label:'Monthly review',n:'Monthly review',kind:'point',repeat:'monthly',lane:0,color:5,dom:1}
+];
+const R={sea:[466,494],mon:[430,466],day:[404,430],moon:[372,404],laneTop:358,laneStep:52,laneW:50,core:92};
+const reduce=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- time helpers: every time is "floating" wall-clock ms ---------- */
+const p2=n=>String(n).padStart(2,'0');
+const fl=(y,m,d,h=0,mi=0)=>Date.UTC(y,m,d,h,mi);
+const ymd=f=>{const d=new Date(f);return [d.getUTCFullYear(),d.getUTCMonth(),d.getUTCDate()];};
+const dstart=f=>Math.floor(f/D)*D;
+const iso=f=>{const [y,m,d]=ymd(f);return `${y}-${p2(m+1)}-${p2(d)}`;};
+const isoF=s=>{const [y,m,d]=s.split('-').map(Number);return fl(y,m-1,d);};
+const hm=f=>{const d=new Date(f);return p2(d.getUTCHours())+':'+p2(d.getUTCMinutes());};
+const tmin=s=>{const [h,m]=s.split(':').map(Number);return (h*60+m)*6e4;};
+const wdi=f=>(new Date(f).getUTCDay()+6)%7;
+const validISO=s=>/^\d{4}-\d{2}-\d{2}$/.test(s||'');
+const validT=s=>/^\d{2}:\d{2}$/.test(s||'');
+const nowF=()=>{const n=new Date();return fl(n.getFullYear(),n.getMonth(),n.getDate(),n.getHours(),n.getMinutes());};
+const absOf=f=>f+new Date(f).getTimezoneOffset()*6e4;
+const floOf=a=>a-new Date(a).getTimezoneOffset()*6e4;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const norm=a=>((a%360)+360)%360;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+function isoWeek(f){const d=new Date(dstart(f));d.setUTCDate(d.getUTCDate()+4-(d.getUTCDay()||7));const y0=Date.UTC(d.getUTCFullYear(),0,1);return Math.ceil(((d-y0)/D+1)/7);}
+const fmtD=(f,y)=>{const [yy,m,d]=ymd(f);return `${d} ${MON3[m]}${y?' '+yy:''}`;};
+
+/* ---------- data ---------- */
+let data=S.cycle;fixData();
+const state=TCP.state||(TCP.state={scale:data.set.scale||'year',anchor:nowF(),sel:dstart(nowF()),kind:'span',lane:0,color:1,title:'',start:'',stime:'',end:'',etime:'',repeat:'none',notes:'',armed:'start',editId:null,delArm:false});
+function seed(){return cycDefaults();}
+function fixData(){fix(data);}
+function valid(d){return d&&Array.isArray(d.lanes)&&Array.isArray(d.items);}
+function fix(d){
+  const s=seed();d.set=Object.assign({},s.set,d.set||{});
+  d.lanes=d.lanes.slice(0,5).map(String);while(d.lanes.length<5)d.lanes.push('Lane '+(d.lanes.length+1));
+  d.items=d.items.filter(i=>i&&validISO(i.start)).map(i=>({...i,id:String(i.id||Math.random().toString(36).slice(2)),kind:['span','point','line'].includes(i.kind)?i.kind:'point',lane:clamp(+i.lane||0,0,4),color:clamp(+i.color||0,0,5),title:String(i.title||'Untitled'),repeat:REPS.includes(i.repeat)?i.repeat:undefined}));
+  d.v=2;return d;
+}
+function save(){persist();}
+const south=()=>data.set.south;
+
+/* ---------- seasons ---------- */
+function seasonOf(m){
+  const north=m===11||m<=1?'winter':m<=4?'spring':m<=7?'summer':'autumn';
+  if(south())return {winter:'summer',spring:'autumn',summer:'winter',autumn:'spring'}[north];
+  return north;
+}
+function seasonSegs(t0,t1){
+  const out=[];let t=t0;
+  while(t<t1){const [y,m]=ymd(t),nt=Math.min(fl(y,m+1,1),t1),s=seasonOf(m),last=out[out.length-1];
+    if(last&&last.key===s&&last.b===t)last.b=nt;else out.push({a:t,b:nt,key:s,label:SEA[s].toUpperCase(),cls:'s-'+s,z:'season'});t=nt;}
+  return out;
+}
+
+/* ---------- astronomy (low precision, minutes to well under an hour) ---------- */
+const jd=t=>t/D+2440587.5;
+function sunLon(t){const d=jd(t)-2451545,L=280.460+0.9856474*d,g=(357.528+0.9856003*d)*rad;return norm(L+1.915*Math.sin(g)+0.020*Math.sin(2*g));}
+function moonLon(t){const T=(jd(t)-2451545)/36525,s=(a,b)=>Math.sin((a+b*T)*rad);
+  return norm(218.32+481267.881*T+6.29*s(135.0,477198.87)-1.27*s(259.3,-413335.36)+0.66*s(235.7,890534.22)+0.21*s(269.9,954397.74)-0.19*s(357.5,35999.05)-0.11*s(186.5,966404.03));}
+const elong=t=>norm(moonLon(t)-sunLon(t));
+const elongAt=f=>elong(absOf(f));
+function moonLat(a){const T=(jd(a)-2451545)/36525,r=x=>x*rad,F=93.272+483202.017*T,Mp=134.963+477198.868*T,Dd=297.850+445267.111*T;
+  return 5.128*Math.sin(r(F))+0.2806*Math.sin(r(Mp+F))+0.2777*Math.sin(r(Mp-F))+0.1732*Math.sin(r(2*Dd-F));}
+const SOLAR_B=1.55,LUNAR_B=1.55;
+const sd=(e,k)=>((e-k+540)%360)-180;
+function crossings(fn,t0,t1,step,ks){
+  const out=[];let pt=t0,pv=ks.map(k=>sd(fn(t0),k));
+  for(let t=t0+step;t<=t1;t+=step){
+    const e=fn(t);
+    ks.forEach((k,j)=>{const s=sd(e,k);
+      if(pv[j]<0&&s>=0&&Math.abs(s)<45&&Math.abs(pv[j])<45){
+        let a=pt,b=t;for(let n=0;n<14;n++){const m=(a+b)/2;if(sd(fn(m),k)<0)a=m;else b=m;}
+        out.push({t:floOf((a+b)/2),k});}
+      pv[j]=s;});
+    pt=t;
+  }
+  return out;
+}
+const evCache=new Map();
+function evYear(y){
+  if(evCache.has(y))return evCache.get(y);
+  const t0=Date.UTC(y-1,11,30),t1=Date.UTC(y+1,0,3);
+  const moon=crossings(elong,t0,t1,H,[0,90,180,270]);
+  const r={moon,sun:crossings(sunLon,t0,t1,6*H,[0,90,180,270]),sky:[]};
+  moon.forEach(e=>{if(e.k===0||e.k===180){const b=Math.abs(moonLat(absOf(e.t)));
+    if(e.k===0&&b<SOLAR_B)r.sky.push({t:e.t,kind:'solar',b});
+    if(e.k===180&&b<LUNAR_B)r.sky.push({t:e.t,kind:'lunar',b});}});
+  evCache.set(y,r);return r;
+}
+function evRange(t0,t1){
+  const y0=ymd(t0-3*D)[0],y1=ymd(t1+3*D)[0],seen=new Set(),moon=[],sun=[],sky=[];
+  for(let y=y0;y<=y1;y++){const e=evYear(y);
+    e.moon.forEach(x=>{const k='m'+x.k+':'+Math.round(x.t/6e4);if(!seen.has(k)&&x.t>=t0-D&&x.t<=t1+D){seen.add(k);moon.push(x);}});
+    e.sun.forEach(x=>{const k='s'+x.k+':'+Math.round(x.t/6e4);if(!seen.has(k)&&x.t>=t0-D&&x.t<=t1+D){seen.add(k);sun.push(x);}});
+    e.sky.forEach(x=>{const k='k'+x.kind+':'+Math.round(x.t/6e4);if(!seen.has(k)&&x.t>=t0-D&&x.t<=t1+D){seen.add(k);sky.push(x);}});}
+  return {moon:moon.sort((a,b)=>a.t-b.t),sun,sky};
+}
+const MOON_EV={0:'New moon',90:'First quarter',180:'Full moon',270:'Last quarter'};
+const SUN_EV={0:'March equinox',90:'June solstice',180:'September equinox',270:'December solstice'};
+const phaseName=e=>['New moon','Waxing crescent','First quarter','Waxing gibbous','Full moon','Waning gibbous','Last quarter','Waning crescent'][Math.floor(((e+22.5)%360)/45)];
+function sunAlt(a){
+  const lam=sunLon(a)*rad,eps=23.439*rad,ra=Math.atan2(Math.cos(eps)*Math.sin(lam),Math.cos(lam)),dec=Math.asin(Math.sin(eps)*Math.sin(lam));
+  const gm=(280.46061837+360.98564736629*(jd(a)-2451545))*rad,ha=gm+data.set.lon*rad-ra,ph=data.set.lat*rad;
+  return Math.asin(Math.sin(ph)*Math.sin(dec)+Math.cos(ph)*Math.cos(dec)*Math.cos(ha))/rad+0.833;
+}
+function sunTimes(dayF){
+  let rise=null,set=null,prev=sunAlt(absOf(dayF));
+  const bis=(a,b,up)=>{for(let i=0;i<10;i++){const m=(a+b)/2,v=sunAlt(absOf(m));if((v<0)===up)a=m;else b=m;}return (a+b)/2;};
+  for(let t=dayF+6e5;t<=dayF+D;t+=6e5){const v=sunAlt(absOf(t));
+    if(prev<0&&v>=0&&rise===null)rise=bis(t-6e5,t,true);else if(prev>=0&&v<0&&set===null)set=bis(t-6e5,t,false);prev=v;}
+  return {rise,set,up:sunAlt(absOf(dayF+12*H))>0};
+}
+
+/* ---------- Japanese 24 sekki and 72 kō (sun every 15 and 5 degrees from 315) ---------- */
+const jpCache=new Map();
+function jpYear(y){
+  if(jpCache.has(y))return jpCache.get(y);
+  const ks=[];for(let k=0;k<360;k+=5)ks.push(k);
+  const c=crossings(sunLon,Date.UTC(y-1,11,1),Date.UTC(y+1,0,31),6*H,ks).map(e=>({t:e.t,j:((e.k-315+360)%360)/5}));
+  jpCache.set(y,c);return c;
+}
+const jpIndex=f=>Math.floor(norm(sunLon(absOf(f))-315)/5)%72;
+function jpSegs(t0,t1,level){
+  const y0=ymd(t0)[0],y1=ymd(t1)[0],seen=new Set(),arr=[];
+  for(let y=y0-1;y<=y1+1;y++)jpYear(y).forEach(e=>{const k=e.j+':'+Math.round(e.t/6e4);if(!seen.has(k)){seen.add(k);arr.push(e);}});
+  arr.sort((a,b)=>a.t-b.t);
+  const out=[];
+  for(let i=0;i<arr.length-1;i++){
+    const a=arr[i].t,b=arr[i+1].t;if(b<=t0||a>=t1)continue;
+    const j=arr[i].j,sk=Math.floor(j/3),lo=Math.max(a,t0),hi=Math.min(b,t1),last=out[out.length-1];
+    if(level==='sekki'&&last&&last.sk===sk&&last.b===lo){last.b=hi;continue;}
+    out.push({a:lo,b:hi,sk,j,jp:true,neutral:true,cls:'nA'+(out.length%2)});
+  }
+  out.forEach(s=>{const se=SEKKI[s.sk],ko=KO[s.j];
+    if(level==='sekki'){s.label=se[0]+' '+se[1].toUpperCase();s.short=se[0];}else{s.label=ko[0];s.short=null;}});
+  return out;
+}
+
+/* ---------- geometry ---------- */
+const XY=(r,a)=>[r*Math.sin(a*rad),-r*Math.cos(a*rad)];
+const P=(r,a)=>{const [x,y]=XY(r,a);return `${x.toFixed(2)} ${y.toFixed(2)}`;};
+function sector(r0,r1,a0,a1){
+  if(a1-a0>=359.99)a1=a0+359.99;
+  const l=(a1-a0)>180?1:0;
+  return `M${P(r1,a0)}A${r1} ${r1} 0 ${l} 1 ${P(r1,a1)}L${P(r0,a1)}A${r0} ${r0} 0 ${l} 0 ${P(r0,a0)}Z`;
+}
+const laneTop=i=>R.laneTop-i*R.laneStep;
+const laneMid=i=>laneTop(i)-R.laneW/2;
+let uid=0;
+function curved(text,rMid,a0,a1,fs,cls,ls){
+  if(a1-a0>=359){a0-=180;a1=a0+359.9;}
+  const mid=(a0+a1)/2,bottom=Math.cos(mid*rad)<0,k=fs*0.34,id='p'+(uid++),l=(a1-a0)>180?1:0;
+  const d=bottom?`M${P(rMid+k,a1)}A${rMid+k} ${rMid+k} 0 ${l} 0 ${P(rMid+k,a0)}`:`M${P(rMid-k,a0)}A${rMid-k} ${rMid-k} 0 ${l} 1 ${P(rMid-k,a1)}`;
+  return {def:`<path id="${id}" d="${d}"/>`,use:`<text class="${cls}" font-size="${fs.toFixed(1)}"${ls?` letter-spacing="${ls.toFixed(2)}"`:''}><textPath href="#${id}" startOffset="50%" text-anchor="middle">${text}</textPath></text>`};
+}
+function pickLabel(opts,a0,a1,rMid,maxFs,lsEm,minFs=7){
+  const len=(a1-a0)*rad*rMid;
+  for(const t of opts){if(!t)continue;
+    const w=[...t].reduce((n,ch)=>n+(ch.charCodeAt(0)>0x2e80?1.05:0.64)+lsEm,0),fs=Math.min(maxFs,(len-10)/w);
+    if(fs>=minFs)return {t,fs};}
+  return null;
+}
+function moonDisc(cx,cy,r,e,key){
+  let ee=e,mir=south();
+  if(e>180){ee=360-e;mir=!mir;}
+  let lit='';
+  if(ee>179)lit=`<circle r="${r}" class="mlit"/>`;
+  else if(ee>1){const rx=(Math.abs(Math.cos(ee*rad))*r).toFixed(2),sw=ee<90?0:1;
+    lit=`<path class="mlit" d="M0 ${-r}A${r} ${r} 0 0 1 0 ${r}A${rx} ${r} 0 0 ${sw} 0 ${-r}Z"/>`;}
+  return `<g transform="translate(${cx.toFixed(2)} ${cy.toFixed(2)}) scale(${mir?-1:1} 1)"><circle r="${r}" class="mdark"/>${lit}${key?`<circle r="${r}" fill="none" class="mkey"/>`:''}</g>`;
+}
+
+/* ---------- frames: one description per zoom level ---------- */
+let cur=null;
+function frameOf(scale,anchor){
+  const [y,m]=ymd(anchor),F={scale,A:[],B:[],C:'days',M:'daily',strong:[],faint:[],lines:[]};
+  const nB=(arr)=>arr.forEach((s,i)=>{s.cls='m'+(i%2);});
+  if(scale==='year'){
+    F.t0=fl(y,0,1);F.t1=fl(y+1,0,1);F.title=String(y);F.sub=south()?'Southern hemisphere':'Northern hemisphere';
+    F.A=seasonSegs(F.t0,F.t1);
+    for(let i=0;i<12;i++)F.B.push({a:fl(y,i,1),b:fl(y,i+1,1),label:MONTHS[i].toUpperCase(),short:MON3[i].toUpperCase(),z:'month'});
+    F.strong=F.A.map(s=>s.a);F.faint=F.B.map(s=>s.a);
+  }else if(scale==='season'){
+    let sy=y,sm;if(m>=11)sm=11;else if(m>=8)sm=8;else if(m>=5)sm=5;else if(m>=2)sm=2;else{sm=11;sy=y-1;}
+    F.t0=fl(sy,sm,1);F.t1=fl(sy,sm+3,1);const key=seasonOf(sm);
+    F.title=SEA[key];F.sub=sm===11?`${sy}\u2013${String(sy+1).slice(2)}`:String(sy);
+    F.A=[{a:F.t0,b:F.t1,label:(SEA[key]+' '+F.sub).toUpperCase(),cls:'s-'+key,z:'year'}];
+    for(let i=0;i<3;i++)F.B.push({a:fl(sy,sm+i,1),b:fl(sy,sm+i+1,1),label:MONTHS[(sm+i)%12].toUpperCase(),short:MON3[(sm+i)%12].toUpperCase(),z:'month'});
+    F.strong=F.B.map(s=>s.a);
+    for(let t=F.t0;t<F.t1;t+=D)if(wdi(t)===0)F.faint.push(t);
+  }else if(scale==='month'){
+    F.t0=fl(y,m,1);F.t1=fl(y,m+1,1);F.title=MONTHS[m];F.sub=String(y);
+    F.A=[{a:F.t0,b:F.t1,label:(MONTHS[m]+' '+y).toUpperCase(),cls:'s-'+seasonOf(m),z:'season'}];
+    for(let t=F.t0;t<F.t1;){const e=Math.min(F.t1,dstart(t)+(7-wdi(t))*D);F.B.push({a:t,b:e,label:'WEEK '+isoWeek(t),short:'W'+isoWeek(t),z:'week'});t=e;}
+    F.strong=F.B.map(s=>s.a);for(let t=F.t0;t<F.t1;t+=D)F.faint.push(t);
+  }else if(scale==='week'){
+    F.t0=dstart(anchor)-wdi(anchor)*D;F.t1=F.t0+7*D;F.title='Week '+isoWeek(F.t0);F.sub=`${fmtD(F.t0)} \u2013 ${fmtD(F.t1-D,true)}`;
+    for(let t=F.t0;t<F.t1;){const [yy,mm]=ymd(t),e=Math.min(F.t1,fl(yy,mm+1,1)),s=seasonOf(mm);F.A.push({a:t,b:e,label:(MONTHS[mm]+' '+yy).toUpperCase(),short:MON3[mm].toUpperCase(),cls:'s-'+s,z:'month'});t=e;}
+    for(let i=0;i<7;i++){const t=F.t0+i*D;F.B.push({a:t,b:t+D,label:`${DOW[i].toUpperCase()} ${ymd(t)[2]}`,short:DOW[i].toUpperCase(),z:'day'});}
+    F.C='hours';F.strong=F.B.map(s=>s.a);for(let t=F.t0;t<F.t1;t+=6*H)F.faint.push(t);
+  }else if(scale==='day'){
+    F.t0=dstart(anchor);F.t1=F.t0+D;const wd=wdi(F.t0),[,mm,dd]=ymd(F.t0);
+    F.title=DOWL[wd];F.sub=`${dd} ${MONTHS[mm]} ${y}`;
+    ['NIGHT','MORNING','AFTERNOON','EVENING'].forEach((n,i)=>F.A.push({a:F.t0+i*6*H,b:F.t0+(i+1)*6*H,label:n,cls:'nA'+(i%2),neutral:true}));
+    for(let h=0;h<24;h++)F.B.push({a:F.t0+h*H,b:F.t0+(h+1)*H,label:String(h),short:String(h)});
+    F.C='quarters';F.M='sun';F.strong=F.A.map(s=>s.a);for(let h=0;h<24;h++)F.faint.push(F.t0+h*H);
+  }else{
+    const ev=evRange(anchor-35*D,anchor+35*D).moon.filter(e=>e.k===0);
+    let i=ev.length-1;while(i>0&&ev[i].t>anchor)i--;
+    i=clamp(i,0,ev.length-2);F.t0=ev[i].t;F.t1=ev[i+1].t;
+    F.title='Lunation';F.sub=`${fmtD(F.t0)} \u2013 ${fmtD(F.t1)}`;F.sub2=`${((F.t1-F.t0)/D).toFixed(1)} days`;
+    const cs=crossings(elong,absOf(F.t0),absOf(F.t1),H,[22.5,67.5,112.5,157.5,202.5,247.5,292.5,337.5]).sort((a,b)=>a.t-b.t);
+    const names=['NEW','WAXING CRESCENT','FIRST QUARTER','WAXING GIBBOUS','FULL','WANING GIBBOUS','LAST QUARTER','WANING CRESCENT','NEW'];
+    const edges=[F.t0,...cs.map(c=>c.t),F.t1];
+    for(let j=0;j<edges.length-1&&j<9;j++)F.A.push({a:edges[j],b:edges[j+1],label:names[j],cls:'nA'+(j%2),neutral:true});
+    for(let k=0;F.t0+k*D<F.t1;k++){const a=F.t0+k*D;F.B.push({a,b:Math.min(F.t1,a+D),label:'DAY '+(k+1),short:String(k+1),z:'day'});}
+    F.M='phases';F.strong=F.A.map(s=>s.a);F.faint=F.B.map(s=>s.a);
+  }
+  if(data.set.outer!=='season'&&['year','season','month','week'].includes(scale))F.A=jpSegs(F.t0,F.t1,data.set.outer);
+  nB(F.B);
+  F.span=F.t1-F.t0;F.ang=t=>(t-F.t0)/F.span*360;
+  return F;
+}
+function frameFor(){return frameOf(state.scale,state.anchor);}
+
+/* ---------- drawing: static layer ---------- */
+function drawStatic(F){
+  let defs='',g='';
+  const ang=F.ang,lanes=data.lanes.length;
+  for(let i=0;i<lanes;i++)g+=`<circle r="${laneMid(i)}" class="laneband"/>`;
+  for(let i=0;i<lanes;i++)g+=`<circle r="${laneMid(i)}" class="laneline"/>`;
+  const inR=t=>t>=F.t0&&t<=F.t1;
+  let sp='',spS='',dots='';
+  F.faint.forEach(t=>{if(inR(t))sp+=`M${P(R.core,ang(t))}L${P(R.mon[0],ang(t))}`;});
+  F.strong.forEach(t=>{if(inR(t)){const a=ang(t);spS+=`M${P(R.core,a)}L${P(R.mon[0],a)}`;
+    for(let i=0;i<lanes;i++){const [x,y]=XY(laneMid(i),a);dots+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="1.9" class="laneDot"/>`;}}});
+  g+=`<path class="spoke" d="${sp}"/><path class="spokeS" d="${spS}"/>${dots}`;
+  g+=`<circle r="${R.core}" class="core" data-core="1"/>`;
+  // B ring
+  F.B.forEach(s=>{
+    const a0=ang(s.a),a1=ang(s.b);
+    g+=`<path d="${sector(R.mon[0],R.mon[1],a0,a1)}" class="${s.cls}"/>`;
+    const pl=pickLabel([s.label,s.short],a0,a1,(R.mon[0]+R.mon[1])/2,F.scale==='day'?17:19,0.14);
+    if(pl){const c=curved(pl.t,(R.mon[0]+R.mon[1])/2,a0,a1,pl.fs,'lbl-b',pl.fs*0.14);defs+=c.def;g+=c.use;}
+  });
+  // A ring
+  F.A.forEach(s=>{
+    const a0=ang(s.a),a1=ang(s.b);
+    g+=`<path d="${sector(R.sea[0],R.sea[1],a0,a1)}" class="${s.cls}${s.neutral?'':' sep'}"/>`;
+    const lsA=s.jp?0.08:0.3,pl=pickLabel([s.label,s.short],a0,a1,(R.sea[0]+R.sea[1])/2,15,lsA,s.jp?4.2:7);
+    if(pl){const c=curved(pl.t,(R.sea[0]+R.sea[1])/2,a0,a1,pl.fs,s.neutral?'lbl-aN':'lbl-a',pl.fs*lsA);defs+=c.def;g+=c.use;}
+  });
+  // C ring
+  g+=`<circle r="${R.day[1]}" class="ringline"/><circle r="${R.day[0]}" class="ringline"/>`;
+  const rC=(R.day[0]+R.day[1])/2;
+  let tk='',tkM='',nums='';
+  if(F.C==='days'){
+    for(let t=dstart(F.t0);t<F.t1;t+=D){
+      const a=Math.max(t,F.t0),b=Math.min(t+D,F.t1),a0=ang(a),a1=ang(b),arc=(a1-a0)*rad*rC,[,mm,dd]=ymd(t),wd=wdi(t);
+      const full=arc>=26,ms=dd===1,len=full?26:ms?11:wd===0?8:4;
+      const seg=`M${P(R.day[1],a0)}L${P(R.day[1]-len,a0)}`;
+      if(ms)tkM+=seg;else tk+=seg;
+      if(state_nums()){
+        const cls=wd>=5?'daynum we':'daynum';
+        if(arc>=60){const c=curved(`${DOW[wd]} ${dd}`,rC,a0,a1,12,cls);defs+=c.def;nums+=c.use;}
+        else if(arc>=24){const c=curved(String(dd),rC,a0,a1,12,cls);defs+=c.def;nums+=c.use;}
+        else if(arc>=4.8){const am=(a0+a1)/2,[x,y]=XY(rC,am),rot=Math.sin(am*rad)>=0?am-90:am+90,fs=Math.min(7.6,arc*0.9);
+          nums+=`<text class="${cls}" font-size="${fs.toFixed(1)}" transform="translate(${x.toFixed(2)} ${y.toFixed(2)}) rotate(${rot.toFixed(2)})" text-anchor="middle" dominant-baseline="central">${dd}</text>`;}
+      }
+    }
+  }else{
+    const step=F.C==='hours'?H:Q;
+    for(let t=F.t0;t<F.t1;t+=step){
+      const a=ang(t),mins=Math.round((t-dstart(t))/6e4),hr=mins/60;
+      let len,major=false;
+      if(F.C==='hours'){len=mins===0?12:hr%6===0?8:4;major=mins===0;}
+      else{len=mins%60===0?8:mins%30===0?6:4;major=mins%360===0;}
+      const seg=`M${P(R.day[1],a)}L${P(R.day[1]-len,a)}`;
+      if(major)tkM+=seg;else tk+=seg;
+    }
+  }
+  g+=`<path class="tick" d="${tk}"/><path class="tickM" d="${tkM}"/>`;
+  if(nums)g+=nums;
+  // moon / sun ring
+  const ev=evRange(F.t0,F.t1);
+  const evl=[];let fullCount=0;
+  g+=`<circle r="${R.moon[0]}" class="ringline"/>`;
+  if(F.M==='sun'){
+    const st=sunTimes(F.t0);
+    g+=`<path d="${sector(R.moon[0],R.moon[1],0,359.99)}" class="nightband"/>`;
+    if(st.rise!==null&&st.set!==null&&st.set>st.rise)g+=`<path d="${sector(R.moon[0],R.moon[1],ang(st.rise),ang(st.set))}" class="dayband"/>`;
+    else if(st.up)g+=`<path d="${sector(R.moon[0],R.moon[1],0,359.99)}" class="dayband"/>`;
+    else if(st.rise!==null&&st.set===null)g+=`<path d="${sector(R.moon[0],R.moon[1],ang(st.rise),359.99)}" class="dayband"/>`;
+    else if(st.set!==null&&st.rise===null)g+=`<path d="${sector(R.moon[0],R.moon[1],0,ang(st.set))}" class="dayband"/>`;
+    F.sun=st;
+  }
+  ev.moon.forEach(e=>{if(e.t>=F.t0&&e.t<F.t1){evl.push({t:e.t,text:`${MOON_EV[e.k]}, ${hm(e.t)}`});if(e.k===180)fullCount++;}});
+  ev.sun.forEach(e=>{if(e.t>=F.t0&&e.t<F.t1){evl.push({t:e.t,text:`${SUN_EV[e.k]}, ${hm(e.t)}`});
+    const a=ang(e.t);g+=`<path class="sunmark" d="M0 -7L5 0 0 7-5 0Z" transform="translate(${P(R.mon[1],a)}) rotate(${a.toFixed(2)})"/>`;}});
+  if(F.M!=='sun'&&data.set.moon){
+    const dayArc=D/F.span*360*rad*388,r=clamp(dayArc*0.36,2.9,13),keyDays=new Set(),marks=[];
+    ev.moon.forEach(e=>{if(e.t>=F.t0&&e.t<F.t1){keyDays.add(dstart(e.t));marks.push(e);}});
+    for(let t=dstart(F.t0);t<F.t1;t+=D){
+      const noon=t+12*H;if(noon<F.t0||noon>=F.t1||keyDays.has(t))continue;
+      const [x,y]=XY(388,F.ang(noon));g+=moonDisc(x,y,r,elongAt(noon),r>=7);
+    }
+    marks.forEach(e=>{const [x,y]=XY(388,F.ang(e.t));const big=e.k%180===0;g+=moonDisc(x,y,big?clamp(r*1.8,7,15):clamp(r*1.5,5.5,13),e.k,true);});
+  }
+  if(data.set.sky){
+    const glyph=(t,type)=>{const [x,y]=XY(365,ang(t)),X=x.toFixed(1),Y=y.toFixed(1);
+      if(type==='solar')return `<g transform="translate(${X} ${Y})"><circle r="4.6" fill="var(--ink)"/><circle r="7.4" fill="none" stroke="var(--accent)" stroke-width="1.2" stroke-dasharray="1.6 2"/></g>`;
+      if(type==='lunar')return `<circle cx="${X}" cy="${Y}" r="5.4" fill="#b5503a" stroke="var(--bg)" stroke-width="1"/>`;
+      return `<path d="M0 -6.5L1.7 -1.7 6.5 0 1.7 1.7 0 6.5 -1.7 1.7 -6.5 0 -1.7 -1.7Z" transform="translate(${X} ${Y})" fill="#f0b429" stroke="var(--ink)" stroke-width=".6"/>`;};
+    ev.sky.forEach(e=>{if(e.t>=F.t0&&e.t<F.t1){g+=glyph(e.t,e.kind);evl.push({t:e.t,text:`${e.kind==='solar'?'Solar':'Lunar'} eclipse (somewhere on Earth; lunar may be partial or penumbral), ${hm(e.t)}`});}});
+    for(let y=ymd(F.t0)[0];y<=ymd(F.t1-1)[0];y++)METEORS.forEach(m=>{const t=fl(y,m[0]-1,m[1],12);
+      if(t>=F.t0&&t<F.t1){const lit=Math.round((1-Math.cos(elongAt(fl(y,m[0]-1,m[1],24))*rad))/2*100);g+=glyph(t,'meteor');evl.push({t:dstart(t),text:`${m[2]} meteor shower peak (approx.), moon ${lit}% lit at midnight`});}});
+  }
+  evl.sort((a,b)=>a.t-b.t);F.evl=evl;
+  // lane names
+  for(let i=0;i<lanes;i++)g+=`<text x="6" y="${(-laneMid(i)+3.4).toFixed(1)}" font-size="9.5" class="lanename halo">${esc(data.lanes[i]).toUpperCase()}</text>`;
+  // centre
+  const tl=F.title.length,tfs=tl>9?26:tl>6?32:46;
+  if(F.scale==='day'){
+    const e=elongAt(F.t0+12*H);
+    g+=moonDisc(0,-44,24,e,true);
+    g+=`<text y="2" text-anchor="middle" font-size="24" class="ctr-t">${esc(F.title)}</text>`;
+    g+=`<text y="21" text-anchor="middle" font-size="12" class="ctr-s">${esc(F.sub)}</text>`;
+    const st=F.sun||{};
+    if(st.rise&&st.set)g+=`<text y="40" text-anchor="middle" font-size="11" class="ctr-s">\u2191 ${hm(st.rise)}   \u2193 ${hm(st.set)}</text>`;
+    g+=`<text y="62" text-anchor="middle" font-size="9" class="ctr-h">tap to zoom out</text>`;
+  }else{
+    g+=`<text y="${F.scale==='year'?-8:-6}" text-anchor="middle" font-size="${tfs}" class="ctr-t">${esc(F.title)}</text>`;
+    g+=`<text y="18" text-anchor="middle" font-size="12" class="ctr-s">${esc(F.sub)}</text>`;
+    const s2=F.sub2||`${Math.round(F.span/D)} days${data.set.moon?` \u00b7 ${fullCount} full moon${fullCount===1?'':'s'}`:''}`;
+    g+=`<text y="36" text-anchor="middle" font-size="11" class="ctr-s">${esc(s2)}</text>`;
+    if(F.scale!=='year')g+=`<text y="62" text-anchor="middle" font-size="9" class="ctr-h">tap to zoom out</text>`;
+  }
+  return `<defs>${defs}</defs>${g}`;
+}
+const state_nums=()=>data.set.nums;
+
+/* ---------- occurrences (repeats) ---------- */
+function occ(it,t0,t1){
+  const out=[];if(!validISO(it.start))return out;
+  const sd0=isoF(it.start),st=validT(it.time)?tmin(it.time):0,s0=sd0+st;
+  let dur;
+  if(it.kind==='span'&&validISO(it.end)){
+    const ed=isoF(it.end);let e0=validT(it.etime)?ed+tmin(it.etime):ed+D;
+    if(e0<=s0)e0=s0+(validT(it.etime)?H:D);dur=e0-s0;
+  }else dur=validT(it.time)?30*6e4:D;
+  const markOff=(it.kind!=='span'&&!validT(it.time))?D/2:0;
+  const push=s=>{if(s<t1&&s+dur>t0)out.push({it,s,e:s+dur,mark:s+markOff});};
+  const rep=it.repeat||'none';
+  if(rep==='weekly'){let k=Math.max(0,Math.floor((t0-dur-s0)/(7*D)));for(;s0+k*7*D<t1&&k<6000;k++)push(s0+k*7*D);}
+  else if(rep==='monthly'||rep==='yearly'){
+    const [by,bm,bd]=ymd(sd0);
+    let [y,m]=ymd(Math.max(s0,t0-dur-31*D));
+    if(rep==='yearly'){for(;fl(y,0,1)<t1&&y<9999;y++){const c=fl(y,bm,bd);if(ymd(c)[2]===bd&&ymd(c)[1]===bm&&c+st>=s0)push(c+st);}}
+    else for(let i=0;i<4000&&fl(y,m,1)<t1;i++){const c=fl(y,m,bd);if(ymd(c)[2]===bd&&c+st>=s0)push(c+st);m++;if(m>11){m=0;y++;}}
+  }else if(rep==='fullmoon'||rep==='newmoon'||rep==='quarter'){
+    const ev=evRange(t0-dur-2*D,t1+2*D),list=rep==='quarter'?ev.sun:ev.moon.filter(e=>e.k===(rep==='fullmoon'?180:0));
+    list.forEach(e=>{const day=dstart(e.t);if(day>=sd0)push(day+st);});
+  }else push(s0);
+  return out;
+}
+
+/* ---------- drawing: dynamic layer ---------- */
+function drawDyn(F){
+  let defs='',g='',top='';
+  const ang=F.ang,lanes=data.lanes.length;
+  const sl=state.scale==='day'?[state.sel,state.sel+Q]:[dstart(state.sel),dstart(state.sel)+D];
+  if(sl[1]>F.t0&&sl[0]<F.t1)g+=`<path class="selwedge" d="${sector(R.core,R.day[1],ang(Math.max(sl[0],F.t0)),ang(Math.min(sl[1],F.t1)))}"/>`;
+  const all=[];data.items.forEach(it=>occ(it,F.t0,F.t1).forEach(o=>all.push(o)));
+  // lines
+  all.filter(o=>o.it.kind==='line').forEach(o=>{
+    const a=ang(clamp(o.mark,F.t0,F.t1)),col=COLORS[o.it.color%6],right=Math.sin(a*rad)>=0,rot=right?a-90:a+90,[x,y]=XY(R.core+12,a),[x0,y0]=XY(R.core,a);
+    g+=`<g data-iid="${esc(o.it.id)}"><path d="M${P(R.core,a)}L${P(R.day[1],a)}" stroke="transparent" stroke-width="14" fill="none"/><path d="M${P(R.core,a)}L${P(R.day[1],a)}" stroke="${col}" stroke-width="1.8" stroke-dasharray="5 3" fill="none"/><circle cx="${x0.toFixed(1)}" cy="${y0.toFixed(1)}" r="4.5" fill="${col}"/>`+
+      `<text transform="translate(${x.toFixed(1)} ${y.toFixed(1)}) rotate(${rot.toFixed(2)})" text-anchor="${right?'start':'end'}" dominant-baseline="central" font-size="10.5" class="ptlabel halo">${esc(o.it.title.slice(0,30))}</text></g>`;
+  });
+  // spans
+  for(let ln=0;ln<lanes;ln++){
+    const arcs=all.filter(o=>o.it.kind==='span'&&o.it.lane===ln).sort((a,b)=>a.s-b.s);
+    const rowsEnd=[];arcs.forEach(o=>{let r=rowsEnd.findIndex(e=>e<=o.s);if(r<0){r=rowsEnd.length;rowsEnd.push(0);}rowsEnd[r]=o.e;o.row=r;});
+    const rows=Math.min(rowsEnd.length,4)||1,th=[26,22,15,11][rows-1];
+    arcs.forEach(o=>{
+      const row=Math.min(o.row,rows-1),rr=laneMid(ln)+(row-(rows-1)/2)*th,col=COLORS[o.it.color%6];
+      let a0=ang(Math.max(o.s,F.t0)),a1=ang(Math.min(o.e,F.t1));
+      if(a1-a0<1.2)a1=a0+1.2;
+      const inset=(th/2)/rr/rad;let cap='butt';if(a1-a0>inset*4){a0+=inset;a1-=inset;cap='round';}
+      const l=(a1-a0)>180?1:0;
+      g+=`<g data-iid="${esc(o.it.id)}"><path d="M${P(rr,a0)}A${rr} ${rr} 0 ${l} 1 ${P(rr,a1)}" stroke="${col}" stroke-width="${th}" stroke-linecap="${cap}" fill="none"/>`;
+      if(th>=15){
+        const fs=Math.min(11,th*0.5),len=(a1-a0)*rad*rr,chars=Math.floor((len-14)/(fs*0.58));
+        let txt=o.it.title;if(txt.length>chars)txt=chars>=4?txt.slice(0,chars-1)+'\u2026':'';
+        if(txt){const c=curved(esc(txt),rr,a0,a1,fs,'arclabel');defs+=c.def;g+=c.use;}
+      }
+      g+='</g>';
+    });
+  }
+  // points
+  const lastEnd={};
+  all.filter(o=>o.it.kind==='point').sort((p,q)=>p.mark-q.mark).forEach(o=>{
+    const a=ang(clamp(o.mark,F.t0,F.t1)),r=laneMid(o.it.lane),col=COLORS[o.it.color%6],[x,y]=XY(r,a);
+    const big=F.span<=8*D?9:F.span<=100*D?8:6.5;
+    g+=`<g data-iid="${esc(o.it.id)}"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${big}" fill="${col}" stroke="var(--bg)" stroke-width="2"/>`;
+    const txt=o.it.title.slice(0,26),fs=10.5,span=(txt.length*fs*0.6)/r/rad,gap=(big+5)/r/rad,id='p'+(uid++),bottom=Math.cos(a*rad)<0,k=fs*0.34;
+    const iv=bottom?[a-gap-span,a-gap]:[a+gap,a+gap+span],used=lastEnd[o.it.id]||(lastEnd[o.it.id]=[]);
+    const room=!used.some(u=>iv[0]<u[1]+2&&iv[1]>u[0]-2);
+    if(room){
+      used.push(iv);
+      const d=bottom?`M${P(r+k,a-gap)}A${r+k} ${r+k} 0 0 0 ${P(r+k,a-gap-span)}`:`M${P(r-k,a+gap)}A${r-k} ${r-k} 0 0 1 ${P(r-k,a+gap+span)}`;
+      defs+=`<path id="${id}" d="${d}"/>`;
+      g+=`<text font-size="${fs}" class="ptlabel halo"><textPath href="#${id}">${esc(txt)}</textPath></text>`;
+    }
+    g+='</g>';
+  });
+  // preview of the item being composed
+  if(validISO(state.start)){
+    const col=COLORS[state.color],prev={kind:state.kind,lane:state.lane,start:state.start,end:state.end,time:state.stime,etime:state.etime,repeat:'none',id:'_p'};
+    const os=occ(prev,F.t0,F.t1);
+    os.forEach(o=>{
+      if(state.kind==='line'){const a=ang(clamp(o.mark,F.t0,F.t1));top+=`<path d="M${P(R.core,a)}L${P(R.day[1],a)}" stroke="${col}" stroke-width="2.4" stroke-dasharray="2 4" fill="none" pointer-events="none"/>`;}
+      else if(state.kind==='point'||!validISO(state.end)){const [x,y]=XY(laneMid(state.lane),ang(clamp(o.mark,F.t0,F.t1)));top+=`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="10" fill="none" stroke="${col}" stroke-width="2.4" stroke-dasharray="3 3" pointer-events="none"/>`;}
+      else{let a0=ang(Math.max(o.s,F.t0)),a1=ang(Math.min(o.e,F.t1));if(a1-a0<1.2)a1=a0+1.2;top+=`<path d="${sector(laneMid(state.lane)-13,laneMid(state.lane)+13,a0,a1)}" fill="none" stroke="${col}" stroke-width="2.4" stroke-dasharray="4 3" pointer-events="none"/>`;}
+    });
+  }
+  if(data.set.jr!==false){
+    const byDay=new Map();
+    S.entries.forEach(e=>{const d=new Date(e.date),f=fl(d.getFullYear(),d.getMonth(),d.getDate(),d.getHours(),d.getMinutes()),k=dstart(f);
+      if(f<F.t0-D||f>=F.t1)return;(byDay.get(k)||byDay.set(k,[]).get(k)).push({f,type:e.type});});
+    const small=state.scale==='year'||state.scale==='season'||state.scale==='moon';
+    byDay.forEach((list,k)=>{list.slice(0,3).forEach((x,j)=>{
+      const t=state.scale==='day'?x.f:k+12*H;if(t<F.t0||t>=F.t1)return;
+      const [px,py]=XY(355-j*(small?4.2:6.5),ang(t));
+      g+=`<circle cx="${px.toFixed(1)}" cy="${py.toFixed(1)}" r="${small?1.7:2.6}" fill="${typeColor(x.type)}" opacity=".9" pointer-events="none"/>`;});});
+  }
+  // today
+  const now=nowF();
+  if(state.scale!=='day'){
+    const t=dstart(now);
+    if(t+D>F.t0&&t<F.t1)top+=`<path class="todaybar" d="${sector(R.day[1]-3.5,R.day[1],ang(Math.max(t,F.t0)),ang(Math.min(t+D,F.t1)))}"/>`;
+  }
+  if(now>=F.t0&&now<F.t1){const a=ang(now),[x,y]=XY(R.day[1],a);
+    top+=`<path class="todayline" d="M${P(R.core,a)}L${P(R.day[1],a)}"/><circle class="todaydot" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="5.5"/>`;}
+  return `<defs>${defs}</defs>${g}${top}`;
+}
+
+/* ---------- render with a zoom or turn animation ---------- */
+let raf=0;
+function ensureSel(F){
+  if(state.sel<F.t0||state.sel>=F.t1){const n=nowF();state.sel=(n>=F.t0&&n<F.t1)?(state.scale==='day'?Math.floor(n/Q)*Q:dstart(n)):(state.scale==='day'?F.t0+8*H:dstart(F.t0));}
+}
+function renderAll(mode){
+  if(mode)resetView();
+  const F=frameFor();cur=F;ensureSel(F);
+  const scene=$('scene'),ghost=$('ghost');
+  cancelAnimationFrame(raf);ghost.innerHTML='';ghost.removeAttribute('transform');ghost.removeAttribute('opacity');scene.removeAttribute('transform');scene.removeAttribute('opacity');
+  const doAnim=mode&&!reduce&&$('static').firstChild;
+  if(doAnim)ghost.innerHTML=$('static').innerHTML+$('dyn').innerHTML;
+  $('static').innerHTML=drawStatic(F);
+  $('dyn').innerHTML=drawDyn(F);
+  if(doAnim){
+    const t0=performance.now(),dur=340,ease=x=>1-Math.pow(1-x,3);
+    const cfg={in:[[1,1.55],[0.62,1]],out:[[1,0.62],[1.55,1]],next:[[0,-28],[28,0]],prev:[[0,28],[-28,0]]}[mode]||[[1,1],[1,1]];
+    const tf=(m,v)=>m==='in'||m==='out'?`scale(${v})`:`rotate(${v})`;
+    const step=now=>{
+      const k=clamp((now-t0)/dur,0,1),e=ease(k),gv=cfg[0][0]+(cfg[0][1]-cfg[0][0])*e,sv=cfg[1][0]+(cfg[1][1]-cfg[1][0])*e;
+      ghost.setAttribute('transform',tf(mode,gv));ghost.setAttribute('opacity',(1-e).toFixed(3));
+      scene.setAttribute('transform',tf(mode,sv));scene.setAttribute('opacity',e.toFixed(3));
+      if(k<1)raf=requestAnimationFrame(step);else{ghost.innerHTML='';ghost.removeAttribute('transform');scene.removeAttribute('transform');scene.removeAttribute('opacity');}
+    };
+    raf=requestAnimationFrame(step);
+  }
+  document.querySelectorAll('#tc-scales button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.scale===state.scale)));
+  renderReadout();renderList();renderForm();
+}
+function renderDyn(){const F=cur;$('dyn').innerHTML=drawDyn(F);renderReadout();}
+
+/* ---------- navigation ---------- */
+const idxOf=s=>ORDER.indexOf(s);
+function goScale(scale,anchor,mode){
+  const from=state.scale;state.scale=scale;state.anchor=anchor;data.set.scale=scale;
+  if(scale==='day'){
+    const day=dstart(anchor),n=nowF();
+    if(state.sel<day||state.sel>=day+D||state.sel===day)state.sel=day===dstart(n)?Math.floor(n/Q)*Q:day+8*H;
+  }
+  renderAll(mode||(idxOf(scale)>idxOf(from)?'in':idxOf(scale)<idxOf(from)?'out':'in'));
+}
+function zoomIn(t){
+  const i=idxOf(state.scale);
+  if(state.scale==='moon')return goScale('day',t,'in');
+  if(i<ORDER.length-1)goScale(ORDER[i+1],t,'in');
+}
+function zoomOut(){
+  const i=idxOf(state.scale);
+  if(state.scale==='moon')return goScale('month',cur.t0+cur.span/2,'out');
+  if(i>0)goScale(ORDER[i-1],state.sel,'out');
+}
+function shift(dir){
+  const F=cur,[y,m]=ymd(F.t0);let a;
+  switch(state.scale){
+    case'year':a=fl(y+dir,0,1);break;
+    case'season':a=fl(y,m+3*dir,1);break;
+    case'month':a=fl(y,m+dir,1);break;
+    case'week':a=F.t0+7*D*dir;break;
+    case'day':a=F.t0+D*dir;break;
+    default:a=dir>0?F.t1+D:F.t0-D;
+  }
+  state.anchor=a;state.sel=-1e18;renderAll(dir>0?'next':'prev');
+}
+$('prev').onclick=()=>shift(-1);
+$('next').onclick=()=>shift(1);
+$('today').onclick=()=>{const n=nowF();state.sel=state.scale==='day'?Math.floor(n/Q)*Q:dstart(n);state.anchor=n;renderAll('in');};
+document.querySelectorAll('#tc-scales button').forEach(b=>b.onclick=()=>{
+  const s=b.dataset.scale;if(s===state.scale)return;
+  goScale(s,state.sel>-1e17?state.sel:nowF());save();
+});
+
+/* ---------- pointer handling: tap, free pinch-zoom, drag, swipe ---------- */
+const svg=$('wheel');
+const view={s:1,tx:0,ty:0};
+function applyView(){
+  $('view').setAttribute('transform',`translate(${view.tx.toFixed(2)} ${view.ty.toFixed(2)}) scale(${view.s.toFixed(4)})`);
+  svg.style.touchAction=view.s>1.02?'none':'pan-y';
+  $('zreset').style.visibility=view.s>1.02?'visible':'hidden';
+}
+function resetView(){view.s=1;view.tx=0;view.ty=0;applyView();}
+function clampView(){const m=500*(view.s-1);view.tx=clamp(view.tx,-m,m);view.ty=clamp(view.ty,-m,m);}
+function zoomAt(cx,cy,f){const ns=clamp(view.s*f,1,9),k=ns/view.s;view.tx=cx-(cx-view.tx)*k;view.ty=cy-(cy-view.ty)*k;view.s=ns;clampView();applyView();}
+function toRoot(cx,cy){const p=svg.createSVGPoint();p.x=cx;p.y=cy;return p.matrixTransform(svg.getScreenCTM().inverse());}
+function polar(cx,cy){const q=toRoot(cx,cy),x=(q.x-view.tx)/view.s,y=(q.y-view.ty)/view.s,r=Math.hypot(x,y),th=norm(Math.atan2(x,-y)/rad);return {r,th,t:cur.t0+th/360*cur.span};}
+function segAt(list,t){return list.find(s=>t>=s.a&&t<s.b)||list[list.length-1];}
+function pickDay(t){state.sel=state.scale==='day'?Math.floor(t/Q)*Q:dstart(t);renderDyn();}
+function tap(cx,cy){
+  const hit=(document.elementFromPoint?document.elementFromPoint(cx,cy):null),it=hit&&hit.closest&&hit.closest('[data-iid]');
+  if(it&&it.dataset.iid){editItem(it.dataset.iid,true);return;}
+  const {r,t}=polar(cx,cy);
+  if(r<R.core){zoomOut();return;}
+  if(r>R.sea[1]+4)return;
+  if(r>=R.mon[0]){
+    const seg=segAt(r>=R.sea[0]?cur.A:cur.B,t);
+    if(seg&&seg.jp){pickDay(t);return;}
+    if(seg&&seg.z){
+      if(seg.z==='day'&&state.scale==='moon')return goScale('day',t,'in');
+      return goScale(seg.z,t,idxOf(seg.z)>idxOf(state.scale)?'in':'out');
+    }
+    if(r<R.sea[0]&&state.scale==='day')selectAt(t,r);
+    return;
+  }
+  selectAt(t,r);
+}
+function selectAt(t,r){
+  const L=data.lanes.length,fromTop=R.laneTop-r;let lane=-1;
+  if(fromTop>=0&&fromTop<R.laneStep*L){const k=Math.floor(fromTop/R.laneStep);if(fromTop-k*R.laneStep<=R.laneW)lane=k;}
+  const day=state.scale==='day',slot=day?Math.floor(t/Q)*Q:dstart(t);
+  state.sel=slot;state.delArm=false;
+  const di=iso(slot),tm=day?hm(slot):'';
+  if(state.kind==='span'&&state.armed==='end'){
+    state.end=di;if(day)state.etime=tm;state.armed='start';
+    if(validISO(state.start)&&(state.end+state.etime)<(state.start+state.stime)){[state.start,state.end]=[state.end,state.start];[state.stime,state.etime]=[state.etime,state.stime];}
+  }else{
+    state.start=di;if(day)state.stime=tm;if(lane>=0)state.lane=lane;
+    if(state.kind==='span'){state.armed='end';if(state.end&&(state.end+state.etime)<(state.start+state.stime)){state.end='';state.etime='';}}
+  }
+  renderDyn();renderForm();
+}
+const ptrs=new Map();let g0=null,lastPinch=0;
+svg.addEventListener('pointerdown',e=>{
+  try{svg.setPointerCapture(e.pointerId);}catch(_){}
+  ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(ptrs.size===1)g0={x:e.clientX,y:e.clientY,tx:view.tx,ty:view.ty,moved:false};
+  else if(ptrs.size===2){g0=null;const [a,b]=[...ptrs.values()];lastPinch=Math.hypot(a.x-b.x,a.y-b.y);}
+});
+svg.addEventListener('pointermove',e=>{
+  if(!ptrs.has(e.pointerId))return;ptrs.set(e.pointerId,{x:e.clientX,y:e.clientY});
+  if(ptrs.size===2){
+    const [a,b]=[...ptrs.values()],d=Math.hypot(a.x-b.x,a.y-b.y);
+    if(lastPinch>0){const c=toRoot((a.x+b.x)/2,(a.y+b.y)/2);zoomAt(c.x,c.y,d/lastPinch);}
+    lastPinch=d;return;
+  }
+  if(g0){
+    const dx=e.clientX-g0.x,dy=e.clientY-g0.y;
+    if(!g0.moved&&Math.hypot(dx,dy)>8)g0.moved=true;
+    if(g0.moved&&view.s>1.02){const k=1000/svg.getBoundingClientRect().width;view.tx=g0.tx+dx*k;view.ty=g0.ty+dy*k;clampView();applyView();}
+  }
+});
+function endPtr(e,cancel){
+  const had=ptrs.size===1&&g0;ptrs.delete(e.pointerId);
+  if(had&&!cancel){
+    const dx=e.clientX-g0.x,dy=e.clientY-g0.y;
+    if(view.s<=1.02&&Math.abs(dx)>70&&Math.abs(dx)>1.6*Math.abs(dy))shift(dx<0?1:-1);
+    else if(!g0.moved)tap(e.clientX,e.clientY);
+  }
+  if(ptrs.size===0){g0=null;lastPinch=0;}
+}
+svg.addEventListener('pointerup',e=>endPtr(e,false));
+svg.addEventListener('pointercancel',e=>endPtr(e,true));
+svg.addEventListener('wheel',e=>{e.preventDefault();const c=toRoot(e.clientX,e.clientY);zoomAt(c.x,c.y,Math.exp(-e.deltaY*0.002));},{passive:false});
+svg.addEventListener('dblclick',e=>{const c=toRoot(e.clientX,e.clientY);zoomAt(c.x,c.y,2);});
+$('zin').onclick=()=>zoomAt(0,0,1.5);
+$('zout').onclick=()=>zoomAt(0,0,1/1.5);
+$('zreset').onclick=resetView;
+
+/* ---------- readout ---------- */
+const COL=i=>COLORS[i%6];
+function itemWhen(o){
+  const it=o.it;let s=fmtD(o.s,true);
+  if(validT(it.time))s+=' '+it.time;
+  if(it.kind==='span'&&validISO(it.end)){s+=' \u2013 '+fmtD(isoF(it.end),true);if(validT(it.etime))s+=' '+it.etime;}
+  return s;
+}
+const ymd2=d=>`${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`;
+const REP={none:'',weekly:' \u00b7 weekly',monthly:' \u00b7 monthly',yearly:' \u00b7 yearly',fullmoon:' \u00b7 every full moon',newmoon:' \u00b7 every new moon',quarter:' \u00b7 every solstice and equinox'};
+function renderReadout(){
+  const F=cur;if(!F)return;
+  const day=dstart(state.sel),[y,m,d]=ymd(day),wd=wdi(day);
+  const e=elongAt(day+12*H),lit=Math.round((1-Math.cos(e*rad))/2*100);
+  let h=`<p class="read-date">${DOWL[wd]} ${d} ${MONTHS[m]} ${y}${state.scale==='day'?`, ${hm(state.sel)}`:''}</p>`;
+  h+=`<p class="read-line"><b>${day===dstart(nowF())?'Today \u00b7 ':''}Week ${isoWeek(day)}</b> \u00b7 ${SEA[seasonOf(m)]}</p>`;
+  h+=`<p class="read-line"><b>${phaseName(e)}</b> \u00b7 ${lit}% lit</p>`;
+  const st=sunTimes(day);if(st.rise&&st.set)h+=`<p class="read-line">Sunrise ${hm(st.rise)} \u00b7 sunset ${hm(st.set)}</p>`;
+  F.evl.filter(x=>dstart(x.t)===day).forEach(x=>{h+=`<p class="read-line"><b>${esc(x.text)}</b></p>`;});
+  if(data.set.outer!=='season'){const j=jpIndex(day+12*H),se=SEKKI[Math.floor(j/3)],ko=KO[j];
+    h+=`<p class="read-line"><b>${se[0]} ${se[1]}</b> \u00b7 ${se[2]}</p><p class="read-line">${ko[0]} \u00b7 ${ko[1]}: ${ko[2].toLowerCase()} <i>(Japan)</i></p>`;}
+  const jes=S.entries.filter(en=>ymd2(new Date(en.date))===iso(day)).sort((a,b)=>a.date<b.date?-1:1);
+  if(data.set.jr!==false&&jes.length)h+=`<p class="read-line"><b>Journal</b></p><div class="read-items">`+jes.map(en=>`<button type="button" data-act="view" data-id="${en.id}"><span class="t-dot" style="background:${typeColor(en.type)}"></span><span><b>${esc(TYPES[en.type]?.label||en.type)}</b><br><span class="read-line">${esc(preview(en).slice(0,80))}</span></span></button>`).join('')+`</div>`;
+  const os=[];data.items.forEach(it=>occ(it,day,day+D).forEach(o=>os.push(o)));
+  os.sort((a,b)=>a.s-b.s);
+  if(os.length)h+=`<div class="read-items">`+os.map(o=>`<button type="button" data-iid="${esc(o.it.id)}"><span class="t-dot" style="background:${COL(o.it.color)}"></span><span><b>${esc(o.it.title)}</b><br><span class="read-line">${o.it.kind==='line'?'Line':esc(data.lanes[o.it.lane])}${validT(o.it.time)?' \u00b7 '+o.it.time:''}${REP[o.it.repeat||'none']}</span></span></button>`).join('')+`</div>`;
+  const tg=[...new Set(os.flatMap(o=>parseTags((o.it.title||'')+' '+(o.it.notes||''))))];
+  if(tg.length)h+=`<div class="chips" style="margin-top:8px">`+tg.map(t=>`<button type="button" class="chip" data-act="tag-journal" data-tag="${esc(t)}">#${esc(t)}</button>`).join('')+`</div>`;
+  h+=`<div class="read-actions">${state.scale!=='day'?'<button class="btn ghost" id="r-day" type="button">Open this day</button>':''}${state.scale!=='year'?'<button class="btn ghost" id="r-out" type="button">Zoom out</button>':''}</div>`;
+  $('readout').innerHTML=h;
+}
+$('readout').addEventListener('click',e=>{
+  const b=e.target.closest('[data-iid]');if(b){editItem(b.dataset.iid,false);return;}
+  if(e.target.id==='r-day')goScale('day',state.sel,'in');
+  if(e.target.id==='r-out')zoomOut();
+});
+
+/* ---------- list ---------- */
+function nextOcc(it,from){const rep=it.repeat||'none',os=rep==='none'?occ(it,from,from+36500*D):occ(it,from,from+400*D);return os.length?os[0]:null;}
+function renderList(){
+  const from=dstart(nowF()),up=[],past=[];
+  data.items.forEach(it=>{const o=nextOcc(it,from);if(o)up.push(o);else past.push(it);});
+  up.sort((a,b)=>a.s-b.s);
+  const li=o=>`<li><button type="button" data-lid="${esc(o.it.id)}" data-at="${o.s}"><span class="t-dot" style="background:${COL(o.it.color)}"></span><span><span class="t">${esc(o.it.title)}</span><span class="m">${esc(o.it.kind==='line'?'Line':data.lanes[o.it.lane])} \u00b7 ${itemWhen(o)}${REP[o.it.repeat||'none']}</span></span></button></li>`;
+  $('list').innerHTML=up.length?up.slice(0,60).map(li).join(''):`<li class="t-empty">Nothing coming up. Tap the wheel to add something.</li>`;
+  past.sort((a,b)=>a.start<b.start?1:-1);
+  $('list2').innerHTML=past.length?past.slice(0,200).map(it=>li({it,s:isoF(it.start)+(validT(it.time)?tmin(it.time):0),e:0})).join(''):`<li class="t-empty">Nothing earlier.</li>`;
+}
+function openFromList(e){
+  const b=e.target.closest('[data-lid]');if(!b)return;
+  const at=+b.dataset.at;state.anchor=at;state.sel=state.scale==='day'?Math.floor(at/Q)*Q:dstart(at);
+  editItem(b.dataset.lid,false,true);
+}
+$('list').addEventListener('click',openFromList);$('list2').addEventListener('click',openFromList);
+
+/* ---------- form ---------- */
+$('swatches').innerHTML=COLORS.map((c,i)=>`<button type="button" style="background:${c}" aria-label="${COLORN[i]}" aria-pressed="${i===1}"></button>`).join('');
+function renderLaneOptions(){
+  $('f-lane').innerHTML=data.lanes.map((n,i)=>`<option value="${i}">${esc(n)}</option>`).join('');
+  $('lanenames').innerHTML=data.lanes.map((n,i)=>`<div class="field"><label for="ln${i}">Lane ${i+1} name</label><input type="text" id="ln${i}" data-lane="${i}" value="${esc(n)}" maxlength="20"></div>`).join('');
+}
+function renderForm(){
+  document.querySelectorAll('#tc-formcard .kinds button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.kind===state.kind)));
+  $('lanefield').style.display=state.kind==='line'?'none':'';
+  $('endrow').style.display=state.kind==='span'?'':'none';
+  $('l-start').textContent=state.kind==='span'?'Start':'Date';
+  if(document.activeElement!==$('f-title'))$('f-title').value=state.title;
+  $('f-start').value=state.start;$('f-stime').value=state.stime;$('f-end').value=state.end;$('f-etime').value=state.etime;
+  $('f-start').classList.toggle('armed',state.armed==='start');$('f-end').classList.toggle('armed',state.armed==='end'&&state.kind==='span');
+  $('f-lane').value=String(state.lane);$('f-repeat').value=state.repeat;$('f-notes').value=state.notes;
+  document.querySelectorAll('#tc-swatches button').forEach((b,i)=>b.setAttribute('aria-pressed',String(i===state.color)));
+  const edit=!!state.editId;
+  $('formh').textContent=edit?'Edit item':'Add to the wheel';
+  $('add').textContent=edit?'Save changes':'Add to wheel';
+  $('cancel').hidden=!edit;$('del').hidden=!edit;$('del').textContent=state.delArm?'Tap again to delete':'Delete';
+  $('hint').textContent=state.kind==='span'?(state.armed==='end'?'Tap the wheel to set the end.':'Tap the wheel to set the start. Tap a lane to choose it.'):'Tap the wheel to set the date'+(state.kind==='point'?'. Tap a lane to choose it.':'.');
+}
+function resetForm(){Object.assign(state,{title:'',start:'',stime:'',end:'',etime:'',repeat:'none',notes:'',armed:'start',editId:null,delArm:false});}
+function applyTemplate(i){
+  const t=TEMPLATES[i],today=dstart(nowF());let start=today;
+  if(t.dow!==undefined)start=today+((t.dow-wdi(today)+7)%7)*D;
+  if(t.dom){const [y,m,d]=ymd(today);start=d<=t.dom?fl(y,m,t.dom):fl(y,m+1,t.dom);}
+  Object.assign(state,{kind:t.kind,title:t.n,lane:t.lane,color:t.color,repeat:t.repeat,stime:t.time||'',start:iso(start),end:'',etime:'',armed:'start',editId:null,delArm:false});
+  renderForm();renderDyn();$('formcard').scrollIntoView({block:'nearest',behavior:'smooth'});
+}
+$('tpls').innerHTML=TEMPLATES.map((t,i)=>`<button type="button" data-t="${i}">${t.label}</button>`).join('');
+$('tpls').addEventListener('click',e=>{const b=e.target.closest('[data-t]');if(b)applyTemplate(+b.dataset.t);});
+function editItem(id,fromWheel,jump){
+  const it=data.items.find(i=>i.id===id);if(!it)return;
+  Object.assign(state,{kind:it.kind,lane:it.lane,color:it.color,title:it.title,start:it.start,stime:it.time||'',end:it.end||'',etime:it.etime||'',repeat:it.repeat||'none',notes:it.notes||'',armed:'start',editId:id,delArm:false});
+  renderAll();
+  $('formcard').scrollIntoView({block:'nearest',behavior:'smooth'});
+}
+document.querySelectorAll('#tc-formcard .kinds button').forEach(b=>b.onclick=()=>{state.kind=b.dataset.kind;state.armed='start';renderForm();renderDyn();});
+document.querySelectorAll('#tc-swatches button').forEach((b,i)=>b.onclick=()=>{state.color=i;renderForm();renderDyn();});
+$('f-title').oninput=e=>{state.title=e.target.value;};
+$('f-lane').onchange=e=>{state.lane=+e.target.value;renderDyn();};
+$('f-repeat').onchange=e=>{state.repeat=e.target.value;};
+$('f-notes').oninput=e=>{state.notes=e.target.value;};
+$('f-start').oninput=e=>{state.start=e.target.value;renderDyn();};
+$('f-stime').oninput=e=>{state.stime=e.target.value;renderDyn();};
+$('f-end').oninput=e=>{state.end=e.target.value;renderDyn();};
+$('f-etime').oninput=e=>{state.etime=e.target.value;renderDyn();};
+$('f-start').onfocus=()=>{state.armed='start';renderForm();};
+$('f-end').onfocus=()=>{state.armed='end';renderForm();};
+$('add').onclick=()=>{
+  if(!validISO(state.start)){$('hint').textContent='Pick a date first: tap the wheel or use the date field.';return;}
+  let kind=state.kind,end=state.end;
+  if(kind==='span'){if(!validISO(end))kind='point';else if(end<state.start)end=state.start;}
+  const base={kind,lane:state.lane,start:state.start,end:kind==='span'?end:undefined,time:state.stime||undefined,etime:kind==='span'&&state.etime?state.etime:undefined,repeat:state.repeat==='none'?undefined:state.repeat,title:state.title.trim()||'Untitled',color:state.color,notes:state.notes.trim()||undefined};
+  if(state.editId){const i=data.items.findIndex(x=>x.id===state.editId);if(i>=0)data.items[i]={...base,id:state.editId};}
+  else data.items.push({...base,id:'i'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)});
+  save();resetForm();renderAll();
+};
+$('cancel').onclick=()=>{resetForm();renderForm();renderDyn();};
+$('del').onclick=()=>{
+  if(!state.delArm){state.delArm=true;renderForm();return;}
+  data.items=data.items.filter(i=>i.id!==state.editId);save();resetForm();renderAll();
+};
+
+/* ---------- settings ---------- */
+function syncSettings(){
+  $('hs-s').setAttribute('aria-pressed',String(south()));$('hs-n').setAttribute('aria-pressed',String(!south()));
+  $('s-lat').value=data.set.lat;$('s-lon').value=data.set.lon;$('t-moon').checked=data.set.moon;$('t-nums').checked=data.set.nums;$('t-jr').checked=data.set.jr!==false;$('t-sky').checked=data.set.sky;document.querySelectorAll('[data-outer]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.outer===data.set.outer)));
+}
+$('hs-s').onclick=()=>{data.set.south=true;save();syncSettings();renderAll();};
+$('hs-n').onclick=()=>{data.set.south=false;save();syncSettings();renderAll();};
+$('s-lat').onchange=e=>{const v=+e.target.value;if(isFinite(v)&&Math.abs(v)<=90){data.set.lat=v;save();renderAll();}};
+$('s-lon').onchange=e=>{const v=+e.target.value;if(isFinite(v)&&Math.abs(v)<=180){data.set.lon=v;save();renderAll();}};
+$('t-moon').onchange=e=>{data.set.moon=e.target.checked;save();renderAll();};
+$('t-nums').onchange=e=>{data.set.nums=e.target.checked;save();renderAll();};
+$('t-jr').onchange=e=>{data.set.jr=e.target.checked;save();renderAll();};
+$('t-sky').onchange=e=>{data.set.sky=e.target.checked;save();renderAll();};
+document.querySelectorAll('[data-outer]').forEach(b=>b.onclick=()=>{data.set.outer=b.dataset.outer;save();syncSettings();renderAll();});
+$('lanenames').addEventListener('input',e=>{
+  const i=e.target.dataset.lane;if(i===undefined)return;
+  data.lanes[+i]=e.target.value||('Lane '+(+i+1));save();$('f-lane').options[+i].textContent=data.lanes[+i];
+  $('static').innerHTML=drawStatic(cur);renderList();
+});
+function say(t){$('msg').textContent=t;}
+async function deliver(name,mime,text){
+  suspendLock();
+  const file=new File([text],name,{type:mime});
+  try{if(navigator.canShare&&navigator.canShare({files:[file]})){await navigator.share({files:[file],title:name});return true;}}catch(e){if(e&&e.name==='AbortError')return true;}
+  try{const url=URL.createObjectURL(file),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),4000);return true;}catch(e){return false;}
+}
+const stamp=()=>iso(nowF()).replace(/-/g,'');
+$('x-ics').onclick=async()=>{const ok=await deliver(`time-circles-${stamp()}.ics`,'text/calendar',toICS());say(ok?'Calendar file ready. Open it to add the items to Apple Calendar.':'Could not make a file here.');};
+$('x-in').onclick=()=>$('x-file').click();
+$('x-file').onchange=async e=>{
+  const f=e.target.files[0];e.target.value='';if(!f)return;
+  const txt=await f.text();
+  if(/BEGIN:VCALENDAR/i.test(txt)){const n=fromICS(txt);save();renderAll();say(`Imported ${n.count} item${n.count===1?'':'s'} into the first lane.${n.approx?` ${n.approx} repeat rule${n.approx===1?'':'s'} simplified.`:''}`);}
+  else loadJSON(txt);
+};
+function loadJSON(txt){
+  try{
+    const d=JSON.parse(txt);if(!valid(d))throw new Error('shape');
+    const have=new Set(data.items.map(i=>i.id)),inc=fix({...d}).items.filter(i=>!have.has(i.id));
+    data.items.push(...inc);
+    if(!data.items.length||inc.length===d.items.length){data.lanes=fix({...d}).lanes;}
+    save();syncSettings();renderLaneOptions();renderAll();say(`Imported ${inc.length} item${inc.length===1?'':'s'} from a Time Circles file.`);}
+  catch(_){say('That is not a Time Circles file.');}
+}
+
+/* ---------- ICS ---------- */
+const icsEsc=s=>String(s).replace(/\\/g,'\\\\').replace(/;/g,'\\;').replace(/,/g,'\\,').replace(/\r?\n/g,'\\n');
+const dCompact=s=>s.replace(/-/g,'');
+function toICS(){
+  const L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//Time Circles//EN','CALSCALE:GREGORIAN'];
+  const st=new Date().toISOString().replace(/[-:]/g,'').slice(0,15)+'Z';
+  const list=[],from0=dstart(nowF());
+  data.items.forEach(it=>{
+    if(['fullmoon','newmoon','quarter'].includes(it.repeat))occ(it,from0,from0+1095*D).forEach((o,i)=>list.push({...it,id:it.id+'-'+i,start:iso(o.s),end:it.kind==='span'?iso(o.e-1):undefined,repeat:'none'}));
+    else list.push(it);
+  });
+  list.forEach(it=>{
+    L.push('BEGIN:VEVENT',`UID:${it.id}@time-circles`,`DTSTAMP:${st}`,`SUMMARY:${icsEsc(it.title)}`);
+    const timed=validT(it.time);
+    if(it.kind==='span'&&validISO(it.end)){
+      if(timed||validT(it.etime)){L.push(`DTSTART:${dCompact(it.start)}T${(it.time||'00:00').replace(':','')}00`,`DTEND:${dCompact(it.end)}T${(it.etime||'23:59').replace(':','')}00`);}
+      else L.push(`DTSTART;VALUE=DATE:${dCompact(it.start)}`,`DTEND;VALUE=DATE:${dCompact(iso(isoF(it.end)+D))}`);
+    }else if(timed){const eT=isoF(it.start)+tmin(it.time)+H;L.push(`DTSTART:${dCompact(it.start)}T${it.time.replace(':','')}00`,`DTEND:${dCompact(iso(eT))}T${hm(eT).replace(':','')}00`);}
+    else L.push(`DTSTART;VALUE=DATE:${dCompact(it.start)}`,`DTEND;VALUE=DATE:${dCompact(iso(isoF(it.start)+D))}`);
+    if(it.repeat&&it.repeat!=='none')L.push(`RRULE:FREQ=${it.repeat.toUpperCase()}`);
+    if(it.notes)L.push(`DESCRIPTION:${icsEsc(it.notes)}`);
+    L.push(`CATEGORIES:${icsEsc(it.kind==='line'?'Time Circles':data.lanes[it.lane])}`,'END:VEVENT');
+  });
+  L.push('END:VCALENDAR');
+  return L.join('\r\n')+'\r\n';
+}
+function parseICSDate(v){
+  const m=/^(\d{4})(\d{2})(\d{2})(?:T(\d{2})(\d{2})(\d{2})?(Z)?)?$/.exec(v.trim());if(!m)return null;
+  if(!m[4])return {date:`${m[1]}-${m[2]}-${m[3]}`,time:''};
+  if(m[7]){const d=new Date(Date.UTC(+m[1],+m[2]-1,+m[3],+m[4],+m[5]));return {date:`${d.getFullYear()}-${p2(d.getMonth()+1)}-${p2(d.getDate())}`,time:`${p2(d.getHours())}:${p2(d.getMinutes())}`};}
+  return {date:`${m[1]}-${m[2]}-${m[3]}`,time:`${m[4]}:${m[5]}`};
+}
+function fromICS(txt){
+  const lines=txt.replace(/\r?\n[ \t]/g,'').split(/\r?\n/);let ev=null,count=0,approx=0;
+  const unesc=s=>s.replace(/\\n/gi,'\n').replace(/\\([,;\\])/g,'$1');
+  lines.forEach(ln=>{
+    if(/^BEGIN:VEVENT/i.test(ln)){ev={};return;}
+    if(/^END:VEVENT/i.test(ln)){
+      if(ev&&ev.s){
+        const s=parseICSDate(ev.s),e=ev.e?parseICSDate(ev.e):null;
+        if(s){
+          const it={id:'x'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),lane:0,color:5,title:unesc(ev.t||'Untitled'),start:s.date,kind:'point'};
+          if(s.time)it.time=s.time;
+          if(e){
+            let ed=e.date;if(!s.time&&!e.time)ed=iso(isoF(e.date)-D);
+            if(ed>s.date){it.kind='span';it.end=ed;if(e.time)it.etime=e.time;}
+          }
+          if(ev.r){const f=/FREQ=(WEEKLY|MONTHLY|YEARLY)/i.exec(ev.r);if(f){it.repeat=f[1].toLowerCase();if(/INTERVAL=([2-9]|\d\d)|BYDAY=[A-Z,]{5,}|COUNT=|UNTIL=/i.test(ev.r))approx++;}else approx++;}
+          if(ev.d)it.notes=unesc(ev.d).slice(0,500);
+          data.items.push(it);count++;
+        }
+      }
+      ev=null;return;
+    }
+    if(!ev)return;
+    const i=ln.indexOf(':');if(i<0)return;
+    const key=ln.slice(0,i).split(';')[0].toUpperCase(),val=ln.slice(i+1);
+    if(key==='SUMMARY')ev.t=val;else if(key==='DTSTART')ev.s=val;else if(key==='DTEND')ev.e=val;else if(key==='RRULE')ev.r=val;else if(key==='DESCRIPTION')ev.d=val;
+  });
+  return {count,approx};
+}
+
+/* ---------- start ---------- */
+renderLaneOptions();syncSettings();
+state.color=1;
+renderAll();
+}
+
 const A = {
+  ...HABA,
   async create() {
     const p1 = $('#p1').value, p2 = $('#p2').value, err = $('#err'), b = $('[data-act=create]');
     if (p1.length < 12) { err.textContent = 'Use at least 12 characters.'; return; }
