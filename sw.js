@@ -1,5 +1,5 @@
 // Bump CACHE when you update index.html so phones pick up the new version.
-const CACHE = 'laf-v14';
+const CACHE = 'laf-v15';
 const FILES = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png'];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(FILES.map(f => new Request(f, {cache: 'reload'})))).then(() => self.skipWaiting()));
