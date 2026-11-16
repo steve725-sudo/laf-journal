@@ -322,6 +322,28 @@ input[type=range]{padding:0;border:0;background:none;accent-color:var(--practice
 .hb-moon::before{content:"";width:12px;border-top:1.5px dashed var(--muted);display:inline-block;margin-right:3px}
 .tabs button{padding-left:0;padding-right:0;font-size:.68rem}
 
+
+.ag-d0{font-size:.85rem;color:var(--muted);margin:20px 0 0}
+.ag-head{font-family:var(--serif);font-size:1.9rem;line-height:1.2;font-weight:400;margin:6px 0 18px}
+.ag-row{display:flex;gap:14px;align-items:flex-start;padding:14px 0;border-top:1px solid var(--line)}
+.ag-time{width:84px;flex:none;font-family:var(--serif);font-size:1.9rem;line-height:1}
+.ag-time small{font-size:.75rem;color:var(--muted);margin-left:3px;font-family:var(--sans)}
+.ag-time .ag-d{display:block;font-family:var(--sans);font-size:.72rem;color:var(--muted);margin:0 0 6px}
+.ag-all{font-size:1rem}
+.ag-main{flex:1;text-align:left;background:none;border:0;padding:0;color:var(--ink);font:inherit;cursor:pointer;min-width:0}
+.ag-title{display:block;font-size:1rem}
+.ag-sub{display:block;font-size:.8rem;color:var(--muted);margin-top:4px}
+.ag-sub i{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px}
+.ag-cb{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--ink);background:none;flex:none;margin:0 58px 0 0;padding:0;position:relative}
+.ag-cb.on{background:var(--ink)}
+.ag-cb.on::after{content:"";position:absolute;left:8px;top:3px;width:6px;height:11px;border:solid var(--bg);border-width:0 2px 2px 0;transform:rotate(45deg)}
+.ag-row.done .ag-title{text-decoration:line-through;color:var(--muted)}
+.ag-row.over .ag-sub{color:var(--love)}
+.ag-dt{font-family:var(--serif);font-size:1.7rem;line-height:1.2;margin:10px 0 6px}
+.ag-big{font-family:var(--serif);font-size:2.8rem;line-height:1;margin:18px 0 2px}
+.tc .field label.t-chk{display:flex;gap:10px;align-items:center;font-size:15px;color:var(--ink)}
+.tc .field label.t-chk input{width:20px;height:20px;margin:0}
+
 </style>
 </head>
 <body>
@@ -560,7 +582,7 @@ function todayHTML(inner) {
   const now = new Date(), today = ymd(now);
   const laf = S.entries.filter(e => e.type === 'laf' && ymd(new Date(e.date)) === today).sort(byDateDesc)[0];
   const L = [['love','What do you love about yourself today?'],['accept','What do you accept about yourself today?'],['forgive','What do you forgive yourself for today?']];
-  let h = inner ? `<h2 class="group" style="margin-top:18px">${fmtDay(now)}</h2>` : `<header class="top"><h1>${fmtDay(now)}</h1><button class="x" data-act="lock">Lock</button></header>`;
+  let h = inner ? agendaHTML() : `<header class="top"><h1>${fmtDay(now)}</h1><button class="x" data-act="lock">Lock</button></header>`;
   if (sleepOn(today)) h += `<p class="small" style="margin-top:-6px">Slept ${sleepOn(today)} h last night</p>`;
   if (laf) h += `<section class="laf done" data-act="view" data-id="${laf.id}" role="button" tabindex="0"><p class="label">Tonight’s LAF</p>
       ${L.map(([k]) => `<div class="laf-row" data-acc="${k}"><span class="bar"></span><p>${esc(laf.fields[k]) || '<span class="hint">Left blank</span>'}</p></div>`).join('')}</section>`;
@@ -1621,6 +1643,96 @@ Object.assign(HABA, {
   },
 });
 
+/* ---------- cycle: agenda and tasks ---------- */
+const AG = {tab:'today'};
+const AG_REP = {weekly:'every week', monthly:'every month', yearly:'every year', fullmoon:'every full moon', newmoon:'every new moon', quarter:'every solstice and equinox'};
+function agX() { mountCycle('engine'); return TCP.api; }
+function agT12(t) { const [h, m] = t.split(':').map(Number); return [(h % 12 || 12) + ':' + String(m).padStart(2, '0'), h < 12 ? 'am' : 'pm']; }
+const agKey = (X, o) => X.iso(X.dstart(o.s));
+const agIsDone = (X, o) => !!(o.it.done && o.it.done[agKey(X, o)]);
+function agItems(tab) {
+  const X = agX(), D1 = 864e5, d0 = X.dstart(X.nowF());
+  const [a, b] = tab === 'today' ? [d0, d0 + D1] : tab === 'tomorrow' ? [d0 + D1, d0 + 2 * D1] : [d0 + 2 * D1, d0 + 62 * D1];
+  const list = [];
+  S.cycle.items.forEach(it => { if (it.kind !== 'line') X.occ(it, a, b).forEach(o => list.push(o)); });
+  list.sort((p, q) => p.s - q.s);
+  if (tab === 'today') {
+    const t = X.iso(d0), over = [];
+    S.cycle.items.forEach(it => { if (it.task && !it.repeat && it.start < t && !(it.done && it.done[it.start])) over.push({it, s: X.isoF(it.start) + (it.time ? X.tmin(it.time) : 0), overdue:true}); });
+    over.sort((p, q) => p.s - q.s);
+    return over.concat(list);
+  }
+  if (tab === 'later') { const seen = new Set(); return list.filter(o => !seen.has(o.it.id) && seen.add(o.it.id)).slice(0, 40); }
+  return list;
+}
+function agDateTxt(X, s) { const [, m, d] = X.ymd(s); return `${X.DOW[X.wdi(s)]} ${d} ${X.MON3[m]}`; }
+function agRow(X, o, tab) {
+  const it = o.it, done = agIsDone(X, o), key = agKey(X, o), lane = esc(S.cycle.lanes[it.lane] || '');
+  const dot = `<i style="background:${X.COLORS[it.color % 6]}"></i>`, ids = `data-id="${esc(it.id)}" data-key="${key}"`;
+  const when = tab === 'later' || o.overdue ? agDateTxt(X, o.s) : '';
+  let left, sub;
+  if (it.task) {
+    left = `<button class="ag-cb${done ? ' on' : ''}" data-act="ag-done" ${ids} aria-label="${done ? 'Mark not done' : 'Mark done'}"></button>`;
+    const due = o.overdue ? 'overdue, due ' + when : tab === 'today' ? 'due today' : tab === 'tomorrow' ? 'due tomorrow' : 'due ' + when;
+    sub = `Task · ${due}${it.time ? ' · ' + agT12(it.time).join(' ') : ''}`;
+  } else {
+    const t = it.time ? agT12(it.time) : null;
+    left = `<div class="ag-time">${when ? `<span class="ag-d">${when}</span>` : ''}${t ? `${t[0]}<small>${t[1]}</small>` : '<span class="ag-all">All day</span>'}</div>`;
+    sub = lane + (AG_REP[it.repeat] ? ' · ' + AG_REP[it.repeat] : '');
+  }
+  return `<div class="ag-row${done ? ' done' : ''}${o.overdue ? ' over' : ''}">${left}<button class="ag-main" data-act="ag-open" ${ids}><span class="ag-title">${esc(it.title)}</span><span class="ag-sub">${dot}${sub}</span></button></div>`;
+}
+function agendaHTML() {
+  const X = agX(), today = agItems('today');
+  const nEv = today.filter(o => !o.it.task).length, nT = today.filter(o => o.it.task && (o.overdue || !agIsDone(X, o))).length;
+  const p = []; if (nEv) p.push(nEv + (nEv > 1 ? ' events' : ' event')); if (nT) p.push(nT + (nT > 1 ? ' tasks' : ' task'));
+  const tab = AG.tab, list = tab === 'today' ? today : agItems(tab);
+  const cnt = {today:today.length, tomorrow:tab === 'tomorrow' ? list.length : agItems('tomorrow').length, later:tab === 'later' ? list.length : agItems('later').length};
+  const chip = (t, l) => `<button class="chip${tab === t ? ' on' : ''}" data-act="ag-tab" data-t="${t}">${l}${cnt[t] ? ' ' + cnt[t] : ''}</button>`;
+  const now = new Date();
+  return `<p class="ag-d0">${fmtDay(now)}</p>
+    <h2 class="ag-head">${p.length ? p.join(' and ') + ' today' : 'Nothing planned today'}</h2>
+    <div class="chips" style="margin-bottom:6px">${chip('today', 'Today')}${chip('tomorrow', 'Tomorrow')}${chip('later', 'Later')}</div>
+    <div class="ag-list">${list.length ? list.map(o => agRow(X, o, tab)).join('') : '<p class="empty" style="margin:18px 0">Nothing planned.</p>'}</div>
+    <button class="link" data-act="cyc-sub" data-s="wheel" style="margin:6px 0 4px">Add on the wheel</button>`;
+}
+function agDetailObj(id, key) {
+  return {kind:'agenda', render: () => {
+    const it = S.cycle.items.find(i => i.id === id); if (!it) return '<p class="empty">This item was deleted.</p>';
+    const X = agX(), day = X.isoF(key), [y, m, d] = X.ymd(day), done = !!(it.done && it.done[key]);
+    const ph = X.phaseName(X.elongAt(day + 12 * 36e5)), st = X.sunTimes(day);
+    const t = it.time ? agT12(it.time) : null;
+    const until = it.kind === 'span' && it.end && it.end !== it.start ? `<p class="small">Until ${X.fmtD(X.isoF(it.end), true)}${it.etime ? ' ' + agT12(it.etime).join(' ') : ''}</p>` : '';
+    const ids = `data-id="${esc(id)}" data-key="${key}"`;
+    return `<div class="sh-head"><h2>${it.task ? 'Task' : 'Event'}</h2><button class="x" data-act="close">Close</button></div>
+      <p class="ag-dt">${esc(it.title)}</p>
+      <p class="small"><span class="dot" style="display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:7px;background:${X.COLORS[it.color % 6]}"></span>${esc(S.cycle.lanes[it.lane] || '')}${AG_REP[it.repeat] ? ' · ' + AG_REP[it.repeat] : ''}</p>
+      <p class="ag-big">${d}</p><p class="txt" style="margin:0 0 14px">${X.MONTHS[m]} ${y}, ${X.DOWL[X.wdi(day)]}</p>
+      ${t ? `<p class="ag-big" style="font-size:2.2rem">${t[0]}<small style="font-size:.9rem;font-family:var(--sans);color:var(--muted)"> ${t[1]}</small></p>` : '<p class="txt">All day</p>'}
+      ${until}
+      <p class="small">${ph}${st.rise && st.set ? ` · sunrise ${X.hm(st.rise)}, sunset ${X.hm(st.set)}` : ''}</p>
+      ${it.notes ? `<p class="label">Notes</p><p class="txt">${esc(it.notes)}</p>` : ''}
+      ${it.task ? `<button class="primary" data-act="ag-done" ${ids} style="margin-top:20px">${done ? 'Mark not done' : 'Mark done'}</button>` : ''}
+      <div class="btnrow"><button class="link" data-act="ag-edit" ${ids}>Edit on the wheel</button><button class="link del" data-act="ag-del" ${ids}>Delete</button></div>`;
+  }};
+}
+Object.assign(HABA, {
+  'ag-tab': el => { AG.tab = el.dataset.t; renderView(); },
+  'ag-open': el => pushSheet(agDetailObj(el.dataset.id, el.dataset.key)),
+  async 'ag-done'(el) {
+    const it = S.cycle.items.find(i => i.id === el.dataset.id); if (!it) return;
+    const k = el.dataset.key; it.done = it.done || {};
+    if (it.done[k]) delete it.done[k]; else it.done[k] = 1;
+    await persist(); if (STACK.at(-1)?.kind === 'agenda') drawSheet(); renderView();
+  },
+  'ag-edit': el => { TCP.pendingEdit = {id:el.dataset.id, key:el.dataset.key}; closeAllSheets(); CYC.sub = 'wheel'; renderView(); },
+  async 'ag-del'(el) {
+    if (!confirm('Delete this item, including every repeat?')) return;
+    S.cycle.items = S.cycle.items.filter(i => i.id !== el.dataset.id);
+    await persist(); closeAllSheets(); renderView(); toast('Deleted');
+  }
+});
+
 /* ---------- cycle view ---------- */
 const TC_MARKUP = `<div class="tc"><header class="t-top">
     <div class="t-seg" id="tc-scales" role="group" aria-label="Zoom level">
@@ -1679,6 +1791,7 @@ const TC_MARKUP = `<div class="tc"><header class="t-top">
         </div>
         <div class="field"><label for="tc-f-repeat">Repeats</label>
           <select id="tc-f-repeat"><option value="none">Does not repeat</option><option value="weekly">Every week</option><option value="monthly">Every month</option><option value="yearly">Every year</option><option value="fullmoon">Every full moon</option><option value="newmoon">Every new moon</option><option value="quarter">Every solstice and equinox</option></select></div>
+        <div class="field" id="tc-taskrow"><label class="t-chk"><input type="checkbox" id="tc-f-task"> Task: tick it off when done</label></div>
         <div class="field"><span class="lbl" id="tc-l-col">Colour</span><div class="swatches" id="tc-swatches" role="group" aria-labelledby="tc-l-col"></div></div>
         <div class="field"><label for="tc-f-notes">Notes</label><textarea id="tc-f-notes" maxlength="500"></textarea></div>
         <p class="t-hint" id="tc-hint"></p>
@@ -1724,7 +1837,7 @@ function cycleHTML() {
     <div class="chips" style="margin-top:14px">${chip('wheel', 'Wheel')}${chip('today', 'Today')}${chip('habits', 'Rhythms')}${chip('journal', 'Journal')}</div>
     ${CYC.sub === 'wheel' ? TC_MARKUP : CYC.sub === 'today' ? todayHTML(true) : CYC.sub === 'journal' ? journalHTML(true) : habitsHTML()}`;
 }
-function mountCycle(){
+function mountCycle(opt){
 
 const $=id=>document.getElementById('tc-'+id);
 const rad=Math.PI/180,H=36e5,D=864e5,Q=9e5;
@@ -2112,6 +2225,7 @@ function occ(it,t0,t1){
   return out;
 }
 
+if(opt==='engine'){TCP.api={occ,iso,isoF,dstart,hm,ymd,wdi,nowF,tmin,validT,elongAt,phaseName,sunTimes,fmtD,COLORS,DOW,MON3,MONTHS,DOWL};return;}
 /* ---------- drawing: dynamic layer ---------- */
 function drawDyn(F){
   let defs='',g='',top='';
@@ -2150,7 +2264,7 @@ function drawDyn(F){
   all.filter(o=>o.it.kind==='point').sort((p,q)=>p.mark-q.mark).forEach(o=>{
     const a=ang(clamp(o.mark,F.t0,F.t1)),r=laneMid(o.it.lane),col=COLORS[o.it.color%6],[x,y]=XY(r,a);
     const big=F.span<=8*D?9:F.span<=100*D?8:6.5;
-    g+=`<g data-iid="${esc(o.it.id)}"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${big}" fill="${col}" stroke="var(--bg)" stroke-width="2"/>`;
+    const tk=o.it.task&&!(o.it.done&&o.it.done[iso(dstart(o.s))]);g+=`<g data-iid="${esc(o.it.id)}"><circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${big}" fill="${tk?'var(--bg)':col}" stroke="${tk?col:'var(--bg)'}" stroke-width="${tk?2.4:2}"/>`;
     const txt=o.it.title.slice(0,26),fs=10.5,span=(txt.length*fs*0.6)/r/rad,gap=(big+5)/r/rad,id='p'+(uid++),bottom=Math.cos(a*rad)<0,k=fs*0.34;
     const iv=bottom?[a-gap-span,a-gap]:[a+gap,a+gap+span],used=lastEnd[o.it.id]||(lastEnd[o.it.id]=[]);
     const room=!used.some(u=>iv[0]<u[1]+2&&iv[1]>u[0]-2);
@@ -2414,7 +2528,7 @@ function renderLaneOptions(){
 function renderForm(){
   document.querySelectorAll('#tc-formcard .kinds button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.kind===state.kind)));
   $('lanefield').style.display=state.kind==='line'?'none':'';
-  $('endrow').style.display=state.kind==='span'?'':'none';
+  $('endrow').style.display=state.kind==='span'?'':'none';$('taskrow').style.display=state.kind==='point'?'':'none';$('f-task').checked=!!state.task;
   $('l-start').textContent=state.kind==='span'?'Start':'Date';
   if(document.activeElement!==$('f-title'))$('f-title').value=state.title;
   $('f-start').value=state.start;$('f-stime').value=state.stime;$('f-end').value=state.end;$('f-etime').value=state.etime;
@@ -2427,19 +2541,19 @@ function renderForm(){
   $('cancel').hidden=!edit;$('del').hidden=!edit;$('del').textContent=state.delArm?'Tap again to delete':'Delete';
   $('hint').textContent=state.kind==='span'?(state.armed==='end'?'Tap the wheel to set the end.':'Tap the wheel to set the start. Tap a lane to choose it.'):'Tap the wheel to set the date'+(state.kind==='point'?'. Tap a lane to choose it.':'.');
 }
-function resetForm(){Object.assign(state,{title:'',start:'',stime:'',end:'',etime:'',repeat:'none',notes:'',armed:'start',editId:null,delArm:false});}
+function resetForm(){Object.assign(state,{task:false,title:'',start:'',stime:'',end:'',etime:'',repeat:'none',notes:'',armed:'start',editId:null,delArm:false});}
 function applyTemplate(i){
   const t=TEMPLATES[i],today=dstart(nowF());let start=today;
   if(t.dow!==undefined)start=today+((t.dow-wdi(today)+7)%7)*D;
   if(t.dom){const [y,m,d]=ymd(today);start=d<=t.dom?fl(y,m,t.dom):fl(y,m+1,t.dom);}
-  Object.assign(state,{kind:t.kind,title:t.n,lane:t.lane,color:t.color,repeat:t.repeat,stime:t.time||'',start:iso(start),end:'',etime:'',armed:'start',editId:null,delArm:false});
+  Object.assign(state,{task:false,kind:t.kind,title:t.n,lane:t.lane,color:t.color,repeat:t.repeat,stime:t.time||'',start:iso(start),end:'',etime:'',armed:'start',editId:null,delArm:false});
   renderForm();renderDyn();$('formcard').scrollIntoView({block:'nearest',behavior:'smooth'});
 }
 $('tpls').innerHTML=TEMPLATES.map((t,i)=>`<button type="button" data-t="${i}">${t.label}</button>`).join('');
 $('tpls').addEventListener('click',e=>{const b=e.target.closest('[data-t]');if(b)applyTemplate(+b.dataset.t);});
 function editItem(id,fromWheel,jump){
   const it=data.items.find(i=>i.id===id);if(!it)return;
-  Object.assign(state,{kind:it.kind,lane:it.lane,color:it.color,title:it.title,start:it.start,stime:it.time||'',end:it.end||'',etime:it.etime||'',repeat:it.repeat||'none',notes:it.notes||'',armed:'start',editId:id,delArm:false});
+  Object.assign(state,{task:!!it.task,kind:it.kind,lane:it.lane,color:it.color,title:it.title,start:it.start,stime:it.time||'',end:it.end||'',etime:it.etime||'',repeat:it.repeat||'none',notes:it.notes||'',armed:'start',editId:id,delArm:false});
   renderAll();
   $('formcard').scrollIntoView({block:'nearest',behavior:'smooth'});
 }
@@ -2448,6 +2562,7 @@ document.querySelectorAll('#tc-swatches button').forEach((b,i)=>b.onclick=()=>{s
 $('f-title').oninput=e=>{state.title=e.target.value;};
 $('f-lane').onchange=e=>{state.lane=+e.target.value;renderDyn();};
 $('f-repeat').onchange=e=>{state.repeat=e.target.value;};
+$('f-task').onchange=e=>{state.task=e.target.checked;};
 $('f-notes').oninput=e=>{state.notes=e.target.value;};
 $('f-start').oninput=e=>{state.start=e.target.value;renderDyn();};
 $('f-stime').oninput=e=>{state.stime=e.target.value;renderDyn();};
@@ -2459,8 +2574,8 @@ $('add').onclick=()=>{
   if(!validISO(state.start)){$('hint').textContent='Pick a date first: tap the wheel or use the date field.';return;}
   let kind=state.kind,end=state.end;
   if(kind==='span'){if(!validISO(end))kind='point';else if(end<state.start)end=state.start;}
-  const base={kind,lane:state.lane,start:state.start,end:kind==='span'?end:undefined,time:state.stime||undefined,etime:kind==='span'&&state.etime?state.etime:undefined,repeat:state.repeat==='none'?undefined:state.repeat,title:state.title.trim()||'Untitled',color:state.color,notes:state.notes.trim()||undefined};
-  if(state.editId){const i=data.items.findIndex(x=>x.id===state.editId);if(i>=0)data.items[i]={...base,id:state.editId};}
+  const base={kind,lane:state.lane,start:state.start,end:kind==='span'?end:undefined,time:state.stime||undefined,etime:kind==='span'&&state.etime?state.etime:undefined,repeat:state.repeat==='none'?undefined:state.repeat,title:state.title.trim()||'Untitled',color:state.color,notes:state.notes.trim()||undefined,task:kind==='point'&&state.task?true:undefined};
+  if(state.editId){const i=data.items.findIndex(x=>x.id===state.editId);if(i>=0)data.items[i]={...base,id:state.editId,done:data.items[i].done};}
   else data.items.push({...base,id:'i'+Date.now().toString(36)+Math.random().toString(36).slice(2,6)});
   save();resetForm();renderAll();
 };
@@ -2581,6 +2696,7 @@ function fromICS(txt){
 renderLaneOptions();syncSettings();
 state.color=1;
 renderAll();
+if(TCP.pendingEdit){const pe=TCP.pendingEdit;TCP.pendingEdit=null;const at=isoF(pe.key);state.anchor=at;state.sel=state.scale==='day'?Math.floor(at/Q)*Q:dstart(at);editItem(pe.id,false,true);}
 }
 
 const A = {
