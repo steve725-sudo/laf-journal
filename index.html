@@ -440,7 +440,7 @@ async function seal(key, data) {
 const unseal = (key, iv, ct) => crypto.subtle.decrypt({name:'AES-GCM', iv}, key, ct);
 
 /* ---------- state ---------- */
-let KEY = null, S = null, META = null, VIEW = 'today', player = null, PENDING_MSG = null;
+let KEY = null, S = null, META = null, VIEW = 'cycle', player = null, PENDING_MSG = null;
 let lastActive = Date.now(), lockHold = 0;
 const JF = {type:'all', tag:null, q:''};
 let MAPP = 90;
@@ -517,19 +517,19 @@ function renderUnlock() {
   $('#pass').addEventListener('keydown', e => { if (e.key === 'Enter') A.unlock(); });
 }
 function enterApp() {
-  $('#root').innerHTML = `<div id="view"></div><nav class="tabs" aria-label="Sections">${[['today','Today'],['journal','Journal'],['cycle','Cycle'],['map','Map'],['patterns','Patterns'],['learn','Learn'],['settings','Settings']]
+  $('#root').innerHTML = `<div id="view"></div><nav class="tabs" aria-label="Sections">${[['cycle','Cycle'],['map','Map'],['patterns','Patterns'],['learn','Learn'],['settings','Settings']]
     .map(([v, l]) => `<button data-act="tab" data-v="${v}">${l}</button>`).join('')}</nav>`;
   lastActive = Date.now(); renderView();
 }
 
 /* ---------- views ---------- */
-function showView(v) { VIEW = v; renderView(); window.scrollTo(0, 0); }
+function showView(v) { if (v === 'today' || v === 'journal') { CYC.sub = v; v = 'cycle'; } VIEW = v; renderView(); window.scrollTo(0, 0); }
 function renderView() {
   if (!S || !$('#view')) return;
   const root = $('#view');
   $$('.tabs button').forEach(b => b.setAttribute('aria-current', b.dataset.v === VIEW ? 'page' : 'false'));
   if (VIEW === 'map') { root.className = 'mapview'; root.innerHTML = mapHTML(); initMap(); return; }
-  if (VIEW === 'cycle') { root.className = 'app cyc'; root.innerHTML = cycleHTML(); if (CYC.sub === 'wheel') mountCycle(); return; }
+  if (VIEW === 'cycle') { root.className = 'app cyc'; root.innerHTML = cycleHTML(); if (CYC.sub === 'wheel') mountCycle(); if (CYC.sub === 'journal') { const q = $('#q'); q.addEventListener('input', () => { JF.q = q.value; $('#jlist').innerHTML = journalList(); }); } return; }
   root.className = 'app';
   root.innerHTML = VIEW === 'today' ? todayHTML() : VIEW === 'journal' ? journalHTML() : VIEW === 'patterns' ? patternsHTML() : VIEW === 'learn' ? learnHTML() : settingsHTML();
   if (VIEW === 'journal') { const q = $('#q'); q.addEventListener('input', () => { JF.q = q.value; $('#jlist').innerHTML = journalList(); }); }
@@ -556,11 +556,11 @@ function card(e) {
     <p class="pv">${esc(preview(e))}</p>
     ${e.tags.length ? `<div class="tags">${e.tags.slice(0, 8).map(t => `<span>#${esc(t)}</span>`).join('')}</div>` : ''}</article>`;
 }
-function todayHTML() {
+function todayHTML(inner) {
   const now = new Date(), today = ymd(now);
   const laf = S.entries.filter(e => e.type === 'laf' && ymd(new Date(e.date)) === today).sort(byDateDesc)[0];
   const L = [['love','What do you love about yourself today?'],['accept','What do you accept about yourself today?'],['forgive','What do you forgive yourself for today?']];
-  let h = `<header class="top"><h1>${fmtDay(now)}</h1><button class="x" data-act="lock">Lock</button></header>`;
+  let h = inner ? `<h2 class="group" style="margin-top:18px">${fmtDay(now)}</h2>` : `<header class="top"><h1>${fmtDay(now)}</h1><button class="x" data-act="lock">Lock</button></header>`;
   if (sleepOn(today)) h += `<p class="small" style="margin-top:-6px">Slept ${sleepOn(today)} h last night</p>`;
   if (laf) h += `<section class="laf done" data-act="view" data-id="${laf.id}" role="button" tabindex="0"><p class="label">Tonight’s LAF</p>
       ${L.map(([k]) => `<div class="laf-row" data-acc="${k}"><span class="bar"></span><p>${esc(laf.fields[k]) || '<span class="hint">Left blank</span>'}</p></div>`).join('')}</section>`;
@@ -594,8 +594,8 @@ function notesHTML() {
     h += `<div class="note"><p>Copy a recent backup off this phone, to your computer or a USB drive.</p><div class="row"><button class="link" data-act="nudge-ok">Done</button><button class="link" data-act="nudge-ok">Not now</button></div></div>`;
   return h;
 }
-function journalHTML() {
-  return `<h1>Journal</h1>
+function journalHTML(inner) {
+  return `${inner ? '' : '<h1>Journal</h1>'}
     <input type="search" id="q" placeholder="Search words or #tags" value="${esc(JF.q)}" autocapitalize="none">
     <div class="chips scroll">${['all', ...TYPE_ORDER].map(t => `<button class="chip${JF.type === t ? ' on' : ''}" data-act="jtype" data-t="${t}">${t === 'all' ? 'All' : TYPES[t].label}</button>`).join('')}</div>
     ${JF.tag ? `<div class="activetag"><span>Showing #${esc(JF.tag)}</span><button class="link" data-act="jtag-clear">Show all</button></div>` : ''}
@@ -693,9 +693,10 @@ function libResults(q) {
   return hits.map(x => `<div class="pair">${x.p.map(w => `<button type="button" class="chip" data-act="emo-add" data-tag="${esc(w)}">${esc(w)}</button>`).join('')}</div>`).join('')
     + '<p class="small">Tap a word to add it.</p>';
 }
+function dayNow(k) { const n = new Date(); if (!k) return n; const [y, m, d] = k.split('-').map(Number); return new Date(y, m - 1, d, n.getHours(), n.getMinutes()); }
 function formHTML(ctx) {
   const T = TYPES[ctx.type], e = ctx.entry, v = e ? e.fields : (ctx.prefill || {});
-  const d = e ? new Date(e.date) : new Date();
+  const d = e ? new Date(e.date) : dayNow(ctx.day);
   const emo = emotionWords(), etags = new Set(e ? e.tags : (ctx.prefill?.tags || []));
   const textTags = new Set(parseTags(T.fields.map(f => v[f.k] || '').join(' ')));
   const parts = partWords(), manual = [...etags].filter(t => !textTags.has(t) && !emo.has(t) && !parts.has(t));
@@ -1572,6 +1573,7 @@ const heSyncName = () => { const n = $('#hb-name'); if (n) HE.name = n.value; };
 const HABA = {};
 Object.assign(HABA, {
   'cyc-sub': el => { CYC.sub = el.dataset.s; renderView(); },
+  'new-on': el => pushSheet(formObj({type: el.dataset.type, day: el.dataset.day})),
   async 'hab-toggle'(el) {
     const h = habById(el.dataset.id), k = el.dataset.k; if (!h) return;
     const lg = S.cycle.log[h.id] ||= {};
@@ -1719,8 +1721,8 @@ const TC_MARKUP = `<div class="tc"><header class="t-top">
 function cycleHTML() {
   const chip = (s, l) => `<button class="chip${CYC.sub === s ? ' on' : ''}" data-act="cyc-sub" data-s="${s}">${l}</button>`;
   return `<header class="top"><h1>Cycle</h1><button class="x" data-act="lock">Lock</button></header>
-    <div class="chips" style="margin-top:14px">${chip('wheel', 'Wheel')}${chip('habits', 'Rhythms')}</div>
-    ${CYC.sub === 'wheel' ? TC_MARKUP : habitsHTML()}`;
+    <div class="chips" style="margin-top:14px">${chip('wheel', 'Wheel')}${chip('today', 'Today')}${chip('habits', 'Rhythms')}${chip('journal', 'Journal')}</div>
+    ${CYC.sub === 'wheel' ? TC_MARKUP : CYC.sub === 'today' ? todayHTML(true) : CYC.sub === 'journal' ? journalHTML(true) : habitsHTML()}`;
 }
 function mountCycle(){
 
@@ -2375,6 +2377,7 @@ function renderReadout(){
   if(os.length)h+=`<div class="read-items">`+os.map(o=>`<button type="button" data-iid="${esc(o.it.id)}"><span class="t-dot" style="background:${COL(o.it.color)}"></span><span><b>${esc(o.it.title)}</b><br><span class="read-line">${o.it.kind==='line'?'Line':esc(data.lanes[o.it.lane])}${validT(o.it.time)?' \u00b7 '+o.it.time:''}${REP[o.it.repeat||'none']}</span></span></button>`).join('')+`</div>`;
   const tg=[...new Set(os.flatMap(o=>parseTags((o.it.title||'')+' '+(o.it.notes||''))))];
   if(tg.length)h+=`<div class="chips" style="margin-top:8px">`+tg.map(t=>`<button type="button" class="chip" data-act="tag-journal" data-tag="${esc(t)}">#${esc(t)}</button>`).join('')+`</div>`;
+  if(day<=dstart(nowF()))h+=`<p class="read-line" style="margin-top:12px"><b>Add to this day</b></p><div class="chips" style="margin-top:6px">`+[['laf','LAF'],['dream','Dream'],['note','Noticing'],['yoga','Yoga'],['creative','Creative'],['idea','Idea']].map(([t,l])=>`<button type="button" class="chip" data-act="new-on" data-type="${t}" data-day="${iso(day)}">${l}</button>`).join('')+`</div>`;
   h+=`<div class="read-actions">${state.scale!=='day'?'<button class="btn ghost" id="r-day" type="button">Open this day</button>':''}${state.scale!=='year'?'<button class="btn ghost" id="r-out" type="button">Zoom out</button>':''}</div>`;
   $('readout').innerHTML=h;
 }
@@ -2590,7 +2593,7 @@ const A = {
     const salt = crypto.getRandomValues(new Uint8Array(16));
     KEY = await deriveKey(p1, salt, ITER); META = {salt, iter:ITER};
     await put('kv', 'meta', META); S = freshState(); await persist();
-    VIEW = 'today'; enterApp();
+    VIEW = 'cycle'; enterApp();
   },
   async unlock() {
     const pass = $('#pass').value, b = $('[data-act=unlock]'); if (!pass || b.disabled) return;
@@ -2598,7 +2601,7 @@ const A = {
     try {
       const key = await deriveKey(pass, META.salt, META.iter), v = await get('kv', 'vault');
       S = migrate(JSON.parse(dec.decode(await unseal(key, v.iv, v.ct)))); KEY = key;
-      VIEW = 'today'; enterApp();
+      VIEW = 'cycle'; enterApp();
       if (PENDING_MSG) { toast(PENDING_MSG, 5000); PENDING_MSG = null; }
     } catch { $('#err').textContent = 'That passphrase didn’t open the journal.'; b.disabled = false; b.textContent = 'Unlock'; }
   },
@@ -2616,7 +2619,7 @@ const A = {
       META = {salt, iter:data.iter}; await put('kv', 'meta', META);
       if (!same) { await clearStore('audio'); st.tracks = []; }
       KEY = key; S = st; await persist();
-      closeAllSheets(); VIEW = 'today'; enterApp();
+      closeAllSheets(); VIEW = 'cycle'; enterApp();
       toast(!same && had ? 'Backup restored. Add your MP3s again.' : 'Backup restored', 4000);
     } catch { $('#rerr').textContent = 'That passphrase didn’t open this backup.'; b.disabled = false; b.textContent = 'Restore'; }
   },
